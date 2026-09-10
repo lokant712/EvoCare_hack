@@ -19,7 +19,7 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({ evidence, onClos
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(15, 23, 42, 0.6)',
+        backgroundColor: 'rgba(28, 26, 20, 0.6)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -30,7 +30,7 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({ evidence, onClos
     >
       <div
         style={{
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '14px',
           maxWidth: '600px',
           width: '100%',
@@ -44,19 +44,19 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({ evidence, onClos
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <FileText size={20} style={{ color: '#0284c7' }} />
+            <FileText size={20} style={{ color: 'var(--color-accent)' }} />
             <div>
               <span
                 style={{
                   fontSize: '14px',
                   fontFamily: "'IBM Plex Mono', monospace",
                   fontWeight: 700,
-                  color: '#0f172a',
+                  color: 'var(--color-text-main)',
                 }}
               >
                 {evidence.evidence_code}
               </span>
-              <div style={{ fontSize: '11px', color: '#64748b' }}>Immutable Raw Evidence Record</div>
+              <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>Immutable Raw Evidence Record</div>
             </div>
           </div>
           <button
@@ -66,7 +66,7 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({ evidence, onClos
               border: 'none',
               fontSize: '20px',
               fontWeight: 700,
-              color: '#94a3b8',
+              color: 'var(--color-text-faint)',
               cursor: 'pointer',
             }}
           >
@@ -83,8 +83,8 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({ evidence, onClos
               fontFamily: "'IBM Plex Mono', monospace",
               fontWeight: 600,
               padding: '2px 8px',
-              backgroundColor: '#f1f5f9',
-              color: '#475569',
+              backgroundColor: 'var(--color-surface-alt)',
+              color: 'var(--color-text-secondary)',
               borderRadius: '9999px',
             }}
           >
@@ -95,8 +95,8 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({ evidence, onClos
               fontSize: '11px',
               fontWeight: 600,
               padding: '2px 8px',
-              backgroundColor: '#ecfdf5',
-              color: '#047857',
+              backgroundColor: 'var(--color-success-soft)',
+              color: 'var(--color-success-dark)',
               borderRadius: '9999px',
             }}
           >
@@ -107,17 +107,17 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({ evidence, onClos
         {/* Verbatim Original Statement */}
         <div
           style={{
-            backgroundColor: '#f8fafc',
+            backgroundColor: 'var(--color-bg)',
             borderRadius: '8px',
-            border: '1px solid #e2e8f0',
+            border: '1px solid var(--color-border)',
             padding: '14px',
             marginBottom: '16px',
           }}
         >
-          <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px' }}>
+          <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px' }}>
             Exact Original Statement (Verbatim)
           </div>
-          <p style={{ fontSize: '14px', color: '#0f172a', margin: 0, lineHeight: 1.5, fontStyle: 'italic' }}>
+          <p style={{ fontSize: '14px', color: 'var(--color-text-main)', margin: 0, lineHeight: 1.5, fontStyle: 'italic' }}>
             "{evidence.original_statement}"
           </p>
         </div>
@@ -132,26 +132,26 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({ evidence, onClos
             marginBottom: '16px',
           }}
         >
-          <div style={{ padding: '8px 10px', backgroundColor: '#f1f5f9', borderRadius: '6px' }}>
-            <div style={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+          <div style={{ padding: '8px 10px', backgroundColor: 'var(--color-surface-alt)', borderRadius: '6px' }}>
+            <div style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
               <Calendar size={12} /> Observed At
             </div>
-            <div style={{ fontWeight: 600, color: '#0f172a', fontFamily: "'IBM Plex Mono', monospace" }}>
+            <div style={{ fontWeight: 600, color: 'var(--color-text-main)', fontFamily: "'IBM Plex Mono', monospace" }}>
               {evidence.observed_at}
             </div>
           </div>
-          <div style={{ padding: '8px 10px', backgroundColor: '#f1f5f9', borderRadius: '6px' }}>
-            <div style={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+          <div style={{ padding: '8px 10px', backgroundColor: 'var(--color-surface-alt)', borderRadius: '6px' }}>
+            <div style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
               <User size={12} /> Recorded By / Observer
             </div>
-            <div style={{ fontWeight: 600, color: '#0f172a' }}>{evidence.observer || evidence.source_type}</div>
+            <div style={{ fontWeight: 600, color: 'var(--color-text-main)' }}>{evidence.observer || evidence.source_type}</div>
           </div>
         </div>
 
         {/* Linked Memory Claims */}
         {evidence.linked_claims && evidence.linked_claims.length > 0 && (
           <div style={{ marginBottom: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700, color: 'var(--color-text-secondary)', marginBottom: '6px' }}>
               <Link2 size={13} /> Linked Active Memory Claims
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -160,11 +160,11 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({ evidence, onClos
                   key={idx}
                   style={{
                     fontSize: '12px',
-                    color: '#1e293b',
-                    backgroundColor: '#eef2ff',
+                    color: 'var(--color-text-main)',
+                    backgroundColor: 'var(--color-plum-soft)',
                     padding: '8px 10px',
                     borderRadius: '6px',
-                    borderLeft: '3px solid #6366f1',
+                    borderLeft: '3px solid var(--color-plum)',
                   }}
                 >
                   {claim}
@@ -178,11 +178,11 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({ evidence, onClos
         <div
           style={{
             padding: '8px 12px',
-            backgroundColor: '#ecfdf5',
+            backgroundColor: 'var(--color-success-soft)',
             borderRadius: '6px',
-            border: '1px solid #a7f3d0',
+            border: '1px solid var(--color-success-border)',
             fontSize: '11px',
-            color: '#065f46',
+            color: 'var(--color-success-dark)',
             display: 'flex',
             alignItems: 'center',
             gap: '6px',

@@ -15,8 +15,9 @@ echo "==========================================================================
 echo "[1/3] Ensuring directories..."
 mkdir -p EvoCare/backend/data
 
-echo "[2/3] Seeding Phase 8 Security & Multi-Patient Data..."
+echo "[2/3] Seeding Security & 5 Rich Demo Patients..."
 python3 EvoCare/backend/scripts/seed_security_demo.py || true
+python3 EvoCare/backend/scripts/seed_5_demo_patients.py || true
 
 echo "[3/3] Starting Backend & Frontend..."
 

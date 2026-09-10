@@ -12,14 +12,15 @@ import {
   MessageSquare,
   Shield,
   ArrowLeft,
+  ArrowRight,
   LogIn,
   Sparkles,
   KeyRound,
   LucideIcon,
-  Users,
-  Heart,
 } from 'lucide-react';
 import { authService, AuthUser } from '../services/auth';
+import { ThemeToggle } from '../components/common/ThemeToggle';
+import { CareNetworkScene } from '../components/common/CareNetworkScene';
 
 interface LoginPageProps {
   onLoginSuccess: (user: AuthUser) => void;
@@ -33,202 +34,97 @@ interface RoleMetadata {
   badge: string;
   subtitle: string;
   description: string;
-  themeColor: string;
-  topBorderColor: string;
-  btnColor: string;
-  bgLight: string;
-  borderColor: string;
+  accent: string;
+  accentSoft: string;
+  accentBorder: string;
   icon: LucideIcon;
   demoUser: string;
   demoPass: string;
   demoRoleDesc: string;
-  graphicType: 'doctor' | 'employee' | 'parent' | 'alumni';
 }
 
 const ROLES: RoleMetadata[] = [
   {
     id: 'DOCTOR',
     title: 'Doctor',
-    badge: 'Physicians & Clinicians',
-    subtitle: 'Clinical Decision Support',
+    badge: 'Physicians & clinicians',
+    subtitle: 'Clinical decision support',
     description: 'Longitudinal health memory, diagnostic reasoning, 2FA patient verification, and differential analysis.',
-    themeColor: '#0284c7',
-    topBorderColor: '#0284c7',
-    btnColor: '#0284c7',
-    bgLight: '#f0f9ff',
-    borderColor: '#bae6fd',
+    accent: 'var(--color-accent)',
+    accentSoft: 'var(--color-accent-soft)',
+    accentBorder: 'var(--color-accent-border)',
     icon: Stethoscope,
     demoUser: 'doctor.demo',
     demoPass: 'DoctorPass123!',
     demoRoleDesc: 'Full clinical reasoning station with 2FA email consent security.',
-    graphicType: 'doctor',
   },
   {
     id: 'CAREGIVER',
     title: 'Caregiver',
-    badge: 'Family & Caretakers',
-    subtitle: 'Observations & Daily Logs',
+    badge: 'Family & caretakers',
+    subtitle: 'Observations & daily logs',
     description: 'Log patient daily observations, behavior, nutrition, and manage patient connection requests.',
-    themeColor: '#d97706',
-    topBorderColor: '#eab308',
-    btnColor: '#ca8a04',
-    bgLight: '#fefce8',
-    borderColor: '#fef08a',
+    accent: 'var(--color-warning-dark)',
+    accentSoft: 'var(--color-warning-soft)',
+    accentBorder: 'var(--color-warning-border)',
     icon: HeartHandshake,
     demoUser: 'caregiver.demo',
     demoPass: 'CaregiverPass123!',
     demoRoleDesc: 'Submit vital observations and accept patient pairing invites.',
-    graphicType: 'employee',
   },
   {
     id: 'PATIENT',
     title: 'Patient',
-    badge: 'Patients & Individuals',
-    subtitle: 'AI Health Companion',
+    badge: 'Patients & individuals',
+    subtitle: 'AI health companion',
     description: 'Engage with your personalized conversational health companion, check symptoms, and pair caretakers.',
-    themeColor: '#16a34a',
-    topBorderColor: '#22c55e',
-    btnColor: '#16a34a',
-    bgLight: '#f0fdf4',
-    borderColor: '#bbf7d0',
+    accent: 'var(--color-success)',
+    accentSoft: 'var(--color-success-soft)',
+    accentBorder: 'var(--color-success-border)',
     icon: MessageSquare,
     demoUser: 'patient.demo',
     demoPass: 'PatientPass123!',
     demoRoleDesc: 'Conversational wellness companion and caregiver connection management.',
-    graphicType: 'parent',
   },
   {
     id: 'ADMIN',
     title: 'Administrator',
-    badge: 'System & Governance',
-    subtitle: 'Access & User Management',
+    badge: 'System & governance',
+    subtitle: 'Access & user management',
     description: 'Manage users, clinical roles, system security parameters, and cross-provider access controls.',
-    themeColor: '#0284c7',
-    topBorderColor: '#38bdf8',
-    btnColor: '#0284c7',
-    bgLight: '#f0f9ff',
-    borderColor: '#bae6fd',
+    accent: 'var(--color-plum-dark)',
+    accentSoft: 'var(--color-plum-soft)',
+    accentBorder: 'var(--color-plum-border)',
     icon: Shield,
     demoUser: 'admin.demo',
     demoPass: 'AdminPass123!',
     demoRoleDesc: 'Administrative controls and provider authorization management.',
-    graphicType: 'alumni',
   },
 ];
 
-// Visual Avatar Graphic Component mimicking the portal cards in the reference
-const RoleGraphic: React.FC<{ type: 'doctor' | 'employee' | 'parent' | 'alumni' }> = ({
-  type,
-}) => {
-  if (type === 'doctor') {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <div
-          style={{
-            width: '42px',
-            height: '42px',
-            borderRadius: '10px',
-            backgroundColor: '#e0f2fe',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#0284c7',
-            marginBottom: '4px',
-          }}
-        >
-          <Stethoscope size={24} />
-        </div>
-        <div style={{ display: 'flex', gap: '3px', marginTop: '2px' }}>
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#93c5fd' }} />
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#60a5fa' }} />
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#93c5fd' }} />
-        </div>
-      </div>
-    );
-  }
-
-  if (type === 'employee') {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <div
-          style={{
-            width: '42px',
-            height: '42px',
-            borderRadius: '10px',
-            backgroundColor: '#fef9c3',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#ca8a04',
-            marginBottom: '4px',
-          }}
-        >
-          <Users size={24} />
-        </div>
-        <div style={{ display: 'flex', gap: '3px', marginTop: '2px' }}>
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#fde047' }} />
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#eab308' }} />
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#fde047' }} />
-        </div>
-      </div>
-    );
-  }
-
-  if (type === 'parent') {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <div
-          style={{
-            width: '42px',
-            height: '42px',
-            borderRadius: '10px',
-            backgroundColor: '#dcfce7',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#16a34a',
-            marginBottom: '4px',
-          }}
-        >
-          <Heart size={24} />
-        </div>
-        <div style={{ display: 'flex', gap: '3px', marginTop: '2px' }}>
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#86efac' }} />
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#4ade80' }} />
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#86efac' }} />
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <div
-        style={{
-          width: '42px',
-          height: '42px',
-          borderRadius: '10px',
-          backgroundColor: '#e0f2fe',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#0284c7',
-          marginBottom: '4px',
-        }}
-      >
-        <Shield size={24} />
-      </div>
-      <div style={{ display: 'flex', gap: '3px', marginTop: '2px' }}>
-        <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#7dd3fc' }} />
-        <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#38bdf8' }} />
-        <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#7dd3fc' }} />
-      </div>
-    </div>
-  );
-};
+const BrandMark: React.FC<{ size?: number }> = ({ size = 38 }) => (
+  <div
+    style={{
+      width: size,
+      height: size,
+      borderRadius: '50%',
+      background: 'linear-gradient(155deg, var(--color-accent-bright) 0%, var(--color-accent-dark) 100%)',
+      border: '1px solid rgba(255,255,255,0.25)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#ffffff',
+      boxShadow: '0 6px 16px -4px rgba(8, 79, 71, 0.55)',
+      flexShrink: 0,
+    }}
+  >
+    <Activity size={Math.round(size * 0.55)} />
+  </div>
+);
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const [selectedRole, setSelectedRole] = useState<RoleType | null>(null);
+  const [hoveredRole, setHoveredRole] = useState<RoleType | null>(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -278,280 +174,213 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     setError(null);
   };
 
-  // STEP 1: PORTAL LANDING PAGE (MATCHING THE UPLOADED REFERENCE DESIGN)
+  const shellStyle: React.CSSProperties = {
+    minHeight: '100dvh',
+    backgroundColor: 'var(--color-bg)',
+    display: 'flex',
+    flexDirection: 'column',
+  };
+
+  // STEP 1: ROLE LANDING — asymmetric split hero
   if (!selectedRole) {
     return (
-      <div
-        style={{
-          minHeight: '100vh',
-          backgroundColor: '#f1f5f9',
-          display: 'flex',
-          flexDirection: 'column',
-          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-        }}
-      >
-        {/* Top Deep Blue Banner */}
-        <header
-          style={{
-            background: 'linear-gradient(90deg, #1e3a8a 0%, #1e40af 40%, #2563eb 100%)',
-            color: '#ffffff',
-            padding: '14px 32px',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '50%',
-                backgroundColor: 'rgba(255, 255, 255, 0.18)',
-                border: '1.5px solid rgba(255, 255, 255, 0.4)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#ffffff',
-              }}
-            >
-              <Activity size={22} />
-            </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.02em' }}>EvoCare</span>
-                <span style={{ fontSize: '13px', fontWeight: 400, opacity: 0.9 }}>(Clinical Intelligence Platform)</span>
-              </div>
-            </div>
-          </div>
-          <div
-            style={{
-              fontSize: '11px',
-              fontWeight: 600,
-              backgroundColor: 'rgba(255, 255, 255, 0.15)',
-              padding: '4px 10px',
-              borderRadius: '4px',
-              border: '1px solid rgba(255, 255, 255, 0.25)',
-            }}
-          >
-            Longitudinal Health Memory
-          </div>
-        </header>
-
-        {/* Central Content Area */}
-        <main
+      <div style={shellStyle}>
+        <div
           style={{
             flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '48px 24px',
-            maxWidth: '1200px',
-            margin: '0 auto',
-            width: '100%',
-            boxSizing: 'border-box',
+            display: 'grid',
+            gridTemplateColumns: 'minmax(320px, 1fr) minmax(0, 1.55fr)',
+            minHeight: '100dvh',
           }}
         >
-          {/* Header Title & Subtitle */}
-          <div style={{ textAlign: 'center', marginBottom: '44px', maxWidth: '820px' }}>
-            <h1
-              style={{
-                fontSize: '26px',
-                fontWeight: 700,
-                color: '#0284c7',
-                margin: '0 0 14px 0',
-                letterSpacing: '-0.02em',
-              }}
-            >
-              EvoCare translates to "Evolving Longitudinal Care"
-            </h1>
-            <p
-              style={{
-                fontSize: '13px',
-                color: '#1e293b',
-                lineHeight: 1.6,
-                fontWeight: 500,
-                margin: 0,
-              }}
-            >
-              A digital health initiative facilitating Doctor, Caregiver, Patient, and Administrator to access and
-              process Longitudinal Health Records, Clinical Reasoning, and Care Observations on one common platform.
-            </p>
-          </div>
-
-          {/* 4 Horizontal Role Cards Grid */}
+          {/* Left: editorial brand panel */}
           <div
+            className="evocare-grain"
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-              gap: '20px',
-              width: '100%',
-              marginBottom: '48px',
+              position: 'relative',
+              background: 'linear-gradient(165deg, var(--color-accent) 0%, var(--color-accent-dark) 55%, var(--color-accent-dark) 100%)',
+              color: '#f4f1ea',
+              padding: '48px 40px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              overflow: 'hidden',
             }}
           >
-            {ROLES.map((role) => (
+            <CareNetworkScene />
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <BrandMark />
+              <div>
+                <div style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.02em' }}>EvoCare</div>
+                <div style={{ fontSize: '12px', opacity: 0.75, fontWeight: 500 }}>Clinical intelligence platform</div>
+              </div>
+            </div>
+
+            <div style={{ maxWidth: '440px' }}>
               <div
-                key={role.id}
-                id={`evocare-select-role-${role.id.toLowerCase()}`}
-                onClick={() => handleSelectRole(role.id)}
                 style={{
-                  backgroundColor: '#ffffff',
-                  borderRadius: '6px',
-                  borderTop: `4px solid ${role.topBorderColor}`,
-                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.07)',
-                  padding: '20px 24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  cursor: 'pointer',
-                  transition: 'all 0.18s ease',
-                  userSelect: 'none',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.12)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 0, 0, 0.07)';
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.12em',
+                  opacity: 0.65,
+                  marginBottom: '18px',
                 }}
               >
-                {/* Left side: Avatar Graphic */}
-                <RoleGraphic type={role.graphicType} />
-
-                {/* Right side: Role Title + Action Button */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                  <span
-                    style={{
-                      fontSize: '18px',
-                      fontWeight: 700,
-                      color: role.themeColor,
-                      letterSpacing: '-0.01em',
-                    }}
-                  >
-                    {role.title}
-                  </span>
-
-                  <button
-                    type="button"
-                    style={{
-                      width: '36px',
-                      height: '32px',
-                      borderRadius: '4px',
-                      backgroundColor: role.btnColor,
-                      border: 'none',
-                      color: '#ffffff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      boxShadow: `0 2px 6px ${role.btnColor}60`,
-                    }}
-                    aria-label={`Enter ${role.title} Portal`}
-                  >
-                    <LogIn size={17} />
-                  </button>
-                </div>
+                Evolving Longitudinal Care
               </div>
-            ))}
+              <h1
+                style={{
+                  fontSize: 'clamp(28px, 3.4vw, 40px)',
+                  fontWeight: 700,
+                  lineHeight: 1.15,
+                  letterSpacing: '-0.03em',
+                  margin: '0 0 20px 0',
+                }}
+              >
+                One longitudinal record, read the same way by everyone caring for a patient.
+              </h1>
+              <p style={{ fontSize: '14.5px', lineHeight: 1.7, opacity: 0.8, fontWeight: 400, margin: 0 }}>
+                Doctors, caregivers, patients, and administrators work from a single evidence-linked
+                timeline — every claim traceable back to who observed it and when.
+              </p>
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '9px',
+                fontSize: '12.5px',
+                opacity: 0.75,
+                borderTop: '1px solid rgba(244,241,234,0.18)',
+                paddingTop: '18px',
+              }}
+            >
+              <ShieldCheck size={15} />
+              <span>Multi-role access control &middot; 2FA patient memory gate &middot; audited clinical platform</span>
+            </div>
           </div>
 
-          {/* Bottom Security Footer */}
+          {/* Right: role selection */}
           <div
             style={{
               display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontSize: '12px',
-              color: '#64748b',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              padding: '56px clamp(28px, 6vw, 88px)',
             }}
           >
-            <ShieldCheck size={14} style={{ color: '#0284c7' }} />
-            <span>Multi-Role Access Control • 2FA Patient Memory Gate • End-to-End Audited Clinical Platform</span>
+            <div style={{ maxWidth: '620px', width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px' }}>
+                <div>
+                  <h2
+                    style={{
+                      fontSize: '15px',
+                      fontWeight: 700,
+                      color: 'var(--color-text-main)',
+                      margin: '0 0 6px 0',
+                    }}
+                  >
+                    Continue as
+                  </h2>
+                </div>
+                <ThemeToggle />
+              </div>
+              <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', margin: '0 0 28px 0' }}>
+                Select the portal that matches your role to reach a dedicated, role-scoped sign-in.
+              </p>
+
+              <div className="evocare-stagger" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {ROLES.map((role) => {
+                  const Icon = role.icon;
+                  const isHovered = hoveredRole === role.id;
+                  return (
+                    <button
+                      key={role.id}
+                      id={`evocare-select-role-${role.id.toLowerCase()}`}
+                      type="button"
+                      onClick={() => handleSelectRole(role.id)}
+                      onMouseEnter={() => setHoveredRole(role.id)}
+                      onMouseLeave={() => setHoveredRole(null)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '16px',
+                        width: '100%',
+                        textAlign: 'left',
+                        backgroundColor: 'var(--color-surface)',
+                        border: `1px solid ${isHovered ? role.accent : 'var(--color-border)'}`,
+                        borderRadius: 'var(--radius-md)',
+                        padding: '16px 18px',
+                        cursor: 'pointer',
+                        transform: isHovered ? 'translateX(4px)' : 'translateX(0)',
+                        boxShadow: isHovered ? '0 10px 28px -12px rgba(28,26,20,0.22)' : 'var(--shadow-sm)',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '44px',
+                          height: '44px',
+                          borderRadius: 'var(--radius-sm)',
+                          backgroundColor: role.accentSoft,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: role.accent,
+                          flexShrink: 0,
+                        }}
+                      >
+                        <Icon size={21} />
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: '15.5px', fontWeight: 700, color: 'var(--color-text-main)' }}>
+                            {role.title}
+                          </span>
+                          <span style={{ fontSize: '11.5px', color: 'var(--color-text-muted)' }}>{role.subtitle}</span>
+                        </div>
+                        <div
+                          style={{
+                            fontSize: '12.5px',
+                            color: 'var(--color-text-muted)',
+                            marginTop: '2px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {role.description}
+                        </div>
+                      </div>
+                      <ArrowRight
+                        size={17}
+                        style={{
+                          color: role.accent,
+                          flexShrink: 0,
+                          transform: isHovered ? 'translateX(2px)' : 'translateX(0)',
+                          transition: 'transform 0.15s ease',
+                        }}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-        </main>
+        </div>
       </div>
     );
   }
 
-  // STEP 2: DEDICATED ROLE-SPECIFIC LOGIN PAGE
+  // STEP 2: ROLE-SPECIFIC SIGN-IN
   const Icon = currentRoleConfig?.icon || Lock;
+  const accent = currentRoleConfig?.accent || 'var(--color-accent)';
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        backgroundColor: '#f1f5f9',
-        display: 'flex',
-        flexDirection: 'column',
-        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-      }}
-    >
-      {/* Top Banner */}
-      <header
-        style={{
-          background: 'linear-gradient(90deg, #1e3a8a 0%, #1e40af 40%, #2563eb 100%)',
-          color: '#ffffff',
-          padding: '14px 32px',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div
-            style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(255, 255, 255, 0.18)',
-              border: '1.5px solid rgba(255, 255, 255, 0.4)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#ffffff',
-            }}
-          >
-            <Activity size={22} />
-          </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-              <span style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.02em' }}>EvoCare</span>
-              <span style={{ fontSize: '13px', fontWeight: 400, opacity: 0.9 }}>
-                ({currentRoleConfig?.title} Portal)
-              </span>
-            </div>
-          </div>
-        </div>
-        <button
-          id="evocare-back-to-roles"
-          type="button"
-          onClick={handleBackToLanding}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            backgroundColor: 'rgba(255, 255, 255, 0.15)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            color: '#ffffff',
-            fontSize: '12px',
-            fontWeight: 600,
-            cursor: 'pointer',
-            padding: '6px 12px',
-            borderRadius: '4px',
-            transition: 'background-color 0.15s',
-          }}
-        >
-          <ArrowLeft size={14} />
-          <span>Change Role</span>
-        </button>
-      </header>
-
-      {/* Login Container */}
-      <main
+    <div style={shellStyle}>
+      <div
         style={{
           flex: 1,
           display: 'flex',
@@ -559,62 +388,96 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '32px 24px',
+          position: 'relative',
         }}
       >
+        <button
+          id="evocare-back-to-roles"
+          type="button"
+          onClick={handleBackToLanding}
+          style={{
+            position: 'absolute',
+            top: '28px',
+            left: '28px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            backgroundColor: 'transparent',
+            border: '1px solid var(--color-border)',
+            color: 'var(--color-text-muted)',
+            fontSize: '12.5px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            padding: '7px 14px',
+            borderRadius: 'var(--radius-sm)',
+          }}
+        >
+          <ArrowLeft size={14} />
+          <span>Change role</span>
+        </button>
+
+        <div style={{ position: 'absolute', top: '28px', right: '28px' }}>
+          <ThemeToggle />
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }}>
+          <BrandMark size={32} />
+          <span style={{ fontSize: '17px', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--color-text-main)' }}>
+            EvoCare
+          </span>
+        </div>
+
         <div
           style={{
-            backgroundColor: '#ffffff',
-            borderRadius: '8px',
-            borderTop: `4px solid ${currentRoleConfig?.topBorderColor || '#0284c7'}`,
-            border: '1px solid #e2e8f0',
-            borderTopWidth: '4px',
-            borderTopColor: currentRoleConfig?.topBorderColor || '#0284c7',
+            backgroundColor: 'var(--color-surface)',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--color-border)',
+            borderTop: `3px solid ${accent}`,
             padding: '36px',
             width: '100%',
             maxWidth: '440px',
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+            boxShadow: 'var(--shadow-lg)',
           }}
         >
           {/* Role Header Banner */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '26px' }}>
             <div
               style={{
                 width: '46px',
                 height: '46px',
-                borderRadius: '10px',
-                backgroundColor: currentRoleConfig?.bgLight || '#f0f9ff',
-                border: `1px solid ${currentRoleConfig?.borderColor || '#bae6fd'}`,
+                borderRadius: 'var(--radius-sm)',
+                backgroundColor: currentRoleConfig?.accentSoft,
+                border: `1px solid ${currentRoleConfig?.accentBorder}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: currentRoleConfig?.themeColor || '#0284c7',
+                color: accent,
                 flexShrink: 0,
               }}
             >
-              <Icon size={24} />
+              <Icon size={23} />
             </div>
             <div>
               <div
                 style={{
                   fontSize: '11px',
                   fontWeight: 700,
-                  color: currentRoleConfig?.themeColor || '#0284c7',
+                  color: accent,
                   textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
+                  letterSpacing: '0.06em',
                 }}
               >
                 {currentRoleConfig?.badge}
               </div>
               <h2
                 style={{
-                  fontSize: '20px',
-                  fontWeight: 800,
-                  color: '#0f172a',
-                  margin: '2px 0 0 0',
-                  letterSpacing: '-0.02em',
+                  fontSize: '21px',
+                  fontWeight: 700,
+                  color: 'var(--color-text-main)',
+                  margin: '3px 0 0 0',
                 }}
               >
-                {currentRoleConfig?.title} Sign In
+                {currentRoleConfig?.title} sign in
               </h2>
             </div>
           </div>
@@ -626,15 +489,15 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                 display: 'flex',
                 alignItems: 'flex-start',
                 gap: '8px',
-                backgroundColor: '#fef2f2',
-                border: '1px solid #fecaca',
-                borderRadius: '6px',
+                backgroundColor: 'var(--color-danger-soft)',
+                border: '1px solid var(--color-danger-border)',
+                borderRadius: 'var(--radius-sm)',
                 padding: '10px 12px',
                 marginBottom: '20px',
               }}
             >
-              <AlertCircle size={16} style={{ color: '#dc2626', flexShrink: 0, marginTop: '1px' }} />
-              <span style={{ fontSize: '13px', color: '#991b1b' }}>{error}</span>
+              <AlertCircle size={16} style={{ color: 'var(--color-danger)', flexShrink: 0, marginTop: '1px' }} />
+              <span style={{ fontSize: '13px', color: 'var(--color-danger)' }}>{error}</span>
             </div>
           )}
 
@@ -643,7 +506,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             <div style={{ marginBottom: '16px' }}>
               <label
                 htmlFor="evocare-username"
-                style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#374151', marginBottom: '6px' }}
+                style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '6px' }}
               >
                 User ID / Username
               </label>
@@ -655,7 +518,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                     left: '12px',
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    color: '#9ca3af',
+                    color: 'var(--color-text-faint)',
                   }}
                 />
                 <input
@@ -669,17 +532,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                   style={{
                     width: '100%',
                     padding: '10px 12px 10px 36px',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '6px',
+                    border: '1px solid var(--color-border-strong)',
+                    borderRadius: 'var(--radius-sm)',
                     fontSize: '14px',
-                    color: '#0f172a',
-                    backgroundColor: loading ? '#f9fafb' : '#ffffff',
+                    color: 'var(--color-text-main)',
+                    backgroundColor: loading ? 'var(--color-surface-alt)' : 'var(--color-surface)',
                     outline: 'none',
                     boxSizing: 'border-box',
-                    transition: 'border-color 0.15s',
                   }}
-                  onFocus={(e) => (e.target.style.borderColor = currentRoleConfig?.themeColor || '#0284c7')}
-                  onBlur={(e) => (e.target.style.borderColor = '#d1d5db')}
+                  onFocus={(e) => (e.target.style.borderColor = accent)}
+                  onBlur={(e) => (e.target.style.borderColor = 'var(--color-border-strong)')}
                 />
               </div>
             </div>
@@ -688,7 +550,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             <div style={{ marginBottom: '20px' }}>
               <label
                 htmlFor="evocare-password"
-                style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#374151', marginBottom: '6px' }}
+                style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '6px' }}
               >
                 Password
               </label>
@@ -700,7 +562,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                     left: '12px',
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    color: '#9ca3af',
+                    color: 'var(--color-text-faint)',
                   }}
                 />
                 <input
@@ -714,17 +576,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                   style={{
                     width: '100%',
                     padding: '10px 40px 10px 36px',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '6px',
+                    border: '1px solid var(--color-border-strong)',
+                    borderRadius: 'var(--radius-sm)',
                     fontSize: '14px',
-                    color: '#0f172a',
-                    backgroundColor: loading ? '#f9fafb' : '#ffffff',
+                    color: 'var(--color-text-main)',
+                    backgroundColor: loading ? 'var(--color-surface-alt)' : 'var(--color-surface)',
                     outline: 'none',
                     boxSizing: 'border-box',
-                    transition: 'border-color 0.15s',
                   }}
-                  onFocus={(e) => (e.target.style.borderColor = currentRoleConfig?.themeColor || '#0284c7')}
-                  onBlur={(e) => (e.target.style.borderColor = '#d1d5db')}
+                  onFocus={(e) => (e.target.style.borderColor = accent)}
+                  onBlur={(e) => (e.target.style.borderColor = 'var(--color-border-strong)')}
                 />
                 <button
                   type="button"
@@ -738,7 +599,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                     border: 'none',
                     cursor: 'pointer',
                     padding: '4px',
-                    color: '#9ca3af',
+                    color: 'var(--color-text-faint)',
                   }}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
@@ -755,19 +616,24 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               style={{
                 width: '100%',
                 padding: '12px',
-                backgroundColor: loading ? '#94a3b8' : currentRoleConfig?.themeColor || '#0284c7',
+                backgroundColor: loading ? 'var(--color-text-faint)' : accent,
                 color: '#ffffff',
                 border: 'none',
-                borderRadius: '6px',
+                borderRadius: 'var(--radius-sm)',
                 fontSize: '14px',
                 fontWeight: 700,
                 cursor: loading ? 'not-allowed' : 'pointer',
-                transition: 'background-color 0.15s',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                boxShadow: `0 2px 8px ${currentRoleConfig?.themeColor || '#0284c7'}40`,
+                boxShadow: loading ? 'none' : `0 8px 20px -6px ${accent}80`,
+              }}
+              onMouseEnter={(e) => {
+                if (!loading) (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
               }}
             >
               {loading ? (
@@ -788,7 +654,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               ) : (
                 <>
                   <LogIn size={15} />
-                  Sign In to {currentRoleConfig?.title} Portal
+                  Sign in to {currentRoleConfig?.title} portal
                 </>
               )}
             </button>
@@ -800,9 +666,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               style={{
                 marginTop: '24px',
                 padding: '16px',
-                backgroundColor: currentRoleConfig.bgLight,
-                borderRadius: '8px',
-                border: `1px solid ${currentRoleConfig.borderColor}`,
+                backgroundColor: currentRoleConfig.accentSoft,
+                borderRadius: 'var(--radius-md)',
+                border: `1px solid ${currentRoleConfig.accentBorder}`,
               }}
             >
               <div
@@ -817,7 +683,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                   style={{
                     fontSize: '11px',
                     fontWeight: 700,
-                    color: currentRoleConfig.themeColor,
+                    color: accent,
                     textTransform: 'uppercase',
                     letterSpacing: '0.06em',
                     display: 'flex',
@@ -826,7 +692,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                   }}
                 >
                   <KeyRound size={12} />
-                  {currentRoleConfig.title} Demo Credentials
+                  {currentRoleConfig.title} demo credentials
                 </div>
                 <button
                   id={`evocare-demo-${currentRoleConfig.demoUser}`}
@@ -835,11 +701,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                   style={{
                     fontSize: '11px',
                     fontWeight: 700,
-                    backgroundColor: currentRoleConfig.themeColor,
+                    backgroundColor: accent,
                     color: '#ffffff',
                     border: 'none',
-                    borderRadius: '4px',
-                    padding: '3px 8px',
+                    borderRadius: 'var(--radius-sm)',
+                    padding: '4px 9px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -847,22 +713,22 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                   }}
                 >
                   <Sparkles size={11} />
-                  Auto-Fill
+                  Auto-fill
                 </button>
               </div>
 
-              <div style={{ fontSize: '12px', color: '#334155', marginBottom: '8px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--color-text-main)', marginBottom: '8px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0' }}>
-                  <span style={{ color: '#64748b' }}>Username:</span>
-                  <strong style={{ fontFamily: "'IBM Plex Mono', monospace" }}>{currentRoleConfig.demoUser}</strong>
+                  <span style={{ color: 'var(--color-text-muted)' }}>Username:</span>
+                  <strong style={{ fontFamily: 'var(--font-mono)' }}>{currentRoleConfig.demoUser}</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0' }}>
-                  <span style={{ color: '#64748b' }}>Password:</span>
-                  <strong style={{ fontFamily: "'IBM Plex Mono', monospace" }}>{currentRoleConfig.demoPass}</strong>
+                  <span style={{ color: 'var(--color-text-muted)' }}>Password:</span>
+                  <strong style={{ fontFamily: 'var(--font-mono)' }}>{currentRoleConfig.demoPass}</strong>
                 </div>
               </div>
 
-              <div style={{ fontSize: '11px', color: '#64748b', borderTop: '1px solid #e2e8f0', paddingTop: '6px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', borderTop: `1px solid ${currentRoleConfig.accentBorder}`, paddingTop: '6px' }}>
                 {currentRoleConfig.demoRoleDesc}
               </div>
             </div>
@@ -877,15 +743,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             gap: '6px',
             marginTop: '20px',
             fontSize: '12px',
-            color: '#64748b',
+            color: 'var(--color-text-muted)',
           }}
         >
-          <ShieldCheck size={13} style={{ color: currentRoleConfig?.themeColor || '#0284c7' }} />
-          <span>JWT-secured · Role-specific endpoint authorization</span>
+          <ShieldCheck size={13} style={{ color: accent }} />
+          <span>JWT-secured &middot; role-specific endpoint authorization</span>
         </div>
-      </main>
-
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
     </div>
   );
 };

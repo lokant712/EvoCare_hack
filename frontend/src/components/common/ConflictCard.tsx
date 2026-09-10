@@ -11,9 +11,9 @@ export const ConflictCard: React.FC<ConflictCardProps> = ({ conflict, onSelectEv
   return (
     <div
       style={{
-        backgroundColor: '#fff',
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '10px',
-        border: '1px solid #fed7aa',
+        border: '1px solid var(--color-warning-border)',
         padding: '16px',
         marginBottom: '12px',
         boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
@@ -21,16 +21,16 @@ export const ConflictCard: React.FC<ConflictCardProps> = ({ conflict, onSelectEv
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <AlertTriangle size={18} style={{ color: '#ea580c' }} />
-          <span style={{ fontWeight: 700, fontSize: '14px', color: '#9a3412' }}>{conflict.title}</span>
+          <AlertTriangle size={18} style={{ color: 'var(--color-warning)' }} />
+          <span style={{ fontWeight: 700, fontSize: '14px', color: 'var(--color-warning-dark)' }}>{conflict.title}</span>
           <span
             style={{
               fontSize: '11px',
               fontFamily: "'IBM Plex Mono', monospace",
               padding: '2px 6px',
               borderRadius: '4px',
-              backgroundColor: '#ffedd5',
-              color: '#c2410c',
+              backgroundColor: 'var(--color-warning-soft)',
+              color: 'var(--color-warning-dark)',
               fontWeight: 600,
             }}
           >
@@ -43,15 +43,15 @@ export const ConflictCard: React.FC<ConflictCardProps> = ({ conflict, onSelectEv
             fontWeight: 600,
             padding: '2px 8px',
             borderRadius: '9999px',
-            backgroundColor: '#fee2e2',
-            color: '#991b1b',
+            backgroundColor: 'var(--color-danger-soft)',
+            color: 'var(--color-danger-dark)',
           }}
         >
           {conflict.status}
         </span>
       </div>
 
-      <p style={{ fontSize: '13px', color: '#4b5563', marginBottom: '12px', lineHeight: 1.4 }}>
+      <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', marginBottom: '12px', lineHeight: 1.4 }}>
         {conflict.description}
       </p>
 
@@ -60,33 +60,33 @@ export const ConflictCard: React.FC<ConflictCardProps> = ({ conflict, onSelectEv
         {/* Clinician Perspective */}
         <div
           style={{
-            backgroundColor: '#f0f9ff',
+            backgroundColor: 'var(--color-accent-soft)',
             padding: '10px 12px',
             borderRadius: '8px',
-            border: '1px solid #bae6fd',
+            border: '1px solid var(--color-accent-border)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-            <Stethoscope size={14} style={{ color: '#0284c7' }} />
-            <span style={{ fontSize: '11px', fontWeight: 700, color: '#0369a1' }}>CLINICIAN VIEW</span>
+            <Stethoscope size={14} style={{ color: 'var(--color-accent)' }} />
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-accent-dark)' }}>CLINICIAN VIEW</span>
           </div>
-          <p style={{ fontSize: '12px', color: '#0c4a6e', margin: 0 }}>{conflict.doctor_view}</p>
+          <p style={{ fontSize: '12px', color: 'var(--color-accent-dark)', margin: 0 }}>{conflict.doctor_view}</p>
         </div>
 
         {/* Caregiver Perspective */}
         <div
           style={{
-            backgroundColor: '#fefce8',
+            backgroundColor: 'var(--color-warning-soft)',
             padding: '10px 12px',
             borderRadius: '8px',
-            border: '1px solid #fef08a',
+            border: '1px solid var(--color-warning-border)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-            <Users size={14} style={{ color: '#ca8a04' }} />
-            <span style={{ fontSize: '11px', fontWeight: 700, color: '#854d0e' }}>CAREGIVER VIEW</span>
+            <Users size={14} style={{ color: 'var(--color-warning)' }} />
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-warning-dark)' }}>CAREGIVER VIEW</span>
           </div>
-          <p style={{ fontSize: '12px', color: '#713f12', margin: 0 }}>{conflict.caregiver_view}</p>
+          <p style={{ fontSize: '12px', color: 'var(--color-warning-dark)', margin: 0 }}>{conflict.caregiver_view}</p>
         </div>
       </div>
 
@@ -94,22 +94,22 @@ export const ConflictCard: React.FC<ConflictCardProps> = ({ conflict, onSelectEv
       <div
         style={{
           fontSize: '12px',
-          color: '#6b7280',
-          backgroundColor: '#f9fafb',
+          color: 'var(--color-text-muted)',
+          backgroundColor: 'var(--color-bg)',
           padding: '8px 10px',
           borderRadius: '6px',
-          borderLeft: '3px solid #cbd5e1',
+          borderLeft: '3px solid var(--color-border-strong)',
           marginBottom: '10px',
         }}
       >
-        <span style={{ fontWeight: 600, color: '#374151' }}>Context: </span>
+        <span style={{ fontWeight: 600, color: 'var(--color-text-secondary)' }}>Context: </span>
         {conflict.context}
       </div>
 
       {/* Supporting Evidence Chips */}
       {conflict.evidence_ids && conflict.evidence_ids.length > 0 && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '11px', color: '#9ca3af', fontWeight: 500 }}>Evidence:</span>
+          <span style={{ fontSize: '11px', color: 'var(--color-text-faint)', fontWeight: 500 }}>Evidence:</span>
           {conflict.evidence_ids.map((ev) => (
             <button
               key={ev}
@@ -119,9 +119,9 @@ export const ConflictCard: React.FC<ConflictCardProps> = ({ conflict, onSelectEv
                 fontFamily: "'IBM Plex Mono', monospace",
                 padding: '2px 8px',
                 borderRadius: '4px',
-                backgroundColor: '#f1f5f9',
-                border: '1px solid #cbd5e1',
-                color: '#0284c7',
+                backgroundColor: 'var(--color-surface-alt)',
+                border: '1px solid var(--color-border-strong)',
+                color: 'var(--color-accent)',
                 cursor: 'pointer',
                 fontWeight: 600,
               }}

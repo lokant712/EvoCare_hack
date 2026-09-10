@@ -157,7 +157,7 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(15, 23, 42, 0.65)',
+        backgroundColor: 'rgba(28, 26, 20, 0.65)',
         backdropFilter: 'blur(4px)',
         display: 'flex',
         alignItems: 'center',
@@ -168,9 +168,9 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
     >
       <div
         style={{
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '16px',
-          border: '1px solid #e2e8f0',
+          border: '1px solid var(--color-border)',
           boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
           width: '100%',
           maxWidth: '520px',
@@ -180,7 +180,7 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
         {/* Header */}
         <div
           style={{
-            background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+            background: 'linear-gradient(135deg, var(--color-success) 0%, var(--color-success) 100%)',
             padding: '20px 24px',
             color: '#ffffff',
             display: 'flex',
@@ -220,10 +220,10 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
               style={{
                 padding: '10px 14px',
                 borderRadius: '8px',
-                backgroundColor: message.type === 'success' ? '#f0fdf4' : '#fef2f2',
+                backgroundColor: message.type === 'success' ? 'var(--color-success-soft)' : 'var(--color-danger-soft)',
                 border: '1px solid',
-                borderColor: message.type === 'success' ? '#bbf7d0' : '#fecaca',
-                color: message.type === 'success' ? '#166534' : '#b91c1c',
+                borderColor: message.type === 'success' ? 'var(--color-success-border)' : 'var(--color-danger-border)',
+                color: message.type === 'success' ? 'var(--color-success-dark)' : 'var(--color-danger-dark)',
                 fontSize: '13px',
                 marginBottom: '16px',
                 display: 'flex',
@@ -242,21 +242,21 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
               style={{
                 padding: '16px',
                 borderRadius: '10px',
-                backgroundColor: '#f0fdf4',
-                border: '1.5px solid #86efac',
+                backgroundColor: 'var(--color-success-soft)',
+                border: '1.5px solid var(--color-success-border)',
                 marginBottom: '16px',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#15803d' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'var(--color-success-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-success)' }}>
                     <ShieldCheck size={20} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '15px', fontWeight: 700, color: '#166534' }}>
+                    <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-success-dark)' }}>
                       {activeConnection.caregiver_name}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#15803d' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--color-success)' }}>
                       @{activeConnection.caregiver_username} · {activeConnection.caregiver_email}
                     </div>
                   </div>
@@ -267,18 +267,18 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
                     fontWeight: 700,
                     padding: '3px 8px',
                     borderRadius: '6px',
-                    backgroundColor: '#dcfce7',
-                    color: '#166534',
+                    backgroundColor: 'var(--color-success-soft)',
+                    color: 'var(--color-success-dark)',
                   }}
                 >
                   CONNECTED
                 </span>
               </div>
-              <div style={{ fontSize: '12px', color: '#166534', marginTop: '10px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--color-success-dark)', marginTop: '10px' }}>
                 ✓ This caretaker has permanent permission to record observations and assist with your care.
               </div>
 
-              <div style={{ marginTop: '16px', borderTop: '1px solid #bbf7d0', paddingTop: '12px', display: 'flex', justifyContent: 'flex-end' }}>
+              <div style={{ marginTop: '16px', borderTop: '1px solid var(--color-success-border)', paddingTop: '12px', display: 'flex', justifyContent: 'flex-end' }}>
                 <button
                   type="button"
                   onClick={() => handleDisconnect(activeConnection.id)}
@@ -286,9 +286,9 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
                   style={{
                     padding: '6px 14px',
                     borderRadius: '6px',
-                    border: '1px solid #fecaca',
-                    backgroundColor: '#fff1f2',
-                    color: '#e11d48',
+                    border: '1px solid var(--color-danger-border)',
+                    backgroundColor: 'var(--color-danger-soft)',
+                    color: 'var(--color-danger)',
                     fontSize: '12px',
                     fontWeight: 700,
                     cursor: 'pointer',
@@ -308,19 +308,19 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
               style={{
                 padding: '16px',
                 borderRadius: '10px',
-                backgroundColor: '#fefce8',
-                border: '1.5px solid #fde047',
+                backgroundColor: 'var(--color-warning-soft)',
+                border: '1.5px solid var(--color-warning-border)',
                 marginBottom: '16px',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Clock size={20} color="#854d0e" />
+                  <Clock size={20} color="var(--color-warning-dark)" />
                   <div>
-                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#713f12' }}>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-warning-dark)' }}>
                       Request Sent to: {pendingConnection.caregiver_name}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#854d0e' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--color-warning-dark)' }}>
                       Awaiting caregiver approval.
                     </div>
                   </div>
@@ -331,8 +331,8 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
                     fontWeight: 700,
                     padding: '3px 8px',
                     borderRadius: '6px',
-                    backgroundColor: '#fef08a',
-                    color: '#854d0e',
+                    backgroundColor: 'var(--color-warning-border)',
+                    color: 'var(--color-warning-dark)',
                   }}
                 >
                   PENDING
@@ -347,9 +347,9 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
                   style={{
                     padding: '4px 10px',
                     borderRadius: '6px',
-                    border: '1px solid #cbd5e1',
-                    backgroundColor: '#ffffff',
-                    color: '#64748b',
+                    border: '1px solid var(--color-border-strong)',
+                    backgroundColor: 'var(--color-surface)',
+                    color: 'var(--color-text-muted)',
                     fontSize: '11px',
                     fontWeight: 600,
                     cursor: 'pointer',
@@ -363,7 +363,7 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
             /* Case 3: Select and Connect Caregiver */
             <form onSubmit={handleSendRequest}>
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: 'var(--color-text-secondary)', marginBottom: '6px' }}>
                   Choose a Registered Caretaker:
                 </label>
                 <select
@@ -373,10 +373,10 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
                     width: '100%',
                     padding: '10px 14px',
                     borderRadius: '8px',
-                    border: '1.5px solid #cbd5e1',
+                    border: '1.5px solid var(--color-border-strong)',
                     fontSize: '14px',
                     outline: 'none',
-                    backgroundColor: '#ffffff',
+                    backgroundColor: 'var(--color-surface)',
                   }}
                 >
                   {caregivers.map((cg) => (
@@ -388,7 +388,7 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: 'var(--color-text-secondary)', marginBottom: '6px' }}>
                   Optional Note / Relationship:
                 </label>
                 <input
@@ -400,7 +400,7 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
                     width: '100%',
                     padding: '10px 14px',
                     borderRadius: '8px',
-                    border: '1.5px solid #cbd5e1',
+                    border: '1.5px solid var(--color-border-strong)',
                     fontSize: '13px',
                     outline: 'none',
                     boxSizing: 'border-box',
@@ -416,7 +416,7 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
                   padding: '12px',
                   borderRadius: '8px',
                   border: 'none',
-                  backgroundColor: '#059669',
+                  backgroundColor: 'var(--color-success)',
                   color: '#ffffff',
                   fontSize: '14px',
                   fontWeight: 700,
@@ -433,16 +433,16 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
             </form>
           )}
 
-          <div style={{ marginTop: '20px', borderTop: '1px solid #f1f5f9', paddingTop: '12px', display: 'flex', justifyContent: 'flex-end' }}>
+          <div style={{ marginTop: '20px', borderTop: '1px solid var(--color-surface-alt)', paddingTop: '12px', display: 'flex', justifyContent: 'flex-end' }}>
             <button
               type="button"
               onClick={onClose}
               style={{
                 padding: '8px 16px',
                 borderRadius: '6px',
-                border: '1px solid #cbd5e1',
-                backgroundColor: '#ffffff',
-                color: '#475569',
+                border: '1px solid var(--color-border-strong)',
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text-secondary)',
                 fontSize: '12px',
                 fontWeight: 600,
                 cursor: 'pointer',

@@ -121,7 +121,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
   return (
     <div
       style={{
-        backgroundColor: '#f8fafc',
+        backgroundColor: 'var(--color-bg)',
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
@@ -133,8 +133,8 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
       <div
         style={{
           padding: '10px 24px',
-          borderBottom: '1px solid #e2e8f0',
-          backgroundColor: '#ffffff',
+          borderBottom: '1px solid var(--color-border)',
+          backgroundColor: 'var(--color-surface)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -156,7 +156,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                 width: '32px',
                 height: '32px',
                 borderRadius: '8px',
-                backgroundColor: '#0284c7',
+                backgroundColor: 'var(--color-accent)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -166,10 +166,10 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
               <Bot size={18} />
             </div>
             <div>
-              <div style={{ fontSize: '14px', fontWeight: 700, color: '#0f172a' }}>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-text-main)' }}>
                 EvoCare Clinical AI Assistant
               </div>
-              <div style={{ fontSize: '11px', color: '#64748b' }}>
+              <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>
                 Consultative intelligence grounded in {data.patient.name}'s longitudinal records
               </div>
             </div>
@@ -179,8 +179,8 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
             style={{
               fontSize: '11px',
               fontWeight: 600,
-              color: '#0369a1',
-              backgroundColor: '#e0f2fe',
+              color: 'var(--color-accent-dark)',
+              backgroundColor: 'var(--color-accent-soft)',
               padding: '4px 10px',
               borderRadius: '6px',
               display: 'flex',
@@ -203,7 +203,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--color-surface)',
         }}
       >
         <div
@@ -230,11 +230,11 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                 <div
                   style={{
                     maxWidth: '75%',
-                    backgroundColor: '#0284c7',
+                    backgroundColor: 'var(--color-accent)',
                     color: '#ffffff',
                     padding: '12px 18px',
                     borderRadius: '20px 20px 4px 20px',
-                    boxShadow: '0 2px 4px rgba(2, 132, 199, 0.15)',
+                    boxShadow: '0 2px 4px rgba(13, 110, 100, 0.15)',
                     fontSize: '14px',
                     lineHeight: 1.5,
                     wordBreak: 'break-word',
@@ -242,7 +242,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                 >
                   {msg.text}
                 </div>
-                <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px', paddingRight: '4px' }}>
+                <div style={{ fontSize: '10px', color: 'var(--color-text-faint)', marginTop: '4px', paddingRight: '4px' }}>
                   {msg.timestamp}
                 </div>
               </div>
@@ -265,7 +265,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                       width: '32px',
                       height: '32px',
                       borderRadius: '50%',
-                      backgroundColor: '#0284c7',
+                      backgroundColor: 'var(--color-accent)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -281,28 +281,28 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                   <div
                     style={{
                       flex: 1,
-                      backgroundColor: '#f8fafc',
+                      backgroundColor: 'var(--color-bg)',
                       borderRadius: '16px',
-                      border: '1px solid #e2e8f0',
+                      border: '1px solid var(--color-border)',
                       boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)',
                       padding: '18px 22px',
                       fontSize: '14px',
                       lineHeight: 1.5,
-                      color: '#0f172a',
+                      color: 'var(--color-text-main)',
                     }}
                   >
                     {/* Initial Summary Card or Normal Text */}
                     {msg.isInitialSummary ? (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                        <div style={{ fontSize: '14px', lineHeight: 1.5, color: '#0f172a' }}>
+                        <div style={{ fontSize: '14px', lineHeight: 1.5, color: 'var(--color-text-main)' }}>
                           {msg.text}
                         </div>
 
                         {/* Embedded Baseline Summary Card */}
                         <div
                           style={{
-                            backgroundColor: '#ffffff',
-                            border: '1px solid #e2e8f0',
+                            backgroundColor: 'var(--color-surface)',
+                            border: '1px solid var(--color-border)',
                             borderRadius: '12px',
                             padding: '16px',
                             display: 'flex',
@@ -317,22 +317,22 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                               justifyContent: 'space-between',
                               flexWrap: 'wrap',
                               gap: '8px',
-                              borderBottom: '1px solid #f1f5f9',
+                              borderBottom: '1px solid var(--color-surface-alt)',
                               paddingBottom: '10px',
                             }}
                           >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <HeartPulse size={18} style={{ color: '#0284c7' }} />
-                              <span style={{ fontSize: '13px', fontWeight: 700, color: '#0369a1' }}>
+                              <HeartPulse size={18} style={{ color: 'var(--color-accent)' }} />
+                              <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-accent-dark)' }}>
                                 Essential Patient Summary &amp; Longitudinal Baseline
                               </span>
                             </div>
                             <button
                               onClick={onSwitchToPatientRecords}
                               style={{
-                                backgroundColor: '#ffffff',
-                                border: '1px solid #cbd5e1',
-                                color: '#0284c7',
+                                backgroundColor: 'var(--color-surface)',
+                                border: '1px solid var(--color-border-strong)',
+                                color: 'var(--color-accent)',
                                 padding: '4px 10px',
                                 borderRadius: '6px',
                                 fontSize: '11px',
@@ -351,30 +351,30 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
 
                           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
                             {/* Confirmed Chronic Conditions */}
-                            <div style={{ backgroundColor: '#f8fafc', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                              <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px' }}>
+                            <div style={{ backgroundColor: 'var(--color-bg)', padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
+                              <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px' }}>
                                 Confirmed Chronic Conditions
                               </div>
                               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                                <span style={{ fontSize: '11px', fontWeight: 600, color: '#0f172a', backgroundColor: '#e2e8f0', padding: '2px 6px', borderRadius: '4px' }}>
+                                <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-main)', backgroundColor: 'var(--color-border)', padding: '2px 6px', borderRadius: '4px' }}>
                                   Type 2 Diabetes (E11.9)
                                 </span>
-                                <span style={{ fontSize: '11px', fontWeight: 600, color: '#0f172a', backgroundColor: '#e2e8f0', padding: '2px 6px', borderRadius: '4px' }}>
+                                <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-main)', backgroundColor: 'var(--color-border)', padding: '2px 6px', borderRadius: '4px' }}>
                                   Hypertension (I10)
                                 </span>
-                                <span style={{ fontSize: '11px', fontWeight: 600, color: '#0f172a', backgroundColor: '#e2e8f0', padding: '2px 6px', borderRadius: '4px' }}>
+                                <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-main)', backgroundColor: 'var(--color-border)', padding: '2px 6px', borderRadius: '4px' }}>
                                   Bilateral Knee Osteoarthritis
                                 </span>
                               </div>
                             </div>
 
                             {/* Recent Trajectory Alerts */}
-                            <div style={{ backgroundColor: '#fff7ed', padding: '10px 12px', borderRadius: '8px', border: '1px solid #fed7aa' }}>
-                              <div style={{ fontSize: '11px', fontWeight: 700, color: '#c2410c', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <div style={{ backgroundColor: 'var(--color-warning-soft)', padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--color-warning-border)' }}>
+                              <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-warning-dark)', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 <AlertTriangle size={12} />
                                 Recent Trajectory Warnings
                               </div>
-                              <div style={{ fontSize: '11px', color: '#7c2d12', lineHeight: 1.4 }}>
+                              <div style={{ fontSize: '11px', color: 'var(--color-warning-dark)', lineHeight: 1.4 }}>
                                 • <strong>Mobility:</strong> Intermittent outdoor arm support needed<br />
                                 • <strong>Dizziness:</strong> Positional morning lightheadedness<br />
                                 • <strong>Falls:</strong> Near-fall on Sep 06 (Zero ground impact)
@@ -382,19 +382,19 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                             </div>
 
                             {/* Active Regimen */}
-                            <div style={{ backgroundColor: '#f8fafc', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                              <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <div style={{ backgroundColor: 'var(--color-bg)', padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
+                              <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 <Pill size={12} />
                                 Active Regimen ({data.medications.length})
                               </div>
-                              <div style={{ fontSize: '11px', color: '#334155', display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                              <div style={{ fontSize: '11px', color: 'var(--color-text-secondary)', display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
                                 {data.medications.slice(0, 3).map((m, i) => (
-                                  <span key={i} style={{ backgroundColor: '#f0fdf4', color: '#166534', padding: '2px 6px', borderRadius: '4px', border: '1px solid #bbf7d0', fontSize: '10px', fontWeight: 600 }}>
+                                  <span key={i} style={{ backgroundColor: 'var(--color-success-soft)', color: 'var(--color-success-dark)', padding: '2px 6px', borderRadius: '4px', border: '1px solid var(--color-success-border)', fontSize: '10px', fontWeight: 600 }}>
                                     {m.name} {m.dose} ({m.frequency})
                                   </span>
                                 ))}
                                 {data.medications.length > 3 && (
-                                  <span style={{ fontSize: '10px', color: '#64748b', alignSelf: 'center' }}>
+                                  <span style={{ fontSize: '10px', color: 'var(--color-text-muted)', alignSelf: 'center' }}>
                                     +{data.medications.length - 3} more
                                   </span>
                                 )}
@@ -402,7 +402,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                             </div>
                           </div>
 
-                          <div style={{ fontSize: '12px', color: '#0369a1', fontWeight: 600, paddingTop: '4px' }}>
+                          <div style={{ fontSize: '12px', color: 'var(--color-accent-dark)', fontWeight: 600, paddingTop: '4px' }}>
                             💬 What clinical considerations, trajectory questions, or drug safety interactions would you like to explore?
                           </div>
                         </div>
@@ -415,7 +415,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
 
                     {/* Error state */}
                     {msg.error && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#b91c1c' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-danger-dark)' }}>
                         <AlertTriangle size={16} />
                         <span>{msg.error}</span>
                       </div>
@@ -426,7 +426,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {/* Consideration Cards */}
                         <div>
-                          <div style={{ fontSize: '12px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.04em' }}>
+                          <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.04em' }}>
                             Differential Considerations for Clinician Evaluation
                           </div>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -434,22 +434,22 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                               <div
                                 key={i}
                                 style={{
-                                  backgroundColor: '#ffffff',
-                                  border: '1px solid #cbd5e1',
+                                  backgroundColor: 'var(--color-surface)',
+                                  border: '1px solid var(--color-border-strong)',
                                   borderRadius: '10px',
                                   padding: '14px 16px',
                                 }}
                               >
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-                                  <span style={{ fontWeight: 700, color: '#0f172a', fontSize: '14px' }}>
+                                  <span style={{ fontWeight: 700, color: 'var(--color-text-main)', fontSize: '14px' }}>
                                     {c.title}
                                   </span>
                                   <span
                                     style={{
                                       fontSize: '10px',
                                       fontWeight: 700,
-                                      backgroundColor: '#fef3c7',
-                                      color: '#92400e',
+                                      backgroundColor: 'var(--color-warning-soft)',
+                                      color: 'var(--color-warning-dark)',
                                       padding: '2px 8px',
                                       borderRadius: '4px',
                                     }}
@@ -457,14 +457,14 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                                     {c.status.replace(/_/g, ' ')}
                                   </span>
                                 </div>
-                                <p style={{ margin: '0 0 10px 0', fontSize: '13px', color: '#475569', lineHeight: 1.5 }}>
+                                <p style={{ margin: '0 0 10px 0', fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
                                   {c.description || c.reasoning || 'Evaluated against longitudinal evidence.'}
                                 </p>
 
                                 {/* Supporting Evidence Chips */}
                                 {c.references && c.references.length > 0 && (
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Evidence:</span>
+                                    <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 600 }}>Evidence:</span>
                                     {c.references.map((refCode) => (
                                       <button
                                         key={refCode}
@@ -473,9 +473,9 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                                           fontSize: '11px',
                                           fontFamily: "'IBM Plex Mono', monospace",
                                           fontWeight: 600,
-                                          backgroundColor: '#e0f2fe',
-                                          color: '#0369a1',
-                                          border: '1px solid #bae6fd',
+                                          backgroundColor: 'var(--color-accent-soft)',
+                                          color: 'var(--color-accent-dark)',
+                                          border: '1px solid var(--color-accent-border)',
                                           borderRadius: '4px',
                                           padding: '2px 7px',
                                           cursor: 'pointer',
@@ -494,7 +494,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                         </div>
 
                         {/* Disclaimer */}
-                        <div style={{ fontSize: '11px', color: '#94a3b8', fontStyle: 'italic', borderTop: '1px solid #e2e8f0', paddingTop: '8px' }}>
+                        <div style={{ fontSize: '11px', color: 'var(--color-text-faint)', fontStyle: 'italic', borderTop: '1px solid var(--color-border)', paddingTop: '8px' }}>
                           ⚠ {msg.reasoningData.disclaimer}
                         </div>
                       </div>
@@ -502,7 +502,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                   </div>
                 </div>
 
-                <div style={{ fontSize: '10px', color: '#94a3b8', marginLeft: '46px' }}>
+                <div style={{ fontSize: '10px', color: 'var(--color-text-faint)', marginLeft: '46px' }}>
                   {msg.timestamp}
                 </div>
               </div>
@@ -517,7 +517,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                   width: '32px',
                   height: '32px',
                   borderRadius: '50%',
-                  backgroundColor: '#0284c7',
+                  backgroundColor: 'var(--color-accent)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -529,12 +529,12 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
               </div>
               <div
                 style={{
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: 'var(--color-bg)',
+                  border: '1px solid var(--color-border)',
                   padding: '12px 18px',
                   borderRadius: '14px',
                   fontSize: '13px',
-                  color: '#64748b',
+                  color: 'var(--color-text-muted)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
@@ -544,7 +544,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                   style={{
                     width: '12px',
                     height: '12px',
-                    border: '2px solid #0284c7',
+                    border: '2px solid var(--color-accent)',
                     borderTopColor: 'transparent',
                     borderRadius: '50%',
                     animation: 'spin 0.8s linear infinite',
@@ -563,8 +563,8 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
       {/* Bottom Floating/Docked Input Capsule (ChatGPT / Claude / Gemini style) */}
       <div
         style={{
-          borderTop: '1px solid #e2e8f0',
-          backgroundColor: '#ffffff',
+          borderTop: '1px solid var(--color-border)',
+          backgroundColor: 'var(--color-surface)',
           padding: '12px 20px 16px 20px',
           display: 'flex',
           flexDirection: 'column',
@@ -583,7 +583,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
               paddingBottom: '2px',
             }}
           >
-            <span style={{ fontSize: '11px', fontWeight: 600, color: '#94a3b8', whiteSpace: 'nowrap' }}>
+            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-faint)', whiteSpace: 'nowrap' }}>
               Suggestions:
             </span>
             {EXAMPLE_PROMPTS.map((prompt, i) => (
@@ -592,9 +592,9 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                 onClick={() => handleSend(prompt)}
                 disabled={loading}
                 style={{
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid #e2e8f0',
-                  color: '#334155',
+                  backgroundColor: 'var(--color-bg)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text-secondary)',
                   padding: '4px 12px',
                   borderRadius: '16px',
                   fontSize: '12px',
@@ -603,14 +603,14 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                   transition: 'all 0.15s',
                 }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#e0f2fe';
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = '#bae6fd';
-                  (e.currentTarget as HTMLButtonElement).style.color = '#0369a1';
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--color-accent-soft)';
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--color-accent-border)';
+                  (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-accent-dark)';
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#f8fafc';
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = '#e2e8f0';
-                  (e.currentTarget as HTMLButtonElement).style.color = '#334155';
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--color-bg)';
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--color-border)';
+                  (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-text-secondary)';
                 }}
               >
                 {prompt}
@@ -627,8 +627,8 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
             style={{
               display: 'flex',
               alignItems: 'center',
-              backgroundColor: '#ffffff',
-              border: '1px solid #cbd5e1',
+              backgroundColor: 'var(--color-surface)',
+              border: '1px solid var(--color-border-strong)',
               borderRadius: '24px',
               boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
               padding: '4px 8px 4px 18px',
@@ -646,7 +646,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                 border: 'none',
                 outline: 'none',
                 fontSize: '14px',
-                color: '#0f172a',
+                color: 'var(--color-text-main)',
                 padding: '10px 0',
                 backgroundColor: 'transparent',
               }}
@@ -655,8 +655,8 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
               type="submit"
               disabled={loading || !inputValue.trim()}
               style={{
-                backgroundColor: loading || !inputValue.trim() ? '#e2e8f0' : '#0284c7',
-                color: loading || !inputValue.trim() ? '#94a3b8' : '#ffffff',
+                backgroundColor: loading || !inputValue.trim() ? 'var(--color-border)' : 'var(--color-accent)',
+                color: loading || !inputValue.trim() ? 'var(--color-text-faint)' : '#ffffff',
                 border: 'none',
                 borderRadius: '20px',
                 padding: '8px 18px',
@@ -675,7 +675,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
             </button>
           </form>
 
-          <div style={{ textAlign: 'center', fontSize: '11px', color: '#94a3b8' }}>
+          <div style={{ textAlign: 'center', fontSize: '11px', color: 'var(--color-text-faint)' }}>
             EvoCare AI interprets and constrains evidence • Human clinician remains the definitive decision-maker
           </div>
         </div>

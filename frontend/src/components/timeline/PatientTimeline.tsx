@@ -20,9 +20,9 @@ export const PatientTimeline: React.FC<PatientTimelineProps> = ({ timeline, onSe
   return (
     <div
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '12px',
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--color-border)',
         padding: '20px',
         marginBottom: '24px',
         boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
@@ -31,17 +31,17 @@ export const PatientTimeline: React.FC<PatientTimelineProps> = ({ timeline, onSe
       {/* Header & Filter */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '16px' }}>
         <div>
-          <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+          <h2 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', margin: 0 }}>
             Longitudinal Patient Timeline
           </h2>
-          <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 0 0' }}>
+          <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', margin: '2px 0 0 0' }}>
             Unified chronological history of clinical consultations, laboratory results, and caregiver observations
           </p>
         </div>
 
         {/* Filter Pills */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-          <Filter size={13} style={{ color: '#64748b' }} />
+          <Filter size={13} style={{ color: 'var(--color-text-muted)' }} />
           {categories.map((cat) => (
             <button
               key={cat}
@@ -51,9 +51,9 @@ export const PatientTimeline: React.FC<PatientTimelineProps> = ({ timeline, onSe
                 fontWeight: 600,
                 padding: '3px 8px',
                 borderRadius: '6px',
-                border: selectedFilter === cat ? '1px solid #0284c7' : '1px solid #e2e8f0',
-                backgroundColor: selectedFilter === cat ? '#e0f2fe' : '#ffffff',
-                color: selectedFilter === cat ? '#0369a1' : '#64748b',
+                border: selectedFilter === cat ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
+                backgroundColor: selectedFilter === cat ? 'var(--color-accent-soft)' : 'var(--color-surface)',
+                color: selectedFilter === cat ? 'var(--color-accent-dark)' : 'var(--color-text-muted)',
                 cursor: 'pointer',
               }}
             >
@@ -73,7 +73,7 @@ export const PatientTimeline: React.FC<PatientTimelineProps> = ({ timeline, onSe
             bottom: '8px',
             left: '8px',
             width: '2px',
-            backgroundColor: '#e2e8f0',
+            backgroundColor: 'var(--color-border)',
           }}
         />
 
@@ -89,9 +89,9 @@ export const PatientTimeline: React.FC<PatientTimelineProps> = ({ timeline, onSe
                   width: '10px',
                   height: '10px',
                   borderRadius: '50%',
-                  backgroundColor: '#0284c7',
+                  backgroundColor: 'var(--color-accent)',
                   border: '2px solid #ffffff',
-                  boxShadow: '0 0 0 2px #bae6fd',
+                  boxShadow: '0 0 0 2px var(--color-accent-border)',
                 }}
               />
 
@@ -99,18 +99,18 @@ export const PatientTimeline: React.FC<PatientTimelineProps> = ({ timeline, onSe
               <div
                 style={{
                   padding: '12px 14px',
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: 'var(--color-bg)',
                   borderRadius: '8px',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px', marginBottom: '6px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '12px', fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ fontSize: '12px', fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, color: 'var(--color-text-main)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <Calendar size={12} />
                       {evt.date}
                     </span>
-                    <span style={{ fontSize: '13px', fontWeight: 700, color: '#1e293b' }}>
+                    <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-text-main)' }}>
                       {evt.title}
                     </span>
                   </div>
@@ -123,9 +123,9 @@ export const PatientTimeline: React.FC<PatientTimelineProps> = ({ timeline, onSe
                         style={{
                           fontSize: '11px',
                           fontFamily: "'IBM Plex Mono', monospace",
-                          color: '#0284c7',
-                          backgroundColor: '#e0f2fe',
-                          border: '1px solid #bae6fd',
+                          color: 'var(--color-accent)',
+                          backgroundColor: 'var(--color-accent-soft)',
+                          border: '1px solid var(--color-accent-border)',
                           borderRadius: '4px',
                           padding: '1px 6px',
                           cursor: 'pointer',
@@ -141,7 +141,7 @@ export const PatientTimeline: React.FC<PatientTimelineProps> = ({ timeline, onSe
                   </div>
                 </div>
 
-                <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.4 }}>
+                <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: 1.4 }}>
                   {evt.description}
                 </div>
               </div>

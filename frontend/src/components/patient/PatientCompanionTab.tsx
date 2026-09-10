@@ -63,7 +63,7 @@ const renderFormattedMessage = (text: string, isUser: boolean) => {
                     key={partIdx}
                     style={{
                       fontWeight: 700,
-                      color: isUser ? '#ffffff' : '#0f172a',
+                      color: isUser ? 'var(--color-accent-contrast)' : 'var(--color-text-main)',
                     }}
                   >
                     {part.slice(2, -2)}
@@ -174,8 +174,8 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
         display: 'flex',
         flexDirection: 'column',
         height: 'calc(100vh - 65px)',
-        backgroundColor: '#f8fafc',
-        color: '#0f172a',
+        backgroundColor: 'var(--color-bg)',
+        color: 'var(--color-text-main)',
         overflow: 'hidden',
         position: 'relative',
       }}
@@ -183,8 +183,8 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
       {/* Top Patient Header Bar */}
       <div
         style={{
-          backgroundColor: '#ffffff',
-          borderBottom: '1px solid #e2e8f0',
+          backgroundColor: 'var(--color-surface)',
+          borderBottom: '1px solid var(--color-border)',
           padding: '12px 24px',
           display: 'flex',
           alignItems: 'center',
@@ -201,36 +201,36 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
               width: '40px',
               height: '40px',
               borderRadius: '10px',
-              backgroundColor: '#d97706',
+              backgroundColor: 'var(--color-warning)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: '#ffffff',
-              boxShadow: '0 2px 6px rgba(217, 119, 6, 0.25)',
+              boxShadow: '0 2px 6px rgba(163, 102, 31, 0.25)',
             }}
           >
             <Bot size={22} />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+              <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: 'var(--color-text-main)' }}>
                 Personal Health Companion
               </h2>
               <span
                 style={{
                   fontSize: '11px',
                   fontWeight: 600,
-                  backgroundColor: '#fef3c7',
-                  color: '#92400e',
+                  backgroundColor: 'var(--color-warning-soft)',
+                  color: 'var(--color-warning-dark)',
                   padding: '2px 8px',
                   borderRadius: '12px',
-                  border: '1px solid #fde68a',
+                  border: '1px solid var(--color-warning-border)',
                 }}
               >
                 Informational Mode
               </span>
             </div>
-            <p style={{ fontSize: '12px', color: '#64748b', margin: 0 }}>
+            <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', margin: 0 }}>
               Grounded in records for {data.patient.name} ({data.patient.patient_code})
             </p>
           </div>
@@ -243,9 +243,9 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
             style={{
               padding: '6px 14px',
               borderRadius: '6px',
-              border: '1px solid #bbf7d0',
-              backgroundColor: '#f0fdf4',
-              color: '#166534',
+              border: '1px solid var(--color-success-border)',
+              backgroundColor: 'var(--color-success-soft)',
+              color: 'var(--color-success-dark)',
               fontSize: '12px',
               fontWeight: 700,
               cursor: 'pointer',
@@ -264,9 +264,9 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
             style={{
               padding: '6px 12px',
               borderRadius: '6px',
-              border: '1px solid #e2e8f0',
-              backgroundColor: '#ffffff',
-              color: '#64748b',
+              border: '1px solid var(--color-border)',
+              backgroundColor: 'var(--color-surface)',
+              color: 'var(--color-text-muted)',
               fontSize: '12px',
               fontWeight: 600,
               cursor: 'pointer',
@@ -321,14 +321,14 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
                       width: '34px',
                       height: '34px',
                       borderRadius: '50%',
-                      backgroundColor: '#d97706',
+                      backgroundColor: 'var(--color-warning)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       color: '#ffffff',
                       flexShrink: 0,
                       marginTop: '2px',
-                      boxShadow: '0 2px 4px rgba(217, 119, 6, 0.2)',
+                      boxShadow: '0 2px 4px rgba(163, 102, 31, 0.2)',
                     }}
                   >
                     <Bot size={18} />
@@ -338,14 +338,14 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
                 <div
                   style={{
                     maxWidth: isUser ? '75%' : '85%',
-                    backgroundColor: isUser ? '#0f172a' : '#ffffff',
-                    color: isUser ? '#ffffff' : '#0f172a',
+                    backgroundColor: isUser ? 'var(--color-accent)' : 'var(--color-surface)',
+                    color: isUser ? 'var(--color-accent-contrast)' : 'var(--color-text-main)',
                     padding: '14px 18px',
                     borderRadius: isUser ? '16px 16px 4px 16px' : '4px 16px 16px 16px',
                     boxShadow: isUser
-                      ? '0 2px 8px rgba(15, 23, 42, 0.15)'
+                      ? 'var(--shadow-sm)'
                       : '0 2px 8px rgba(0, 0, 0, 0.04)',
-                    border: isUser ? 'none' : '1px solid #e2e8f0',
+                    border: isUser ? 'none' : '1px solid var(--color-border)',
                   }}
                 >
                   <div
@@ -358,13 +358,13 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
                   </div>
 
                   {msg.isWelcome && (
-                    <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #f1f5f9' }}>
+                    <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--color-surface-alt)' }}>
                       <div
                         style={{
                           fontSize: '11px',
                           fontWeight: 700,
                           textTransform: 'uppercase',
-                          color: '#64748b',
+                          color: 'var(--color-text-muted)',
                           letterSpacing: '0.05em',
                           marginBottom: '8px',
                           display: 'flex',
@@ -372,7 +372,7 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
                           gap: '6px',
                         }}
                       >
-                        <HelpCircle size={13} style={{ color: '#d97706' }} />
+                        <HelpCircle size={13} style={{ color: 'var(--color-warning)' }} />
                         <span>Suggested Questions for Your Records:</span>
                       </div>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -381,25 +381,25 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
                             key={idx}
                             onClick={() => handleSend(prompt)}
                             style={{
-                              backgroundColor: '#f8fafc',
-                              border: '1px solid #cbd5e1',
+                              backgroundColor: 'var(--color-bg)',
+                              border: '1px solid var(--color-border-strong)',
                               borderRadius: '16px',
                               padding: '5px 12px',
                               fontSize: '12px',
-                              color: '#334155',
+                              color: 'var(--color-text-secondary)',
                               cursor: 'pointer',
                               textAlign: 'left',
                               transition: 'all 0.15s ease',
                             }}
                             onMouseEnter={(e) => {
-                              e.currentTarget.style.backgroundColor = '#fef3c7';
-                              e.currentTarget.style.borderColor = '#f59e0b';
-                              e.currentTarget.style.color = '#92400e';
+                              e.currentTarget.style.backgroundColor = 'var(--color-warning-soft)';
+                              e.currentTarget.style.borderColor = 'var(--color-warning)';
+                              e.currentTarget.style.color = 'var(--color-warning-dark)';
                             }}
                             onMouseLeave={(e) => {
-                              e.currentTarget.style.backgroundColor = '#f8fafc';
-                              e.currentTarget.style.borderColor = '#cbd5e1';
-                              e.currentTarget.style.color = '#334155';
+                              e.currentTarget.style.backgroundColor = 'var(--color-bg)';
+                              e.currentTarget.style.borderColor = 'var(--color-border-strong)';
+                              e.currentTarget.style.color = 'var(--color-text-secondary)';
                             }}
                           >
                             {prompt}
@@ -414,16 +414,16 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
                       style={{
                         marginTop: '12px',
                         paddingTop: '8px',
-                        borderTop: isUser ? 'none' : '1px solid #f1f5f9',
+                        borderTop: isUser ? 'none' : '1px solid var(--color-surface-alt)',
                         fontSize: '11px',
-                        color: isUser ? '#cbd5e1' : '#64748b',
+                        color: isUser ? 'var(--color-border-strong)' : 'var(--color-text-muted)',
                         display: 'flex',
                         alignItems: 'flex-start',
                         gap: '6px',
                         fontStyle: 'italic',
                       }}
                     >
-                      <Info size={13} style={{ flexShrink: 0, marginTop: '2px', color: '#d97706' }} />
+                      <Info size={13} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--color-warning)' }} />
                       <span>{msg.disclaimer}</span>
                     </div>
                   )}
@@ -431,7 +431,7 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
                   <div
                     style={{
                       fontSize: '10px',
-                      color: isUser ? '#94a3b8' : '#94a3b8',
+                      color: isUser ? 'var(--color-text-faint)' : 'var(--color-text-faint)',
                       marginTop: '6px',
                       textAlign: 'right',
                     }}
@@ -446,11 +446,11 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
                       width: '34px',
                       height: '34px',
                       borderRadius: '50%',
-                      backgroundColor: '#0f172a',
+                      backgroundColor: 'var(--color-accent)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#ffffff',
+                      color: 'var(--color-accent-contrast)',
                       flexShrink: 0,
                       marginTop: '2px',
                     }}
@@ -469,7 +469,7 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
                   width: '34px',
                   height: '34px',
                   borderRadius: '50%',
-                  backgroundColor: '#d97706',
+                  backgroundColor: 'var(--color-warning)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -481,18 +481,18 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
               </div>
               <div
                 style={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: 'var(--color-surface)',
+                  border: '1px solid var(--color-border)',
                   padding: '12px 18px',
                   borderRadius: '4px 16px 16px 16px',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  color: '#64748b',
+                  color: 'var(--color-text-muted)',
                   fontSize: '13px',
                 }}
               >
-                <Sparkles size={16} className="animate-spin" style={{ color: '#d97706' }} />
+                <Sparkles size={16} className="animate-spin" style={{ color: 'var(--color-warning)' }} />
                 <span>Consulting your personal health records…</span>
               </div>
             </div>
@@ -509,7 +509,7 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
           bottom: 0,
           left: 0,
           right: 0,
-          backgroundColor: 'linear-gradient(to top, #f8fafc 80%, rgba(248, 250, 252, 0) 100%)',
+          backgroundColor: 'linear-gradient(to top, var(--color-bg) 80%, rgba(247, 244, 238, 0) 100%)',
           padding: '16px 24px 20px 24px',
           display: 'flex',
           flexDirection: 'column',
@@ -520,9 +520,9 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
           style={{
             maxWidth: '960px',
             width: '100%',
-            backgroundColor: '#ffffff',
+            backgroundColor: 'var(--color-surface)',
             borderRadius: '24px',
-            border: '1px solid #cbd5e1',
+            border: '1px solid var(--color-border-strong)',
             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
             display: 'flex',
             alignItems: 'center',
@@ -549,7 +549,7 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
               border: 'none',
               outline: 'none',
               fontSize: '14px',
-              color: '#0f172a',
+              color: 'var(--color-text-main)',
               backgroundColor: 'transparent',
             }}
           />
@@ -561,8 +561,8 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
               width: '38px',
               height: '38px',
               borderRadius: '50%',
-              backgroundColor: inputValue.trim() && !loading ? '#d97706' : '#e2e8f0',
-              color: inputValue.trim() && !loading ? '#ffffff' : '#94a3b8',
+              backgroundColor: inputValue.trim() && !loading ? 'var(--color-warning)' : 'var(--color-border)',
+              color: inputValue.trim() && !loading ? '#ffffff' : 'var(--color-text-faint)',
               border: 'none',
               cursor: inputValue.trim() && !loading ? 'pointer' : 'default',
               display: 'flex',
@@ -580,13 +580,13 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
           style={{
             marginTop: '8px',
             fontSize: '11px',
-            color: '#64748b',
+            color: 'var(--color-text-muted)',
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
           }}
         >
-          <ShieldCheck size={13} style={{ color: '#16a34a' }} />
+          <ShieldCheck size={13} style={{ color: 'var(--color-success)' }} />
           <span>Informational records viewer • Private &amp; encrypted • Always follow your doctor's clinical advice</span>
         </div>
       </div>

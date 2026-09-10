@@ -185,9 +185,9 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
       {/* Header Banner */}
       <div
         style={{
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '12px',
-          border: '1px solid #e2e8f0',
+          border: '1px solid var(--color-border)',
           padding: '20px 24px',
           boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
         }}
@@ -198,7 +198,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
               width: '36px',
               height: '36px',
               borderRadius: '8px',
-              backgroundColor: '#059669',
+              backgroundColor: 'var(--color-success)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -208,10 +208,10 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
             <Stethoscope size={20} />
           </div>
           <div>
-            <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-text-main)', margin: 0 }}>
               Doctor Clinical Entry &amp; Markdown Generator
             </h2>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>
+            <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
               Record structured diagnoses and prescriptions • Automatically compiled into immutable Markdown reports
             </div>
           </div>
@@ -220,7 +220,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
         {/* General Encounter Info */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px', marginTop: '16px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#475569', marginBottom: '4px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: '4px' }}>
               Encounter Title
             </label>
             <input
@@ -231,14 +231,14 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                 width: '100%',
                 padding: '8px 12px',
                 borderRadius: '6px',
-                border: '1px solid #cbd5e1',
+                border: '1px solid var(--color-border-strong)',
                 fontSize: '13px',
                 boxSizing: 'border-box',
               }}
             />
           </div>
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#475569', marginBottom: '4px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: '4px' }}>
               Clinical Examination Notes
             </label>
             <input
@@ -250,7 +250,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                 width: '100%',
                 padding: '8px 12px',
                 borderRadius: '6px',
-                border: '1px solid #cbd5e1',
+                border: '1px solid var(--color-border-strong)',
                 fontSize: '13px',
                 boxSizing: 'border-box',
               }}
@@ -263,36 +263,36 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
       {saveSuccess && (
         <div
           style={{
-            backgroundColor: '#ecfdf5',
-            border: '1px solid #a7f3d0',
+            backgroundColor: 'var(--color-success-soft)',
+            border: '1px solid var(--color-success-border)',
             borderRadius: '8px',
             padding: '12px 16px',
-            color: '#065f46',
+            color: 'var(--color-success-dark)',
             fontSize: '13px',
             fontWeight: 600,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckCircle size={16} style={{ color: '#059669', flexShrink: 0 }} />
+            <CheckCircle size={16} style={{ color: 'var(--color-success)', flexShrink: 0 }} />
             <span>{saveSuccess}</span>
           </div>
           {savedEvidenceIds.length > 0 && (
             <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '11px', color: '#047857', fontWeight: 600 }}>Immutable Evidence Codes Generated:</span>
+              <span style={{ fontSize: '11px', color: 'var(--color-success-dark)', fontWeight: 600 }}>Immutable Evidence Codes Generated:</span>
               {savedEvidenceIds.map((evId) => (
                 <button
                   key={evId}
                   type="button"
                   onClick={() => onSelectEvidence?.(evId)}
                   style={{
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #059669',
+                    backgroundColor: 'var(--color-surface)',
+                    border: '1px solid var(--color-success)',
                     borderRadius: '4px',
                     padding: '2px 8px',
                     fontSize: '11px',
                     fontFamily: 'monospace',
                     fontWeight: 700,
-                    color: '#047857',
+                    color: 'var(--color-success-dark)',
                     cursor: onSelectEvidence ? 'pointer' : 'default',
                     display: 'flex',
                     alignItems: 'center',
@@ -312,19 +312,19 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
       {saveError && (
         <div
           style={{
-            backgroundColor: '#fef2f2',
-            border: '1px solid #fecaca',
+            backgroundColor: 'var(--color-danger-soft)',
+            border: '1px solid var(--color-danger-border)',
             borderRadius: '8px',
             padding: '12px 16px',
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            color: '#991b1b',
+            color: 'var(--color-danger-dark)',
             fontSize: '13px',
             fontWeight: 600,
           }}
         >
-          <AlertCircle size={16} style={{ color: '#dc2626', flexShrink: 0 }} />
+          <AlertCircle size={16} style={{ color: 'var(--color-danger)', flexShrink: 0 }} />
           <span>{saveError}</span>
         </div>
       )}
@@ -334,19 +334,19 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
       {/* ============================================================ */}
       <div
         style={{
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '12px',
-          border: '1px solid #e2e8f0',
+          border: '1px solid var(--color-border)',
           padding: '20px',
           boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
           <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+            <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-text-main)', margin: 0 }}>
               1. Structured Diagnoses Table
             </h3>
-            <span style={{ fontSize: '12px', color: '#64748b' }}>
+            <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
               Enter clinician-confirmed assessments or differential diagnoses
             </span>
           </div>
@@ -359,9 +359,9 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                 alignItems: 'center',
                 gap: '4px',
                 padding: '6px 12px',
-                backgroundColor: '#f0fdf4',
-                color: '#166534',
-                border: '1px solid #bbf7d0',
+                backgroundColor: 'var(--color-success-soft)',
+                color: 'var(--color-success-dark)',
+                border: '1px solid var(--color-success-border)',
                 borderRadius: '6px',
                 fontSize: '12px',
                 fontWeight: 600,
@@ -376,7 +376,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
 
         {/* Quick Suggestion Chips */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '14px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>Quick Suggestions:</span>
+          <span style={{ fontSize: '11px', color: 'var(--color-text-faint)', fontWeight: 600 }}>Quick Suggestions:</span>
           {COMMON_DIAGNOSES.map((item, i) => (
             <button
               key={i}
@@ -388,9 +388,9 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
               }}
               style={{
                 fontSize: '11px',
-                backgroundColor: '#f8fafc',
-                border: '1px solid #e2e8f0',
-                color: '#334155',
+                backgroundColor: 'var(--color-bg)',
+                border: '1px solid var(--color-border)',
+                color: 'var(--color-text-secondary)',
                 padding: '2px 8px',
                 borderRadius: '12px',
                 cursor: 'pointer',
@@ -405,24 +405,24 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
-              <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0', textAlign: 'left' }}>
-                <th style={{ padding: '10px 12px', fontWeight: 700, color: '#334155' }}>Condition / Diagnosis</th>
-                <th style={{ padding: '10px 12px', fontWeight: 700, color: '#334155', width: '120px' }}>ICD-10</th>
-                <th style={{ padding: '10px 12px', fontWeight: 700, color: '#334155', width: '150px' }}>Status</th>
-                <th style={{ padding: '10px 12px', fontWeight: 700, color: '#334155' }}>Clinical Rationale / Notes</th>
-                <th style={{ padding: '10px 12px', fontWeight: 700, color: '#334155', width: '60px', textAlign: 'center' }}>Action</th>
+              <tr style={{ backgroundColor: 'var(--color-bg)', borderBottom: '2px solid var(--color-border)', textAlign: 'left' }}>
+                <th style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--color-text-secondary)' }}>Condition / Diagnosis</th>
+                <th style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--color-text-secondary)', width: '120px' }}>ICD-10</th>
+                <th style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--color-text-secondary)', width: '150px' }}>Status</th>
+                <th style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--color-text-secondary)' }}>Clinical Rationale / Notes</th>
+                <th style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--color-text-secondary)', width: '60px', textAlign: 'center' }}>Action</th>
               </tr>
             </thead>
             <tbody>
               {diagnoses.map((row, idx) => (
-                <tr key={idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                <tr key={idx} style={{ borderBottom: '1px solid var(--color-surface-alt)' }}>
                   <td style={{ padding: '8px 12px' }}>
                     <input
                       type="text"
                       value={row.condition}
                       onChange={(e) => updateDiagnosis(idx, 'condition', e.target.value)}
                       placeholder="e.g. Orthostatic Hypotension"
-                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid var(--color-border-strong)', fontSize: '13px', boxSizing: 'border-box' }}
                     />
                   </td>
                   <td style={{ padding: '8px 12px' }}>
@@ -431,14 +431,14 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                       value={row.icd_code}
                       onChange={(e) => updateDiagnosis(idx, 'icd_code', e.target.value)}
                       placeholder="e.g. I95.1"
-                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box', fontFamily: 'monospace' }}
+                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid var(--color-border-strong)', fontSize: '13px', boxSizing: 'border-box', fontFamily: 'monospace' }}
                     />
                   </td>
                   <td style={{ padding: '8px 12px' }}>
                     <select
                       value={row.status}
                       onChange={(e) => updateDiagnosis(idx, 'status', e.target.value)}
-                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box', backgroundColor: '#ffffff' }}
+                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid var(--color-border-strong)', fontSize: '13px', boxSizing: 'border-box', backgroundColor: 'var(--color-surface)' }}
                     >
                       <option value="CONFIRMED">CONFIRMED</option>
                       <option value="SUSPECTED">SUSPECTED</option>
@@ -452,7 +452,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                       value={row.notes}
                       onChange={(e) => updateDiagnosis(idx, 'notes', e.target.value)}
                       placeholder="Rationale / observation tie-in..."
-                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid var(--color-border-strong)', fontSize: '13px', boxSizing: 'border-box' }}
                     />
                   </td>
                   <td style={{ padding: '8px 12px', textAlign: 'center' }}>
@@ -463,7 +463,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                       style={{
                         background: 'none',
                         border: 'none',
-                        color: diagnoses.length <= 1 ? '#cbd5e1' : '#ef4444',
+                        color: diagnoses.length <= 1 ? 'var(--color-border-strong)' : 'var(--color-danger)',
                         cursor: diagnoses.length <= 1 ? 'not-allowed' : 'pointer',
                         padding: '4px',
                       }}
@@ -483,19 +483,19 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
       {/* ============================================================ */}
       <div
         style={{
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '12px',
-          border: '1px solid #e2e8f0',
+          border: '1px solid var(--color-border)',
           padding: '20px',
           boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
           <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+            <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-text-main)', margin: 0 }}>
               2. Structured Medications &amp; Prescriptions Table
             </h3>
-            <span style={{ fontSize: '12px', color: '#64748b' }}>
+            <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
               Add or adjust pharmacotherapy orders and therapy regimens
             </span>
           </div>
@@ -508,9 +508,9 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                 alignItems: 'center',
                 gap: '4px',
                 padding: '6px 12px',
-                backgroundColor: '#eff6ff',
-                color: '#1d4ed8',
-                border: '1px solid #bfdbfe',
+                backgroundColor: 'var(--color-accent-soft)',
+                color: 'var(--color-accent-dark)',
+                border: '1px solid var(--color-accent-border)',
                 borderRadius: '6px',
                 fontSize: '12px',
                 fontWeight: 600,
@@ -525,7 +525,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
 
         {/* Quick Suggestion Chips */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '14px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>Common Prescriptions:</span>
+          <span style={{ fontSize: '11px', color: 'var(--color-text-faint)', fontWeight: 600 }}>Common Prescriptions:</span>
           {COMMON_MEDS.map((med, i) => (
             <button
               key={i}
@@ -537,9 +537,9 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
               }}
               style={{
                 fontSize: '11px',
-                backgroundColor: '#f8fafc',
-                border: '1px solid #e2e8f0',
-                color: '#334155',
+                backgroundColor: 'var(--color-bg)',
+                border: '1px solid var(--color-border)',
+                color: 'var(--color-text-secondary)',
                 padding: '2px 8px',
                 borderRadius: '12px',
                 cursor: 'pointer',
@@ -554,25 +554,25 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
-              <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0', textAlign: 'left' }}>
-                <th style={{ padding: '10px 12px', fontWeight: 700, color: '#334155' }}>Medication Name</th>
-                <th style={{ padding: '10px 12px', fontWeight: 700, color: '#334155', width: '120px' }}>Dosage</th>
-                <th style={{ padding: '10px 12px', fontWeight: 700, color: '#334155' }}>Frequency</th>
-                <th style={{ padding: '10px 12px', fontWeight: 700, color: '#334155' }}>Indication</th>
-                <th style={{ padding: '10px 12px', fontWeight: 700, color: '#334155' }}>Instructions</th>
-                <th style={{ padding: '10px 12px', fontWeight: 700, color: '#334155', width: '60px', textAlign: 'center' }}>Action</th>
+              <tr style={{ backgroundColor: 'var(--color-bg)', borderBottom: '2px solid var(--color-border)', textAlign: 'left' }}>
+                <th style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--color-text-secondary)' }}>Medication Name</th>
+                <th style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--color-text-secondary)', width: '120px' }}>Dosage</th>
+                <th style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--color-text-secondary)' }}>Frequency</th>
+                <th style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--color-text-secondary)' }}>Indication</th>
+                <th style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--color-text-secondary)' }}>Instructions</th>
+                <th style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--color-text-secondary)', width: '60px', textAlign: 'center' }}>Action</th>
               </tr>
             </thead>
             <tbody>
               {prescriptions.map((row, idx) => (
-                <tr key={idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                <tr key={idx} style={{ borderBottom: '1px solid var(--color-surface-alt)' }}>
                   <td style={{ padding: '8px 12px' }}>
                     <input
                       type="text"
                       value={row.medication_name}
                       onChange={(e) => updatePrescription(idx, 'medication_name', e.target.value)}
                       placeholder="e.g. Meclizine"
-                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid var(--color-border-strong)', fontSize: '13px', boxSizing: 'border-box' }}
                     />
                   </td>
                   <td style={{ padding: '8px 12px' }}>
@@ -581,7 +581,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                       value={row.dose}
                       onChange={(e) => updatePrescription(idx, 'dose', e.target.value)}
                       placeholder="e.g. 25 mg"
-                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid var(--color-border-strong)', fontSize: '13px', boxSizing: 'border-box' }}
                     />
                   </td>
                   <td style={{ padding: '8px 12px' }}>
@@ -590,7 +590,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                       value={row.frequency}
                       onChange={(e) => updatePrescription(idx, 'frequency', e.target.value)}
                       placeholder="e.g. Once daily in morning"
-                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid var(--color-border-strong)', fontSize: '13px', boxSizing: 'border-box' }}
                     />
                   </td>
                   <td style={{ padding: '8px 12px' }}>
@@ -599,7 +599,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                       value={row.indication}
                       onChange={(e) => updatePrescription(idx, 'indication', e.target.value)}
                       placeholder="e.g. Positional dizziness"
-                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid var(--color-border-strong)', fontSize: '13px', boxSizing: 'border-box' }}
                     />
                   </td>
                   <td style={{ padding: '8px 12px' }}>
@@ -608,7 +608,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                       value={row.instructions}
                       onChange={(e) => updatePrescription(idx, 'instructions', e.target.value)}
                       placeholder="e.g. Take with breakfast"
-                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                      style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', border: '1px solid var(--color-border-strong)', fontSize: '13px', boxSizing: 'border-box' }}
                     />
                   </td>
                   <td style={{ padding: '8px 12px', textAlign: 'center' }}>
@@ -619,7 +619,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                       style={{
                         background: 'none',
                         border: 'none',
-                        color: prescriptions.length <= 1 ? '#cbd5e1' : '#ef4444',
+                        color: prescriptions.length <= 1 ? 'var(--color-border-strong)' : 'var(--color-danger)',
                         cursor: prescriptions.length <= 1 ? 'not-allowed' : 'pointer',
                         padding: '4px',
                       }}
@@ -642,7 +642,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
           onClick={handleSaveAndGenerateMarkdown}
           disabled={saving}
           style={{
-            backgroundColor: saving ? '#93c5fd' : '#0284c7',
+            backgroundColor: saving ? 'var(--color-accent-border)' : 'var(--color-accent)',
             color: '#ffffff',
             padding: '12px 24px',
             borderRadius: '8px',
@@ -653,7 +653,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            boxShadow: '0 2px 4px rgba(2, 132, 199, 0.25)',
+            boxShadow: '0 2px 4px rgba(13, 110, 100, 0.25)',
           }}
         >
           <FileText size={16} />
@@ -667,18 +667,18 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
       {generatedMarkdown && (
         <div
           style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: 'var(--color-surface)',
             borderRadius: '12px',
-            border: '1px solid #0284c7',
+            border: '1px solid var(--color-accent)',
             overflow: 'hidden',
-            boxShadow: '0 4px 12px rgba(2, 132, 199, 0.08)',
+            boxShadow: '0 4px 12px rgba(13, 110, 100, 0.08)',
           }}
         >
           {/* Header */}
           <div
             style={{
-              backgroundColor: '#f0f9ff',
-              borderBottom: '1px solid #bae6fd',
+              backgroundColor: 'var(--color-accent-soft)',
+              borderBottom: '1px solid var(--color-accent-border)',
               padding: '12px 20px',
               display: 'flex',
               alignItems: 'center',
@@ -688,11 +688,11 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <FileText size={18} style={{ color: '#0284c7' }} />
-              <span style={{ fontSize: '14px', fontWeight: 700, color: '#0369a1' }}>
+              <FileText size={18} style={{ color: 'var(--color-accent)' }} />
+              <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-accent-dark)' }}>
                 Generated Clinical Markdown Note (.md)
               </span>
-              <span style={{ fontSize: '11px', color: '#0284c7', backgroundColor: '#e0f2fe', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>
+              <span style={{ fontSize: '11px', color: 'var(--color-accent)', backgroundColor: 'var(--color-accent-soft)', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>
                 Saved to Knowledge Base
               </span>
             </div>
@@ -701,9 +701,9 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
               <button
                 onClick={() => setShowRawMarkdown(!showRawMarkdown)}
                 style={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #cbd5e1',
-                  color: '#475569',
+                  backgroundColor: 'var(--color-surface)',
+                  border: '1px solid var(--color-border-strong)',
+                  color: 'var(--color-text-secondary)',
                   padding: '4px 10px',
                   borderRadius: '6px',
                   fontSize: '12px',
@@ -721,9 +721,9 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
               <button
                 onClick={copyMarkdownToClipboard}
                 style={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #cbd5e1',
-                  color: '#475569',
+                  backgroundColor: 'var(--color-surface)',
+                  border: '1px solid var(--color-border-strong)',
+                  color: 'var(--color-text-secondary)',
                   padding: '4px 10px',
                   borderRadius: '6px',
                   fontSize: '12px',
@@ -741,7 +741,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
               <button
                 onClick={downloadMarkdownFile}
                 style={{
-                  backgroundColor: '#0284c7',
+                  backgroundColor: 'var(--color-accent)',
                   border: 'none',
                   color: '#ffffff',
                   padding: '4px 12px',
@@ -765,8 +765,8 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
             {showRawMarkdown ? (
               <pre
                 style={{
-                  backgroundColor: '#0f172a',
-                  color: '#e2e8f0',
+                  backgroundColor: '#1c1a14',
+                  color: '#e5ddcf',
                   padding: '16px',
                   borderRadius: '8px',
                   fontSize: '12px',
@@ -779,18 +779,18 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
                 {generatedMarkdown}
               </pre>
             ) : (
-              <div style={{ fontSize: '13px', lineHeight: 1.6, color: '#334155' }}>
+              <div style={{ fontSize: '13px', lineHeight: 1.6, color: 'var(--color-text-secondary)' }}>
                 <pre
                   style={{
-                    backgroundColor: '#f8fafc',
-                    color: '#1e293b',
+                    backgroundColor: 'var(--color-bg)',
+                    color: 'var(--color-text-main)',
                     padding: '16px',
                     borderRadius: '8px',
                     fontSize: '12px',
                     fontFamily: 'system-ui, sans-serif',
                     whiteSpace: 'pre-wrap',
                     lineHeight: 1.6,
-                    border: '1px solid #e2e8f0',
+                    border: '1px solid var(--color-border)',
                     margin: 0,
                   }}
                 >

@@ -26,7 +26,7 @@ export const WhyModal: React.FC<WhyModalProps> = ({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(15, 23, 42, 0.6)',
+        backgroundColor: 'rgba(28, 26, 20, 0.6)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -37,7 +37,7 @@ export const WhyModal: React.FC<WhyModalProps> = ({
     >
       <div
         style={{
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '14px',
           maxWidth: '720px',
           width: '100%',
@@ -56,20 +56,20 @@ export const WhyModal: React.FC<WhyModalProps> = ({
                 width: '36px',
                 height: '36px',
                 borderRadius: '8px',
-                backgroundColor: '#e0f2fe',
+                backgroundColor: 'var(--color-accent-soft)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#0284c7',
+                color: 'var(--color-accent)',
               }}
             >
               <HelpCircle size={22} />
             </div>
             <div>
-              <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-text-main)', margin: 0 }}>
                 Why This Information Appears
               </h2>
-              <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 0 0' }}>
+              <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', margin: '2px 0 0 0' }}>
                 Complete clinical provenance & derivation trace from original observations
               </p>
             </div>
@@ -82,7 +82,7 @@ export const WhyModal: React.FC<WhyModalProps> = ({
               border: 'none',
               fontSize: '20px',
               fontWeight: 700,
-              color: '#94a3b8',
+              color: 'var(--color-text-faint)',
               cursor: 'pointer',
             }}
           >
@@ -93,31 +93,31 @@ export const WhyModal: React.FC<WhyModalProps> = ({
         {/* Step 1: Synthesized Memory Claim */}
         <div
           style={{
-            backgroundColor: '#f8fafc',
+            backgroundColor: 'var(--color-bg)',
             borderRadius: '10px',
-            border: '1px solid #e2e8f0',
+            border: '1px solid var(--color-border)',
             padding: '16px',
             marginBottom: '14px',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>
               1. Synthesized Memory Claim ({change.category})
             </span>
             <SourceBadge type="AI-DERIVED" size="sm" />
           </div>
-          <div style={{ fontSize: '15px', fontWeight: 600, color: '#0f172a', lineHeight: 1.4 }}>
+          <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-text-main)', lineHeight: 1.4 }}>
             "{change.change_summary}"
           </div>
           {change.memory_version && (
-            <div style={{ marginTop: '8px', fontSize: '11px', color: '#64748b', fontFamily: "'IBM Plex Mono', monospace" }}>
+            <div style={{ marginTop: '8px', fontSize: '11px', color: 'var(--color-text-muted)', fontFamily: "'IBM Plex Mono', monospace" }}>
               Memory Version: {change.memory_version} • Confidence: {change.confidence}
             </div>
           )}
         </div>
 
         {/* Flow indicator */}
-        <div style={{ display: 'flex', justifyContent: 'center', margin: '8px 0', color: '#94a3b8' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '8px 0', color: 'var(--color-text-faint)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600 }}>
             <ArrowDown size={16} /> Derived deterministically from supporting raw evidence:
           </div>
@@ -131,9 +131,9 @@ export const WhyModal: React.FC<WhyModalProps> = ({
               <div
                 key={evCode}
                 style={{
-                  backgroundColor: '#ffffff',
+                  backgroundColor: 'var(--color-surface)',
                   borderRadius: '10px',
-                  border: '1px solid #cbd5e1',
+                  border: '1px solid var(--color-border-strong)',
                   padding: '14px 16px',
                   boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                 }}
@@ -145,7 +145,7 @@ export const WhyModal: React.FC<WhyModalProps> = ({
                         fontSize: '12px',
                         fontFamily: "'IBM Plex Mono', monospace",
                         fontWeight: 700,
-                        backgroundColor: '#0284c7',
+                        backgroundColor: 'var(--color-accent)',
                         color: '#ffffff',
                         padding: '2px 8px',
                         borderRadius: '4px',
@@ -155,18 +155,18 @@ export const WhyModal: React.FC<WhyModalProps> = ({
                     </span>
                     <SourceBadge type={evDetail ? evDetail.source_type : 'CAREGIVER'} size="sm" />
                   </div>
-                  <span style={{ fontSize: '12px', color: '#64748b', fontFamily: "'IBM Plex Mono', monospace" }}>
+                  <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: "'IBM Plex Mono', monospace" }}>
                     {evDetail?.observed_at || change.observed_date}
                   </span>
                 </div>
 
                 {/* Original raw statement */}
-                <div style={{ fontSize: '13px', color: '#1e293b', lineHeight: 1.4, margin: '6px 0', fontStyle: 'italic' }}>
+                <div style={{ fontSize: '13px', color: 'var(--color-text-main)', lineHeight: 1.4, margin: '6px 0', fontStyle: 'italic' }}>
                   "{evDetail?.original_statement || 'Original observation recorded in longitudinal database.'}"
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '8px', paddingTop: '6px', borderTop: '1px dashed #e2e8f0' }}>
-                  <span style={{ fontSize: '11px', color: '#64748b' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '8px', paddingTop: '6px', borderTop: '1px dashed var(--color-border)' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>
                     Status: <strong>{evDetail?.status || 'IMMUTABLE'}</strong> • Observer: <strong>{evDetail?.observer || 'Caregiver'}</strong>
                   </span>
                   <button
@@ -174,7 +174,7 @@ export const WhyModal: React.FC<WhyModalProps> = ({
                     style={{
                       fontSize: '11px',
                       fontWeight: 600,
-                      color: '#0284c7',
+                      color: 'var(--color-accent)',
                       background: 'none',
                       border: 'none',
                       cursor: 'pointer',
@@ -196,17 +196,17 @@ export const WhyModal: React.FC<WhyModalProps> = ({
           style={{
             marginTop: '20px',
             padding: '10px 14px',
-            backgroundColor: '#f8fafc',
+            backgroundColor: 'var(--color-bg)',
             borderRadius: '8px',
-            border: '1px solid #e2e8f0',
+            border: '1px solid var(--color-border)',
             fontSize: '11px',
-            color: '#64748b',
+            color: 'var(--color-text-muted)',
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
           }}
         >
-          <CheckCircle2 size={16} style={{ color: '#0284c7', flexShrink: 0 }} />
+          <CheckCircle2 size={16} style={{ color: 'var(--color-accent)', flexShrink: 0 }} />
           <span>
             <strong>Traceability Assurance:</strong> This memory item is deterministically linked to immutable evidence records above. No diagnosis has been synthesized.
           </span>

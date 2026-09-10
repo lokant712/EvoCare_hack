@@ -15,55 +15,55 @@ export const SourceBadge: React.FC<SourceBadgeProps> = ({ type, size = 'sm', sho
       case 'CLINICIAN-CONFIRMED':
       case 'DOCTOR':
         return {
-          bg: '#e0f2fe',
-          text: '#0369a1',
-          border: '#bae6fd',
+          bg: 'var(--color-accent-soft)',
+          text: 'var(--color-accent-dark)',
+          border: 'var(--color-accent-border)',
           label: 'CLINICIAN-CONFIRMED'
         };
       case 'CAREGIVER-REPORTED':
       case 'CAREGIVER':
         return {
-          bg: '#fef3c7',
-          text: '#92400e',
-          border: '#fde68a',
+          bg: 'var(--color-warning-soft)',
+          text: 'var(--color-warning-dark)',
+          border: 'var(--color-warning-border)',
           label: 'CAREGIVER-REPORTED'
         };
       case 'PATIENT-REPORTED':
       case 'PATIENT':
         return {
-          bg: '#f3e8ff',
-          text: '#7e22ce',
-          border: '#e9d5ff',
+          bg: 'var(--color-plum-soft)',
+          text: 'var(--color-plum-dark)',
+          border: 'var(--color-plum-border)',
           label: 'PATIENT-REPORTED'
         };
       case 'AI-DERIVED':
       case 'AI_DERIVED':
         return {
-          bg: '#e0e7ff',
-          text: '#3730a3',
-          border: '#c7d2fe',
+          bg: 'var(--color-plum-soft)',
+          text: 'var(--color-plum-dark)',
+          border: 'var(--color-plum-border)',
           label: 'AI-DERIVED'
         };
       case 'LAB':
         return {
-          bg: '#ecfdf5',
-          text: '#047857',
-          border: '#a7f3d0',
+          bg: 'var(--color-success-soft)',
+          text: 'var(--color-success-dark)',
+          border: 'var(--color-success-border)',
           label: 'LAB RESULT'
         };
       case 'MEDICATION':
       case 'MEDICAL-RECORD':
         return {
-          bg: '#f1f5f9',
-          text: '#334155',
-          border: '#cbd5e1',
+          bg: 'var(--color-surface-alt)',
+          text: 'var(--color-text-secondary)',
+          border: 'var(--color-border-strong)',
           label: 'MEDICAL RECORD'
         };
       default:
         return {
-          bg: '#f8fafc',
-          text: '#475569',
-          border: '#e2e8f0',
+          bg: 'var(--color-bg)',
+          text: 'var(--color-text-secondary)',
+          border: 'var(--color-border)',
           label: type
         };
     }

@@ -76,19 +76,19 @@ export const PatientRecordsTab: React.FC<PatientRecordsTabProps> = ({
       {data.conflicts && data.conflicts.length > 0 && (
         <div
           style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: 'var(--color-surface)',
             borderRadius: '12px',
-            border: '1px solid #fed7aa',
+            border: '1px solid var(--color-warning-border)',
             padding: '20px',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <AlertTriangle size={18} style={{ color: '#ea580c' }} />
-            <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#9a3412', margin: 0 }}>
+            <AlertTriangle size={18} style={{ color: 'var(--color-warning)' }} />
+            <h2 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-warning-dark)', margin: 0 }}>
               Contextual Discrepancies &amp; Conflict Analysis
             </h2>
           </div>
-          <p style={{ fontSize: '12px', color: '#64748b', margin: '0 0 14px 0' }}>
+          <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', margin: '0 0 14px 0' }}>
             Recorded differences between clinical exam and home observations (Preserved contextually without premature AI resolution)
           </p>
           {data.conflicts.map((c) => (

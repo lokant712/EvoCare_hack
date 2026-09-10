@@ -26,10 +26,10 @@ interface UserRecord {
 }
 
 const ROLE_META: Record<string, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
-  DOCTOR:    { label: 'Doctor',    color: '#1d4ed8', bg: '#eff6ff', icon: <Stethoscope size={13} /> },
-  CAREGIVER: { label: 'Caregiver', color: '#065f46', bg: '#f0fdf4', icon: <HeartHandshake size={13} /> },
-  PATIENT:   { label: 'Patient',   color: '#7e22ce', bg: '#fdf4ff', icon: <User size={13} /> },
-  ADMIN:     { label: 'Admin',     color: '#92400e', bg: '#fffbeb', icon: <Shield size={13} /> },
+  DOCTOR:    { label: 'Doctor',    color: 'var(--color-accent-dark)', bg: 'var(--color-accent-soft)', icon: <Stethoscope size={13} /> },
+  CAREGIVER: { label: 'Caregiver', color: 'var(--color-success-dark)', bg: 'var(--color-success-soft)', icon: <HeartHandshake size={13} /> },
+  PATIENT:   { label: 'Patient',   color: 'var(--color-plum-dark)', bg: 'var(--color-plum-soft)', icon: <User size={13} /> },
+  ADMIN:     { label: 'Admin',     color: 'var(--color-warning-dark)', bg: 'var(--color-warning-soft)', icon: <Shield size={13} /> },
 };
 
 const ROLE_FILTER_TABS = [
@@ -167,35 +167,35 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
 
   // ─── Styles ──────────────────────────────────────────────────────────────
   const card: React.CSSProperties = {
-    backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)', borderRadius: '12px', border: '1px solid var(--color-border)',
     boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden'
   };
   const inputStyle: React.CSSProperties = {
     width: '100%', padding: '9px 12px', borderRadius: '7px',
-    border: '1px solid #cbd5e1', fontSize: '13px', color: '#0f172a',
-    outline: 'none', boxSizing: 'border-box', backgroundColor: '#f8fafc'
+    border: '1px solid var(--color-border-strong)', fontSize: '13px', color: 'var(--color-text-main)',
+    outline: 'none', boxSizing: 'border-box', backgroundColor: 'var(--color-bg)'
   };
 
   return (
-    <div style={{ padding: '28px 24px', maxWidth: '1100px', margin: '0 auto', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div style={{ padding: '28px 24px', maxWidth: '1100px', margin: '0 auto', fontFamily: 'var(--font-sans)' }}>
 
       {/* Header row */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Users size={20} color="#d97706" />
+          <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'var(--color-warning-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Users size={20} color="var(--color-warning)" />
           </div>
           <div>
-            <h2 style={{ margin: 0, fontSize: '17px', fontWeight: 700, color: '#0f172a' }}>User Management</h2>
-            <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#64748b' }}>Manage all system accounts — create, view, enable or disable</p>
+            <h2 style={{ margin: 0, fontSize: '17px', fontWeight: 700, color: 'var(--color-text-main)' }}>User Management</h2>
+            <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--color-text-muted)' }}>Manage all system accounts — create, view, enable or disable</p>
           </div>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
-          <button onClick={fetchUsers} disabled={loading} style={{ padding: '8px 12px', borderRadius: '7px', border: '1px solid #e2e8f0', backgroundColor: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#475569', fontWeight: 600 }}>
+          <button onClick={fetchUsers} disabled={loading} style={{ padding: '8px 12px', borderRadius: '7px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--color-text-secondary)', fontWeight: 600 }}>
             <RefreshCw size={14} className={loading ? 'spin' : ''} /> Refresh
           </button>
           <button onClick={() => { setShowAddForm(true); setFormError(null); setFormSuccess(null); }}
-            style={{ padding: '8px 16px', borderRadius: '7px', border: 'none', backgroundColor: '#2563eb', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px', fontSize: '13px', fontWeight: 700, boxShadow: '0 2px 6px rgba(37,99,235,0.25)' }}>
+            style={{ padding: '8px 16px', borderRadius: '7px', border: 'none', backgroundColor: 'var(--color-accent)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px', fontSize: '13px', fontWeight: 700, boxShadow: '0 2px 6px rgba(37,99,235,0.25)' }}>
             <UserPlus size={15} /> Add User
           </button>
         </div>
@@ -211,10 +211,10 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
             <div key={role} style={{ ...card, padding: '14px 16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                 <span style={{ padding: '5px', borderRadius: '7px', backgroundColor: m.bg, color: m.color, display: 'flex' }}>{m.icon}</span>
-                <span style={{ fontSize: '12px', fontWeight: 600, color: '#64748b' }}>{m.label}s</span>
+                <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)' }}>{m.label}s</span>
               </div>
               <div style={{ fontSize: '22px', fontWeight: 800, color: m.color }}>{total}</div>
-              <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{active} active · {total - active} disabled</div>
+              <div style={{ fontSize: '11px', color: 'var(--color-text-faint)', marginTop: '2px' }}>{active} active · {total - active} disabled</div>
             </div>
           );
         })}
@@ -226,19 +226,19 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
           <div style={{ ...card, width: '480px', maxHeight: '90vh', overflowY: 'auto', padding: '28px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <UserPlus size={20} color="#2563eb" />
-                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: '#0f172a' }}>Add New User</h3>
+                <UserPlus size={20} color="var(--color-accent)" />
+                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)' }}>Add New User</h3>
               </div>
-              <button onClick={() => setShowAddForm(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}><X size={20} /></button>
+              <button onClick={() => setShowAddForm(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-faint)' }}><X size={20} /></button>
             </div>
 
             {formError && (
-              <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '7px', padding: '10px 14px', marginBottom: '14px', display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '12px', color: '#991b1b' }}>
+              <div style={{ backgroundColor: 'var(--color-danger-soft)', border: '1px solid var(--color-danger-border)', borderRadius: '7px', padding: '10px 14px', marginBottom: '14px', display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '12px', color: 'var(--color-danger-dark)' }}>
                 <AlertCircle size={14} style={{ flexShrink: 0, marginTop: '1px' }} /> {formError}
               </div>
             )}
             {formSuccess && (
-              <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '7px', padding: '10px 14px', marginBottom: '14px', display: 'flex', gap: '8px', alignItems: 'center', fontSize: '12px', color: '#166534' }}>
+              <div style={{ backgroundColor: 'var(--color-success-soft)', border: '1px solid var(--color-success-border)', borderRadius: '7px', padding: '10px 14px', marginBottom: '14px', display: 'flex', gap: '8px', alignItems: 'center', fontSize: '12px', color: 'var(--color-success-dark)' }}>
                 <CheckCircle2 size={14} /> {formSuccess}
               </div>
             )}
@@ -252,7 +252,7 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
                   { label: 'Password *', key: 'password', type: 'password', placeholder: 'Min 8 characters' },
                 ].map(({ label, key, type, placeholder }) => (
                   <div key={key}>
-                    <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '5px' }}>{label}</label>
+                    <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-secondary)', display: 'block', marginBottom: '5px' }}>{label}</label>
                     <input
                       type={type} placeholder={placeholder} required
                       value={(form as any)[key]}
@@ -263,7 +263,7 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
                 ))}
 
                 <div>
-                  <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '5px' }}>Role *</label>
+                  <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-secondary)', display: 'block', marginBottom: '5px' }}>Role *</label>
                   <select value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value }))} style={{ ...inputStyle, cursor: 'pointer' }}>
                     <option value="DOCTOR">Doctor</option>
                     <option value="CAREGIVER">Caretaker</option>
@@ -274,7 +274,7 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
 
                 {(form.role === 'DOCTOR' || form.role === 'CAREGIVER' || form.role === 'PATIENT') && (
                   <div>
-                    <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '5px' }}>Patient Access (optional)</label>
+                    <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-secondary)', display: 'block', marginBottom: '5px' }}>Patient Access (optional)</label>
                     <select value={form.patient_code} onChange={e => setForm(f => ({ ...f, patient_code: e.target.value }))} style={{ ...inputStyle, cursor: 'pointer' }}>
                       <option value="">— No patient access yet —</option>
                       <option value="P001">P001 — Meenakshi Raman</option>
@@ -284,10 +284,10 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
                 )}
 
                 <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
-                  <button type="button" onClick={() => setShowAddForm(false)} style={{ flex: 1, padding: '10px', borderRadius: '7px', border: '1px solid #e2e8f0', backgroundColor: '#fff', fontSize: '13px', fontWeight: 600, color: '#475569', cursor: 'pointer' }}>
+                  <button type="button" onClick={() => setShowAddForm(false)} style={{ flex: 1, padding: '10px', borderRadius: '7px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-surface)', fontSize: '13px', fontWeight: 600, color: 'var(--color-text-secondary)', cursor: 'pointer' }}>
                     Cancel
                   </button>
-                  <button type="submit" disabled={submitting} style={{ flex: 2, padding: '10px', borderRadius: '7px', border: 'none', backgroundColor: submitting ? '#93c5fd' : '#2563eb', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: submitting ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}>
+                  <button type="submit" disabled={submitting} style={{ flex: 2, padding: '10px', borderRadius: '7px', border: 'none', backgroundColor: submitting ? 'var(--color-accent-border)' : 'var(--color-accent)', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: submitting ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}>
                     <UserPlus size={15} /> {submitting ? 'Creating…' : 'Create Account'}
                   </button>
                 </div>
@@ -303,14 +303,14 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
           {ROLE_FILTER_TABS.map(tab => {
             const active = filterRole === tab.key;
             return (
-              <button key={tab.key} onClick={() => setFilterRole(tab.key)} style={{ padding: '6px 13px', borderRadius: '20px', border: active ? 'none' : '1px solid #e2e8f0', backgroundColor: active ? '#2563eb' : '#fff', color: active ? '#fff' : '#475569', fontSize: '12px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s' }}>
+              <button key={tab.key} onClick={() => setFilterRole(tab.key)} style={{ padding: '6px 13px', borderRadius: '20px', border: active ? 'none' : '1px solid var(--color-border)', backgroundColor: active ? 'var(--color-accent)' : 'var(--color-surface)', color: active ? '#ffffff' : 'var(--color-text-secondary)', fontSize: '12px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s' }}>
                 {tab.label} <span style={{ opacity: 0.7 }}>({(counts as any)[tab.key] || 0})</span>
               </button>
             );
           })}
         </div>
         <div style={{ position: 'relative', minWidth: '220px' }}>
-          <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+          <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-faint)' }} />
           <input placeholder="Search by name, username, email…" value={search}
             onChange={e => setSearch(e.target.value)}
             style={{ ...inputStyle, paddingLeft: '32px', borderRadius: '20px' }} />
@@ -319,7 +319,7 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
 
       {/* Error banner */}
       {error && (
-        <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '10px 14px', marginBottom: '12px', display: 'flex', gap: '8px', fontSize: '13px', color: '#991b1b', alignItems: 'center' }}>
+        <div style={{ backgroundColor: 'var(--color-danger-soft)', border: '1px solid var(--color-danger-border)', borderRadius: '8px', padding: '10px 14px', marginBottom: '12px', display: 'flex', gap: '8px', fontSize: '13px', color: 'var(--color-danger-dark)', alignItems: 'center' }}>
           <AlertCircle size={15} /> {error}
         </div>
       )}
@@ -327,15 +327,15 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
       {/* User Table */}
       <div style={card}>
         {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>Loading users…</div>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--color-text-faint)', fontSize: '13px' }}>Loading users…</div>
         ) : filtered.length === 0 ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>No users found matching your filters.</div>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--color-text-faint)', fontSize: '13px' }}>No users found matching your filters.</div>
         ) : (
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
-              <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+              <tr style={{ backgroundColor: 'var(--color-bg)', borderBottom: '1px solid var(--color-border)' }}>
                 {['Name & Username', 'Email', 'Role', 'Patient Access', 'Last Login', 'Status', 'Actions'].map(h => (
-                  <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontWeight: 600, color: '#475569', whiteSpace: 'nowrap' }}>{h}</th>
+                  <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontWeight: 600, color: 'var(--color-text-secondary)', whiteSpace: 'nowrap' }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -344,12 +344,12 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
                 const m = ROLE_META[u.role] || ROLE_META.ADMIN;
                 const isSelf = String(u.username) === String(user.username);
                 return (
-                  <tr key={u.id} style={{ borderBottom: i < filtered.length - 1 ? '1px solid #f1f5f9' : 'none', backgroundColor: !u.is_active ? '#fafafa' : '#fff', opacity: u.is_active ? 1 : 0.7 }}>
+                  <tr key={u.id} style={{ borderBottom: i < filtered.length - 1 ? '1px solid var(--color-surface-alt)' : 'none', backgroundColor: !u.is_active ? 'var(--color-bg)' : '#fff', opacity: u.is_active ? 1 : 0.7 }}>
                     <td style={{ padding: '12px 14px' }}>
-                      <div style={{ fontWeight: 600, color: '#0f172a' }}>{u.full_name}</div>
-                      <div style={{ fontSize: '11px', color: '#94a3b8', fontFamily: 'monospace', marginTop: '2px' }}>@{u.username}</div>
+                      <div style={{ fontWeight: 600, color: 'var(--color-text-main)' }}>{u.full_name}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--color-text-faint)', fontFamily: 'monospace', marginTop: '2px' }}>@{u.username}</div>
                     </td>
-                    <td style={{ padding: '12px 14px', color: '#475569', fontSize: '12px' }}>{u.email}</td>
+                    <td style={{ padding: '12px 14px', color: 'var(--color-text-secondary)', fontSize: '12px' }}>{u.email}</td>
                     <td style={{ padding: '12px 14px' }}>
                       <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '3px 9px', borderRadius: '10px', backgroundColor: m.bg, color: m.color, fontSize: '11px', fontWeight: 700 }}>
                         {m.icon} {m.label}
@@ -358,22 +358,22 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
                     <td style={{ padding: '12px 14px' }}>
                       {u.authorized_patients.length > 0
                         ? u.authorized_patients.map(p => (
-                          <span key={p} style={{ display: 'inline-block', marginRight: '4px', padding: '2px 7px', borderRadius: '8px', backgroundColor: '#eff6ff', color: '#1d4ed8', fontSize: '11px', fontWeight: 600 }}>{p}</span>
+                          <span key={p} style={{ display: 'inline-block', marginRight: '4px', padding: '2px 7px', borderRadius: '8px', backgroundColor: 'var(--color-accent-soft)', color: 'var(--color-accent-dark)', fontSize: '11px', fontWeight: 600 }}>{p}</span>
                         ))
-                        : <span style={{ color: '#94a3b8', fontSize: '11px' }}>—</span>
+                        : <span style={{ color: 'var(--color-text-faint)', fontSize: '11px' }}>—</span>
                       }
                     </td>
-                    <td style={{ padding: '12px 14px', color: '#94a3b8', fontSize: '11px' }}>{u.last_login_at || '—'}</td>
+                    <td style={{ padding: '12px 14px', color: 'var(--color-text-faint)', fontSize: '11px' }}>{u.last_login_at || '—'}</td>
                     <td style={{ padding: '12px 14px' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '3px 9px', borderRadius: '10px', fontSize: '11px', fontWeight: 700,
-                          backgroundColor: u.is_active ? '#f0fdf4' : '#fef2f2',
-                          color: u.is_active ? '#16a34a' : '#dc2626' }}>
+                          backgroundColor: u.is_active ? 'var(--color-success-soft)' : 'var(--color-danger-soft)',
+                          color: u.is_active ? 'var(--color-success)' : 'var(--color-danger)' }}>
                           {u.is_active ? <><UserCheck size={12} /> Active</> : <><UserX size={12} /> Disabled</>}
                         </span>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '2px 7px', borderRadius: '10px', fontSize: '10px', fontWeight: 700,
-                          backgroundColor: u.is_verified ? '#eff6ff' : '#fef9c3',
-                          color: u.is_verified ? '#1d4ed8' : '#92400e' }}>
+                          backgroundColor: u.is_verified ? 'var(--color-accent-soft)' : 'var(--color-warning-soft)',
+                          color: u.is_verified ? 'var(--color-accent-dark)' : 'var(--color-warning-dark)' }}>
                           {u.is_verified ? '✔ Verified' : '⏳ Unverified'}
                         </span>
                       </div>
@@ -381,18 +381,18 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
                     <td style={{ padding: '12px 14px' }}>
                       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                         {isSelf ? (
-                          <span style={{ fontSize: '11px', color: '#94a3b8' }}>You</span>
+                          <span style={{ fontSize: '11px', color: 'var(--color-text-faint)' }}>You</span>
                         ) : (
                           <>
                             <button onClick={() => handleToggle(u)} disabled={togglingId === u.id}
                               style={{ padding: '5px 10px', borderRadius: '6px', border: 'none', fontSize: '11px', fontWeight: 700, cursor: 'pointer',
-                                backgroundColor: u.is_active ? '#fef2f2' : '#f0fdf4',
-                                color: u.is_active ? '#dc2626' : '#16a34a' }}>
+                                backgroundColor: u.is_active ? 'var(--color-danger-soft)' : 'var(--color-success-soft)',
+                                color: u.is_active ? 'var(--color-danger)' : 'var(--color-success)' }}>
                               {togglingId === u.id ? '…' : u.is_active ? 'Disable' : 'Enable'}
                             </button>
                             {!u.is_verified && (
                               <button onClick={() => handleResendOtp(u)}
-                                style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid #fde68a', backgroundColor: '#fffbeb', fontSize: '11px', fontWeight: 700, color: '#92400e', cursor: 'pointer' }}>
+                                style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid var(--color-warning-border)', backgroundColor: 'var(--color-warning-soft)', fontSize: '11px', fontWeight: 700, color: 'var(--color-warning-dark)', cursor: 'pointer' }}>
                                 Verify OTP
                               </button>
                             )}
@@ -411,55 +411,55 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
       {/* OTP Verification Modal */}
       {otpModal && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ backgroundColor: '#fff', borderRadius: '14px', padding: '28px', width: '420px', boxShadow: '0 8px 40px rgba(0,0,0,0.18)' }}>
+          <div style={{ backgroundColor: 'var(--color-surface)', borderRadius: '14px', padding: '28px', width: '420px', boxShadow: '0 8px 40px rgba(0,0,0,0.18)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#fffbeb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🔐</div>
+                <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: 'var(--color-warning-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🔐</div>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '15px', color: '#0f172a' }}>Verify Account</div>
-                  <div style={{ fontSize: '11px', color: '#64748b' }}>@{otpModal.username} · {otpModal.email}</div>
+                  <div style={{ fontWeight: 700, fontSize: '15px', color: 'var(--color-text-main)' }}>Verify Account</div>
+                  <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>@{otpModal.username} · {otpModal.email}</div>
                 </div>
               </div>
-              <button onClick={() => { setOtpModal(null); setPendingOtp(null); setOtpInput(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}><X size={20} /></button>
+              <button onClick={() => { setOtpModal(null); setPendingOtp(null); setOtpInput(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-faint)' }}><X size={20} /></button>
             </div>
 
             {pendingOtp && (
-              <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #86efac', borderRadius: '10px', padding: '14px 16px', marginBottom: '16px' }}>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: '#166534', marginBottom: '6px' }}>📧 {pendingOtp.message}</div>
+              <div style={{ backgroundColor: 'var(--color-success-soft)', border: '1px solid var(--color-success-border)', borderRadius: '10px', padding: '14px 16px', marginBottom: '16px' }}>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-success-dark)', marginBottom: '6px' }}>📧 {pendingOtp.message}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ fontFamily: 'monospace', fontSize: '28px', fontWeight: 800, color: '#15803d', letterSpacing: '8px', backgroundColor: '#dcfce7', padding: '8px 16px', borderRadius: '8px', flex: 1, textAlign: 'center' }}>
+                  <div style={{ fontFamily: 'monospace', fontSize: '28px', fontWeight: 800, color: 'var(--color-success)', letterSpacing: '8px', backgroundColor: 'var(--color-success-soft)', padding: '8px 16px', borderRadius: '8px', flex: 1, textAlign: 'center' }}>
                     {pendingOtp.otp}
                   </div>
                   <button onClick={() => navigator.clipboard.writeText(pendingOtp.otp)}
-                    style={{ padding: '8px 10px', borderRadius: '7px', border: '1px solid #86efac', backgroundColor: '#fff', cursor: 'pointer', fontSize: '11px', color: '#166534', fontWeight: 600 }}>
+                    style={{ padding: '8px 10px', borderRadius: '7px', border: '1px solid var(--color-success-border)', backgroundColor: 'var(--color-surface)', cursor: 'pointer', fontSize: '11px', color: 'var(--color-success-dark)', fontWeight: 600 }}>
                     Copy
                   </button>
                 </div>
-                <div style={{ fontSize: '11px', color: '#15803d', marginTop: '6px', opacity: 0.8 }}>Share this OTP with the user. It expires when used.</div>
+                <div style={{ fontSize: '11px', color: 'var(--color-success)', marginTop: '6px', opacity: 0.8 }}>Share this OTP with the user. It expires when used.</div>
               </div>
             )}
 
             <div style={{ marginBottom: '14px' }}>
-              <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>Enter OTP to verify account:</label>
+              <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-secondary)', display: 'block', marginBottom: '6px' }}>Enter OTP to verify account:</label>
               <input type="text" maxLength={6} placeholder="6-digit OTP" value={otpInput}
                 onChange={e => setOtpInput(e.target.value.replace(/\D/g, ''))}
-                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '2px solid #e2e8f0', fontSize: '20px', fontFamily: 'monospace', fontWeight: 700, textAlign: 'center', letterSpacing: '6px', color: '#0f172a', outline: 'none', boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '2px solid var(--color-border)', fontSize: '20px', fontFamily: 'monospace', fontWeight: 700, textAlign: 'center', letterSpacing: '6px', color: 'var(--color-text-main)', outline: 'none', boxSizing: 'border-box' }}
               />
             </div>
 
             {otpError && (
-              <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '7px', padding: '8px 12px', marginBottom: '12px', fontSize: '12px', color: '#991b1b', display: 'flex', gap: '6px', alignItems: 'center' }}>
+              <div style={{ backgroundColor: 'var(--color-danger-soft)', border: '1px solid var(--color-danger-border)', borderRadius: '7px', padding: '8px 12px', marginBottom: '12px', fontSize: '12px', color: 'var(--color-danger-dark)', display: 'flex', gap: '6px', alignItems: 'center' }}>
                 <AlertCircle size={13} /> {otpError}
               </div>
             )}
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <button onClick={() => { setOtpModal(null); setPendingOtp(null); setOtpInput(''); }}
-                style={{ flex: 1, padding: '10px', borderRadius: '7px', border: '1px solid #e2e8f0', backgroundColor: '#fff', fontSize: '13px', fontWeight: 600, color: '#475569', cursor: 'pointer' }}>
+                style={{ flex: 1, padding: '10px', borderRadius: '7px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-surface)', fontSize: '13px', fontWeight: 600, color: 'var(--color-text-secondary)', cursor: 'pointer' }}>
                 Close
               </button>
               <button onClick={handleVerifyOtp} disabled={otpInput.length !== 6 || otpVerifying}
-                style={{ flex: 2, padding: '10px', borderRadius: '7px', border: 'none', backgroundColor: otpInput.length === 6 ? '#059669' : '#cbd5e1', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: otpInput.length === 6 ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}>
+                style={{ flex: 2, padding: '10px', borderRadius: '7px', border: 'none', backgroundColor: otpInput.length === 6 ? 'var(--color-success)' : 'var(--color-border-strong)', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: otpInput.length === 6 ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}>
                 <CheckCircle2 size={15} /> {otpVerifying ? 'Verifying…' : 'Confirm & Verify'}
               </button>
             </div>

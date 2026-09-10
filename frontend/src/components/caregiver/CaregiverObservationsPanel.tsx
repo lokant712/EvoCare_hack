@@ -15,9 +15,9 @@ export const CaregiverObservationsPanel: React.FC<CaregiverObservationsPanelProp
   return (
     <div
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '12px',
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--color-border)',
         padding: '20px',
         marginBottom: '24px',
         boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
@@ -27,12 +27,12 @@ export const CaregiverObservationsPanel: React.FC<CaregiverObservationsPanelProp
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+            <h2 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', margin: 0 }}>
               Caregiver Observation Feed
             </h2>
             <SourceBadge type="CAREGIVER-REPORTED" size="sm" />
           </div>
-          <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 0 0' }}>
+          <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', margin: '2px 0 0 0' }}>
             Natural language observations reported by family caregivers (CG001, CG002, CG003)
           </p>
         </div>
@@ -45,9 +45,9 @@ export const CaregiverObservationsPanel: React.FC<CaregiverObservationsPanelProp
             key={obs.id}
             style={{
               padding: '12px 14px',
-              backgroundColor: '#fffdfa',
+              backgroundColor: 'var(--color-surface-raised)',
               borderRadius: '8px',
-              border: '1px solid #fef3c7',
+              border: '1px solid var(--color-warning-soft)',
               display: 'flex',
               flexDirection: 'column',
               gap: '6px',
@@ -62,8 +62,8 @@ export const CaregiverObservationsPanel: React.FC<CaregiverObservationsPanelProp
                     gap: '4px',
                     fontSize: '11px',
                     fontWeight: 700,
-                    color: '#92400e',
-                    backgroundColor: '#fef3c7',
+                    color: 'var(--color-warning-dark)',
+                    backgroundColor: 'var(--color-warning-soft)',
                     padding: '2px 6px',
                     borderRadius: '4px',
                   }}
@@ -76,8 +76,8 @@ export const CaregiverObservationsPanel: React.FC<CaregiverObservationsPanelProp
                     fontSize: '11px',
                     fontFamily: "'IBM Plex Mono', monospace",
                     fontWeight: 600,
-                    color: '#475569',
-                    backgroundColor: '#f1f5f9',
+                    color: 'var(--color-text-secondary)',
+                    backgroundColor: 'var(--color-surface-alt)',
                     padding: '2px 6px',
                     borderRadius: '4px',
                   }}
@@ -87,7 +87,7 @@ export const CaregiverObservationsPanel: React.FC<CaregiverObservationsPanelProp
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '11px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '3px' }}>
                   <Calendar size={11} />
                   {obs.observed_at}
                 </span>
@@ -98,9 +98,9 @@ export const CaregiverObservationsPanel: React.FC<CaregiverObservationsPanelProp
                     fontFamily: "'IBM Plex Mono', monospace",
                     fontWeight: 600,
                     padding: '2px 6px',
-                    backgroundColor: '#e0f2fe',
-                    color: '#0369a1',
-                    border: '1px solid #bae6fd',
+                    backgroundColor: 'var(--color-accent-soft)',
+                    color: 'var(--color-accent-dark)',
+                    border: '1px solid var(--color-accent-border)',
                     borderRadius: '4px',
                     cursor: 'pointer',
                     display: 'flex',
@@ -115,7 +115,7 @@ export const CaregiverObservationsPanel: React.FC<CaregiverObservationsPanelProp
             </div>
 
             {/* Verbatim Caregiver Observation Statement */}
-            <p style={{ fontSize: '13px', color: '#1f2937', margin: '2px 0 0 0', lineHeight: 1.4, fontStyle: 'italic' }}>
+            <p style={{ fontSize: '13px', color: 'var(--color-text-main)', margin: '2px 0 0 0', lineHeight: 1.4, fontStyle: 'italic' }}>
               "{obs.observation_text}"
             </p>
           </div>

@@ -12,6 +12,7 @@ import { WhyModal } from '../components/evidence/WhyModal';
 import { EvidenceDrawer } from '../components/evidence/EvidenceDrawer';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { ErrorMessage } from '../components/common/ErrorMessage';
+import { ThemeToggle } from '../components/common/ThemeToggle';
 import { RecentChangeItem, EvidenceDetailItem } from '../types';
 import { ShieldCheck, MessageSquare, ClipboardList, PenSquare } from 'lucide-react';
 import { authService, AuthUser, AuthorizedPatient } from '../services/auth';
@@ -108,7 +109,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc' }}>
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)' }}>
         <LoadingSpinner message="Loading EvoCare Patient Dashboard…" />
       </div>
     );
@@ -117,21 +118,22 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   // Admin Login Mode: Full User Management Console
   if (user.role === 'ADMIN') {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', color: '#0f172a', fontFamily: 'Inter, system-ui, sans-serif' }}>
-        {/* Admin Header */}
-        <div style={{ backgroundColor: '#1e293b', borderBottom: '1px solid #334155', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)', fontFamily: 'var(--font-sans)' }}>
+        {/* Admin Header — intentionally always-dark chrome, independent of page theme */}
+        <div style={{ backgroundColor: '#1c1a14', borderBottom: '1px solid #3d3a2f', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <ShieldCheck size={20} color="#1e293b" />
+            <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#d9a24a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ShieldCheck size={20} color="#1c1a14" />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '15px', color: '#f8fafc' }}>EvoCare — Admin Console</div>
-              <div style={{ fontSize: '11px', color: '#94a3b8' }}>User Management & System Oversight</div>
+              <div style={{ fontWeight: 700, fontSize: '15px', color: '#f7f4ee' }}>EvoCare — Admin Console</div>
+              <div style={{ fontSize: '11px', color: '#a89d89' }}>User Management & System Oversight</div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '13px', color: '#94a3b8' }}>Logged in as <b style={{ color: '#f8fafc' }}>{user.full_name || user.username}</b></span>
-            <button onClick={onLogout} style={{ padding: '6px 14px', borderRadius: '6px', border: '1px solid #475569', backgroundColor: 'transparent', color: '#94a3b8', fontSize: '12px', cursor: 'pointer', fontWeight: 600 }}>
+            <span style={{ fontSize: '13px', color: '#a89d89' }}>Logged in as <b style={{ color: '#f7f4ee' }}>{user.full_name || user.username}</b></span>
+            <ThemeToggle size="sm" />
+            <button onClick={onLogout} style={{ padding: '6px 14px', borderRadius: '6px', border: '1px solid #5b5346', backgroundColor: 'transparent', color: '#a89d89', fontSize: '12px', cursor: 'pointer', fontWeight: 600 }}>
               Sign Out
             </button>
           </div>
@@ -144,7 +146,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   // Doctor Role: If current patient record has not been 2FA verified in this session, show the 2-step gate
   if (user.role === 'DOCTOR' && !verifiedPatientCodes.has(selectedPatientCode)) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', color: '#0f172a' }}>
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
         <Header
           patient={{
             id: 1,
@@ -175,7 +177,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
 
   if (error || !data) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', padding: '40px 20px' }}>
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', padding: '40px 20px' }}>
         <ErrorMessage message={error || `Patient ${selectedPatientCode} records unavailable.`} onRetry={refetch} />
       </div>
     );
@@ -184,7 +186,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   // Patient Login Mode: Exclusively Chatbot Interface for Informational Use Only
   if (user.role === 'PATIENT') {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', color: '#0f172a' }}>
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
         <Header
           patient={data.patient}
           user={user}
@@ -203,7 +205,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   // Caregiver Login Mode: Exclusively Caregiver Observation & Clarification Notes Portal
   if (user.role === 'CAREGIVER') {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', color: '#0f172a' }}>
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
         <Header
           patient={data.patient}
           user={user}
@@ -220,7 +222,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', color: '#0f172a' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
       {/* Top Fixed Header */}
       <Header
         patient={data.patient}
@@ -252,8 +254,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       {/* Full-Width Tab Navigation Subheader */}
       <div
         style={{
-          backgroundColor: '#ffffff',
-          borderBottom: '1px solid #e2e8f0',
+          backgroundColor: 'var(--color-surface)',
+          borderBottom: '1px solid var(--color-border)',
           padding: '8px 24px',
           boxShadow: '0 1px 2px rgba(0, 0, 0, 0.03)',
           zIndex: 30,
@@ -281,13 +283,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 padding: '10px 18px',
                 borderRadius: '8px',
                 border: 'none',
-                backgroundColor: activeTab === 'assistant' ? '#0284c7' : 'transparent',
-                color: activeTab === 'assistant' ? '#ffffff' : '#475569',
+                backgroundColor: activeTab === 'assistant' ? 'var(--color-accent)' : 'transparent',
+                color: activeTab === 'assistant' ? '#ffffff' : 'var(--color-text-secondary)',
                 fontWeight: 700,
                 fontSize: '13px',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease-in-out',
-                boxShadow: activeTab === 'assistant' ? '0 2px 4px rgba(2, 132, 199, 0.25)' : 'none',
+                boxShadow: activeTab === 'assistant' ? '0 2px 4px rgba(13, 110, 100, 0.25)' : 'none',
               }}
             >
               <MessageSquare size={16} />
@@ -297,8 +299,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                   fontSize: '10px',
                   padding: '2px 6px',
                   borderRadius: '10px',
-                  backgroundColor: activeTab === 'assistant' ? 'rgba(255, 255, 255, 0.25)' : '#e0f2fe',
-                  color: activeTab === 'assistant' ? '#ffffff' : '#0369a1',
+                  backgroundColor: activeTab === 'assistant' ? 'rgba(255, 255, 255, 0.25)' : 'var(--color-accent-soft)',
+                  color: activeTab === 'assistant' ? '#ffffff' : 'var(--color-accent-dark)',
                 }}
               >
                 Chat
@@ -315,13 +317,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 padding: '10px 18px',
                 borderRadius: '8px',
                 border: 'none',
-                backgroundColor: activeTab === 'records' ? '#0284c7' : 'transparent',
-                color: activeTab === 'records' ? '#ffffff' : '#475569',
+                backgroundColor: activeTab === 'records' ? 'var(--color-accent)' : 'transparent',
+                color: activeTab === 'records' ? '#ffffff' : 'var(--color-text-secondary)',
                 fontWeight: 700,
                 fontSize: '13px',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease-in-out',
-                boxShadow: activeTab === 'records' ? '0 2px 4px rgba(2, 132, 199, 0.25)' : 'none',
+                boxShadow: activeTab === 'records' ? '0 2px 4px rgba(13, 110, 100, 0.25)' : 'none',
               }}
             >
               <ClipboardList size={16} />
@@ -331,8 +333,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                   fontSize: '10px',
                   padding: '2px 6px',
                   borderRadius: '10px',
-                  backgroundColor: activeTab === 'records' ? 'rgba(255, 255, 255, 0.25)' : '#f1f5f9',
-                  color: activeTab === 'records' ? '#ffffff' : '#475569',
+                  backgroundColor: activeTab === 'records' ? 'rgba(255, 255, 255, 0.25)' : 'var(--color-surface-alt)',
+                  color: activeTab === 'records' ? '#ffffff' : 'var(--color-text-secondary)',
                 }}
               >
                 6 Domains
@@ -349,13 +351,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 padding: '10px 18px',
                 borderRadius: '8px',
                 border: 'none',
-                backgroundColor: activeTab === 'entry' ? '#0284c7' : 'transparent',
-                color: activeTab === 'entry' ? '#ffffff' : '#475569',
+                backgroundColor: activeTab === 'entry' ? 'var(--color-accent)' : 'transparent',
+                color: activeTab === 'entry' ? '#ffffff' : 'var(--color-text-secondary)',
                 fontWeight: 700,
                 fontSize: '13px',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease-in-out',
-                boxShadow: activeTab === 'entry' ? '0 2px 4px rgba(2, 132, 199, 0.25)' : 'none',
+                boxShadow: activeTab === 'entry' ? '0 2px 4px rgba(13, 110, 100, 0.25)' : 'none',
               }}
             >
               <PenSquare size={16} />
@@ -365,8 +367,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                   fontSize: '10px',
                   padding: '2px 6px',
                   borderRadius: '10px',
-                  backgroundColor: activeTab === 'entry' ? 'rgba(255, 255, 255, 0.25)' : '#f0fdf4',
-                  color: activeTab === 'entry' ? '#ffffff' : '#166534',
+                  backgroundColor: activeTab === 'entry' ? 'rgba(255, 255, 255, 0.25)' : 'var(--color-success-soft)',
+                  color: activeTab === 'entry' ? '#ffffff' : 'var(--color-success-dark)',
                 }}
               >
                 Markdown Export
@@ -374,10 +376,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
             </button>
           </div>
 
-          <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontWeight: 600 }}>Active Patient:</span>
-            <span style={{ fontWeight: 700, color: '#0f172a' }}>{data.patient.name}</span>
-            <span style={{ fontFamily: 'monospace', backgroundColor: '#e2e8f0', padding: '1px 6px', borderRadius: '4px', fontSize: '11px' }}>
+            <span style={{ fontWeight: 700, color: 'var(--color-text-main)' }}>{data.patient.name}</span>
+            <span style={{ fontFamily: 'monospace', backgroundColor: 'var(--color-border)', padding: '1px 6px', borderRadius: '4px', fontSize: '11px' }}>
               {data.patient.patient_code}
             </span>
           </div>
@@ -417,14 +419,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
             style={{
               textAlign: 'center',
               padding: '28px 0 16px 0',
-              borderTop: '1px solid #e2e8f0',
-              color: '#94a3b8',
+              borderTop: '1px solid var(--color-border)',
+              color: 'var(--color-text-faint)',
               fontSize: '12px',
               marginTop: '32px',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '4px' }}>
-              <ShieldCheck size={14} style={{ color: '#0284c7' }} />
+              <ShieldCheck size={14} style={{ color: 'var(--color-accent)' }} />
               <span>EvoCare Clinical Intelligence Station • Doctor Portal • Multi-Tab Clinical Workflow</span>
             </div>
             <div>Patient {data.patient.patient_code} ({data.patient.name}) • Longitudinal Health Profile</div>

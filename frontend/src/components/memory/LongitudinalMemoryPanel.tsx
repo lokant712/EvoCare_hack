@@ -45,9 +45,9 @@ export const LongitudinalMemoryPanel: React.FC<LongitudinalMemoryPanelProps> = (
   return (
     <div
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '12px',
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--color-border)',
         padding: '20px',
         marginBottom: '24px',
         boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
@@ -57,12 +57,12 @@ export const LongitudinalMemoryPanel: React.FC<LongitudinalMemoryPanelProps> = (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+            <h2 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', margin: 0 }}>
               Longitudinal Evolving Patient Memory
             </h2>
             <SourceBadge type="AI-DERIVED" size="sm" />
           </div>
-          <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 0 0' }}>
+          <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', margin: '2px 0 0 0' }}>
             Continuously updated clinical synthesis synchronized with Patient Wiki
           </p>
         </div>
@@ -74,11 +74,11 @@ export const LongitudinalMemoryPanel: React.FC<LongitudinalMemoryPanelProps> = (
               fontSize: '11px',
               fontFamily: "'IBM Plex Mono', monospace",
               fontWeight: 700,
-              backgroundColor: '#e0e7ff',
-              color: '#3730a3',
+              backgroundColor: 'var(--color-plum-soft)',
+              color: 'var(--color-plum-dark)',
               padding: '4px 10px',
               borderRadius: '6px',
-              border: '1px solid #c7d2fe',
+              border: '1px solid var(--color-plum-border)',
             }}
           >
             MEMORY VERSION {memory.current_version}
@@ -93,9 +93,9 @@ export const LongitudinalMemoryPanel: React.FC<LongitudinalMemoryPanelProps> = (
               fontWeight: 600,
               padding: '4px 10px',
               borderRadius: '6px',
-              backgroundColor: '#f8fafc',
-              color: '#475569',
-              border: '1px solid #cbd5e1',
+              backgroundColor: 'var(--color-bg)',
+              color: 'var(--color-text-secondary)',
+              border: '1px solid var(--color-border-strong)',
               cursor: 'pointer',
             }}
           >
@@ -108,46 +108,46 @@ export const LongitudinalMemoryPanel: React.FC<LongitudinalMemoryPanelProps> = (
       {/* Memory Sections Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '14px' }}>
         {/* Baseline Status */}
-        <div style={{ padding: '14px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+        <div style={{ padding: '14px', backgroundColor: 'var(--color-bg)', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <CheckCircle2 size={14} style={{ color: '#0284c7' }} />
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase' }}>
+            <CheckCircle2 size={14} style={{ color: 'var(--color-accent)' }} />
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-accent-dark)', textTransform: 'uppercase' }}>
               Historical Baseline
             </span>
           </div>
-          <p style={{ fontSize: '13px', color: '#334155', margin: 0, lineHeight: 1.4 }}>{memory.baseline}</p>
+          <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', margin: 0, lineHeight: 1.4 }}>{memory.baseline}</p>
         </div>
 
         {/* Recent Synthesized Trajectory */}
-        <div style={{ padding: '14px', backgroundColor: '#f5f3ff', borderRadius: '8px', border: '1px solid #ddd6fe' }}>
+        <div style={{ padding: '14px', backgroundColor: 'var(--color-plum-soft)', borderRadius: '8px', border: '1px solid var(--color-plum-border)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <Sparkles size={14} style={{ color: '#7c3aed' }} />
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#6d28d9', textTransform: 'uppercase' }}>
+            <Sparkles size={14} style={{ color: 'var(--color-plum)' }} />
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-plum-dark)', textTransform: 'uppercase' }}>
               Recent Longitudinal Trajectory
             </span>
           </div>
-          <p style={{ fontSize: '13px', color: '#4c1d95', margin: 0, lineHeight: 1.4 }}>{memory.recent_changes}</p>
+          <p style={{ fontSize: '13px', color: 'var(--color-plum-dark)', margin: 0, lineHeight: 1.4 }}>{memory.recent_changes}</p>
         </div>
 
         {/* Clinician-Confirmed Context */}
-        <div style={{ padding: '14px', backgroundColor: '#f0f9ff', borderRadius: '8px', border: '1px solid #bae6fd' }}>
+        <div style={{ padding: '14px', backgroundColor: 'var(--color-accent-soft)', borderRadius: '8px', border: '1px solid var(--color-accent-border)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-accent-dark)', textTransform: 'uppercase' }}>
               Clinician-Confirmed Notes
             </span>
           </div>
-          <p style={{ fontSize: '13px', color: '#0c4a6e', margin: 0, lineHeight: 1.4 }}>{memory.clinician_confirmed}</p>
+          <p style={{ fontSize: '13px', color: 'var(--color-accent-dark)', margin: 0, lineHeight: 1.4 }}>{memory.clinician_confirmed}</p>
         </div>
 
         {/* Known Unknowns & Etiology Protection */}
-        <div style={{ padding: '14px', backgroundColor: '#fefce8', borderRadius: '8px', border: '1px solid #fef08a' }}>
+        <div style={{ padding: '14px', backgroundColor: 'var(--color-warning-soft)', borderRadius: '8px', border: '1px solid var(--color-warning-border)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <ShieldAlert size={14} style={{ color: '#ca8a04' }} />
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#854d0e', textTransform: 'uppercase' }}>
+            <ShieldAlert size={14} style={{ color: 'var(--color-warning)' }} />
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-warning-dark)', textTransform: 'uppercase' }}>
               Known Unknowns & Safety Gating
             </span>
           </div>
-          <p style={{ fontSize: '13px', color: '#713f12', margin: 0, lineHeight: 1.4 }}>{memory.unknowns}</p>
+          <p style={{ fontSize: '13px', color: 'var(--color-warning-dark)', margin: 0, lineHeight: 1.4 }}>{memory.unknowns}</p>
         </div>
       </div>
 
@@ -160,7 +160,7 @@ export const LongitudinalMemoryPanel: React.FC<LongitudinalMemoryPanelProps> = (
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(15, 23, 42, 0.6)',
+            backgroundColor: 'rgba(28, 26, 20, 0.6)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -171,7 +171,7 @@ export const LongitudinalMemoryPanel: React.FC<LongitudinalMemoryPanelProps> = (
         >
           <div
             style={{
-              backgroundColor: '#ffffff',
+              backgroundColor: 'var(--color-surface)',
               borderRadius: '12px',
               maxWidth: '650px',
               width: '100%',
@@ -184,8 +184,8 @@ export const LongitudinalMemoryPanel: React.FC<LongitudinalMemoryPanelProps> = (
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Brain size={20} style={{ color: '#0284c7' }} />
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+                <Brain size={20} style={{ color: 'var(--color-accent)' }} />
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', margin: 0 }}>
                   Memory Version Audit History
                 </h3>
               </div>
@@ -196,7 +196,7 @@ export const LongitudinalMemoryPanel: React.FC<LongitudinalMemoryPanelProps> = (
                   border: 'none',
                   fontSize: '18px',
                   fontWeight: 700,
-                  color: '#64748b',
+                  color: 'var(--color-text-muted)',
                   cursor: 'pointer',
                 }}
               >
@@ -205,7 +205,7 @@ export const LongitudinalMemoryPanel: React.FC<LongitudinalMemoryPanelProps> = (
             </div>
 
             {loadingHistory ? (
-              <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>Loading version history...</div>
+              <div style={{ padding: '20px', textAlign: 'center', color: 'var(--color-text-muted)' }}>Loading version history...</div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {historyList.map((h, i) => (
@@ -213,13 +213,13 @@ export const LongitudinalMemoryPanel: React.FC<LongitudinalMemoryPanelProps> = (
                     key={i}
                     style={{
                       padding: '12px 14px',
-                      backgroundColor: '#f8fafc',
+                      backgroundColor: 'var(--color-bg)',
                       borderRadius: '8px',
-                      border: '1px solid #e2e8f0',
+                      border: '1px solid var(--color-border)',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                      <span style={{ fontWeight: 700, fontSize: '13px', color: '#0f172a' }}>
+                      <span style={{ fontWeight: 700, fontSize: '13px', color: 'var(--color-text-main)' }}>
                         Version {h.version_number}
                       </span>
                       <span
@@ -228,16 +228,16 @@ export const LongitudinalMemoryPanel: React.FC<LongitudinalMemoryPanelProps> = (
                           fontFamily: "'IBM Plex Mono', monospace",
                           padding: '2px 6px',
                           borderRadius: '4px',
-                          backgroundColor: '#ecfdf5',
-                          color: '#047857',
+                          backgroundColor: 'var(--color-success-soft)',
+                          color: 'var(--color-success-dark)',
                           fontWeight: 600,
                         }}
                       >
                         {h.validation_status}
                       </span>
                     </div>
-                    <div style={{ fontSize: '12px', color: '#334155', marginBottom: '4px' }}>{h.change_summary}</div>
-                    <div style={{ fontSize: '11px', color: '#94a3b8' }}>Created: {h.created_at}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginBottom: '4px' }}>{h.change_summary}</div>
+                    <div style={{ fontSize: '11px', color: 'var(--color-text-faint)' }}>Created: {h.created_at}</div>
                   </div>
                 ))}
               </div>

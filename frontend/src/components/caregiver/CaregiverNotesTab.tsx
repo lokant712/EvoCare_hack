@@ -173,9 +173,9 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
       {/* Top Caregiver Header Card */}
       <div
         style={{
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '12px',
-          border: '1px solid #e2e8f0',
+          border: '1px solid var(--color-border)',
           padding: '20px 24px',
           marginBottom: '24px',
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
@@ -192,11 +192,11 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
               width: '44px',
               height: '44px',
               borderRadius: '10px',
-              backgroundColor: '#059669',
+              backgroundColor: 'var(--color-success)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#ffffff',
+              color: 'var(--color-surface)',
               boxShadow: '0 2px 6px rgba(5, 150, 105, 0.25)',
               flexShrink: 0,
             }}
@@ -205,24 +205,24 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h2 style={{ fontSize: '18px', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 700, margin: 0, color: 'var(--color-text-main)' }}>
                 Caregiver Daily Observation &amp; Notes
               </h2>
               <span
                 style={{
                   fontSize: '11px',
                   fontWeight: 600,
-                  backgroundColor: '#ecfdf5',
-                  color: '#065f46',
+                  backgroundColor: 'var(--color-success-soft)',
+                  color: 'var(--color-success-dark)',
                   padding: '2px 8px',
                   borderRadius: '12px',
-                  border: '1px solid #a7f3d0',
+                  border: '1px solid var(--color-success-border)',
                 }}
               >
                 Caregiver Portal
               </span>
             </div>
-            <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0' }}>
+            <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', margin: '4px 0 0 0' }}>
               Record home observations for <b>{data.patient.name} ({data.patient.patient_code})</b>. EvoCare AI evaluates clarity and updates the patient's existing wiki files.
             </p>
           </div>
@@ -232,17 +232,17 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
           <div
             style={{
               fontSize: '12px',
-              color: '#475569',
-              backgroundColor: '#f8fafc',
+              color: 'var(--color-text-secondary)',
+              backgroundColor: 'var(--color-bg)',
               padding: '6px 12px',
               borderRadius: '6px',
-              border: '1px solid #e2e8f0',
+              border: '1px solid var(--color-border)',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
             }}
           >
-            <User size={13} style={{ color: '#059669' }} />
+            <User size={13} style={{ color: 'var(--color-success)' }} />
             <span>Observer: <b>{user.full_name || 'Caregiver'} ({caregiverId})</b></span>
           </div>
 
@@ -251,9 +251,9 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
             style={{
               padding: '6px 12px',
               borderRadius: '6px',
-              border: '1px solid #cbd5e1',
-              backgroundColor: '#ffffff',
-              color: '#475569',
+              border: '1px solid var(--color-border-strong)',
+              backgroundColor: 'var(--color-surface)',
+              color: 'var(--color-text-secondary)',
               fontSize: '12px',
               fontWeight: 600,
               cursor: 'pointer',
@@ -278,19 +278,19 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
           {/* Note Input Box */}
           <div
             style={{
-              backgroundColor: '#ffffff',
+              backgroundColor: 'var(--color-surface)',
               borderRadius: '12px',
-              border: '1px solid #e2e8f0',
+              border: '1px solid var(--color-border)',
               padding: '20px',
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
               marginBottom: '24px',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <label style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a' }}>
+              <label style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-text-main)' }}>
                 Enter Today's Observation
               </label>
-              <span style={{ fontSize: '11px', color: '#94a3b8' }}>Plain natural language</span>
+              <span style={{ fontSize: '11px', color: 'var(--color-text-faint)' }}>Plain natural language</span>
             </div>
 
             <textarea
@@ -304,22 +304,22 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                 width: '100%',
                 padding: '12px',
                 borderRadius: '8px',
-                border: '1px solid #cbd5e1',
+                border: '1px solid var(--color-border-strong)',
                 fontSize: '14px',
-                color: '#0f172a',
+                color: 'var(--color-text-main)',
                 boxSizing: 'border-box',
                 resize: 'vertical',
                 outline: 'none',
                 fontFamily: 'inherit',
                 lineHeight: '1.5',
-                backgroundColor: sessionId !== null ? '#f8fafc' : '#ffffff',
+                backgroundColor: sessionId !== null ? 'var(--color-bg)' : 'var(--color-surface)',
               }}
             />
 
             {/* Quick Helper Chips (only when not yet submitted) */}
             {sessionId === null && (
               <div style={{ marginTop: '12px' }}>
-                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, marginBottom: '6px' }}>
+                <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 600, marginBottom: '6px' }}>
                   Sample Observations:
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -328,12 +328,12 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                       key={idx}
                       onClick={() => setNoteText(sample)}
                       style={{
-                        backgroundColor: '#f1f5f9',
-                        border: '1px solid #e2e8f0',
+                        backgroundColor: 'var(--color-surface-alt)',
+                        border: '1px solid var(--color-border)',
                         borderRadius: '14px',
                         padding: '4px 10px',
                         fontSize: '11px',
-                        color: '#334155',
+                        color: 'var(--color-text-secondary)',
                         cursor: 'pointer',
                         textAlign: 'left',
                       }}
@@ -357,7 +357,7 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: '#64748b' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'var(--color-text-muted)' }}>
                   <Clock size={14} />
                   <span>Observed: Today</span>
                 </div>
@@ -372,8 +372,8 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                     padding: '8px 18px',
                     borderRadius: '8px',
                     border: 'none',
-                    backgroundColor: noteText.trim() && !loading ? '#059669' : '#cbd5e1',
-                    color: '#ffffff',
+                    backgroundColor: noteText.trim() && !loading ? 'var(--color-success)' : 'var(--color-border-strong)',
+                    color: 'var(--color-surface)',
                     fontWeight: 700,
                     fontSize: '13px',
                     cursor: noteText.trim() && !loading ? 'pointer' : 'default',
@@ -393,11 +393,11 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
               <div
                 style={{
                   marginTop: '14px',
-                  backgroundColor: '#fef2f2',
-                  border: '1px solid #fecaca',
+                  backgroundColor: 'var(--color-danger-soft)',
+                  border: '1px solid var(--color-danger-border)',
                   borderRadius: '8px',
                   padding: '10px 14px',
-                  color: '#991b1b',
+                  color: 'var(--color-danger-dark)',
                   fontSize: '12px',
                   display: 'flex',
                   alignItems: 'center',
@@ -414,9 +414,9 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
           {sessionId !== null && !completedResult && (
             <div
               style={{
-                backgroundColor: '#ffffff',
+                backgroundColor: 'var(--color-surface)',
                 borderRadius: '12px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
                 padding: '20px',
                 boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
                 marginBottom: '24px',
@@ -426,8 +426,8 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                 <>
                   <div
                     style={{
-                      backgroundColor: '#fffbeb',
-                      border: '1px solid #fef3c7',
+                      backgroundColor: 'var(--color-warning-soft)',
+                      border: '1px solid var(--color-warning-soft)',
                       borderRadius: '8px',
                       padding: '12px 16px',
                       marginBottom: '16px',
@@ -436,12 +436,12 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                       gap: '10px',
                     }}
                   >
-                    <HelpCircle size={18} style={{ color: '#d97706', marginTop: '2px', flexShrink: 0 }} />
+                    <HelpCircle size={18} style={{ color: 'var(--color-warning)', marginTop: '2px', flexShrink: 0 }} />
                     <div>
-                      <div style={{ fontSize: '13px', fontWeight: 700, color: '#92400e' }}>
+                      <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-warning-dark)' }}>
                         AI Ambiguity Check: Additional Details Needed
                       </div>
-                      <div style={{ fontSize: '12px', color: '#78350f', marginTop: '2px', lineHeight: '1.4' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--color-warning-dark)', marginTop: '2px', lineHeight: '1.4' }}>
                         To help Dr. Ramesh Varma understand the context accurately, please answer the quick clarification questions below:
                       </div>
                     </div>
@@ -453,13 +453,13 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                       <div
                         key={q.id}
                         style={{
-                          backgroundColor: '#f8fafc',
+                          backgroundColor: 'var(--color-bg)',
                           borderRadius: '8px',
-                          border: '1px solid #e2e8f0',
+                          border: '1px solid var(--color-border)',
                           padding: '12px 14px',
                         }}
                       >
-                        <div style={{ fontSize: '13px', fontWeight: 600, color: '#0f172a', marginBottom: '8px' }}>
+                        <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '8px' }}>
                           {qIdx + 1}. {q.questionText}
                         </div>
 
@@ -473,9 +473,9 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                                 style={{
                                   padding: '6px 12px',
                                   borderRadius: '6px',
-                                  border: isSelected ? '2px solid #059669' : '1px solid #cbd5e1',
-                                  backgroundColor: isSelected ? '#ecfdf5' : '#ffffff',
-                                  color: isSelected ? '#065f46' : '#334155',
+                                  border: isSelected ? '2px solid var(--color-success)' : '1px solid var(--color-border-strong)',
+                                  backgroundColor: isSelected ? 'var(--color-success-soft)' : 'var(--color-surface)',
+                                  color: isSelected ? 'var(--color-success-dark)' : 'var(--color-text-secondary)',
                                   fontSize: '12px',
                                   fontWeight: isSelected ? 700 : 500,
                                   cursor: 'pointer',
@@ -485,7 +485,7 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                                   transition: 'all 0.1s ease',
                                 }}
                               >
-                                {isSelected && <Check size={14} style={{ color: '#059669' }} />}
+                                {isSelected && <Check size={14} style={{ color: 'var(--color-success)' }} />}
                                 <span>{opt}</span>
                               </button>
                             );
@@ -498,8 +498,8 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
               ) : (
                 <div
                   style={{
-                    backgroundColor: '#f0fdf4',
-                    border: '1px solid #bbf7d0',
+                    backgroundColor: 'var(--color-success-soft)',
+                    border: '1px solid var(--color-success-border)',
                     borderRadius: '8px',
                     padding: '14px 16px',
                     marginBottom: '18px',
@@ -508,12 +508,12 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                     gap: '10px',
                   }}
                 >
-                  <CheckCircle2 size={20} style={{ color: '#16a34a', flexShrink: 0 }} />
+                  <CheckCircle2 size={20} style={{ color: 'var(--color-success)', flexShrink: 0 }} />
                   <div>
-                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#166534' }}>
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-success-dark)' }}>
                       Observation is Clear &amp; Complete
                     </div>
-                    <div style={{ fontSize: '12px', color: '#14532d', marginTop: '2px' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--color-success-dark)', marginTop: '2px' }}>
                       Category: <b>{detectedCategory?.toUpperCase()}</b>. No ambiguous points detected. Ready to persist.
                     </div>
                   </div>
@@ -527,9 +527,9 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                   style={{
                     padding: '8px 14px',
                     borderRadius: '8px',
-                    border: '1px solid #cbd5e1',
-                    backgroundColor: '#ffffff',
-                    color: '#475569',
+                    border: '1px solid var(--color-border-strong)',
+                    backgroundColor: 'var(--color-surface)',
+                    color: 'var(--color-text-secondary)',
                     fontSize: '13px',
                     fontWeight: 600,
                     cursor: 'pointer',
@@ -546,8 +546,8 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                     padding: '8px 18px',
                     borderRadius: '8px',
                     border: 'none',
-                    backgroundColor: '#059669',
-                    color: '#ffffff',
+                    backgroundColor: 'var(--color-success)',
+                    color: 'var(--color-surface)',
                     fontWeight: 700,
                     fontSize: '13px',
                     cursor: 'pointer',
@@ -568,9 +568,9 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
           {completedResult && (
             <div
               style={{
-                backgroundColor: '#f0fdf4',
+                backgroundColor: 'var(--color-success-soft)',
                 borderRadius: '12px',
-                border: '1px solid #86efac',
+                border: '1px solid var(--color-success-border)',
                 padding: '20px',
                 marginBottom: '24px',
                 boxShadow: '0 4px 12px rgba(22, 163, 74, 0.08)',
@@ -582,21 +582,21 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                     width: '36px',
                     height: '36px',
                     borderRadius: '50%',
-                    backgroundColor: '#16a34a',
+                    backgroundColor: 'var(--color-success)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#ffffff',
+                    color: 'var(--color-surface)',
                     flexShrink: 0,
                   }}
                 >
                   <Check size={20} />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '15px', fontWeight: 700, color: '#166534' }}>
+                  <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-success-dark)' }}>
                     Observation Recorded &amp; Synchronized to Existing Wiki File!
                   </div>
-                  <div style={{ fontSize: '13px', color: '#14532d', marginTop: '4px', lineHeight: '1.5' }}>
+                  <div style={{ fontSize: '13px', color: 'var(--color-success-dark)', marginTop: '4px', lineHeight: '1.5' }}>
                     Assigned Evidence Code: <span style={{ fontFamily: 'monospace', fontWeight: 700 }}>{completedResult.evidenceCode}</span>
                     <br />
                     Category: <b>{completedResult.category}</b>
@@ -607,11 +607,11 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                       style={{
                         marginTop: '10px',
                         padding: '8px 12px',
-                        backgroundColor: '#ffffff',
-                        border: '1px solid #bbf7d0',
+                        backgroundColor: 'var(--color-surface)',
+                        border: '1px solid var(--color-success-border)',
                         borderRadius: '6px',
                         fontSize: '12px',
-                        color: '#15803d',
+                        color: 'var(--color-success)',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '6px',
@@ -629,8 +629,8 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                         padding: '6px 14px',
                         borderRadius: '6px',
                         border: 'none',
-                        backgroundColor: '#16a34a',
-                        color: '#ffffff',
+                        backgroundColor: 'var(--color-success)',
+                        color: 'var(--color-surface)',
                         fontWeight: 700,
                         fontSize: '12px',
                         cursor: 'pointer',
@@ -649,21 +649,21 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
         <div>
           <div
             style={{
-              backgroundColor: '#ffffff',
+              backgroundColor: 'var(--color-surface)',
               borderRadius: '12px',
-              border: '1px solid #e2e8f0',
+              border: '1px solid var(--color-border)',
               padding: '20px',
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Clock size={16} style={{ color: '#059669' }} />
-                <h3 style={{ fontSize: '14px', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+                <Clock size={16} style={{ color: 'var(--color-success)' }} />
+                <h3 style={{ fontSize: '14px', fontWeight: 700, margin: 0, color: 'var(--color-text-main)' }}>
                   Recent Caregiver Observations On File
                 </h3>
               </div>
-              <span style={{ fontSize: '11px', color: '#94a3b8' }}>
+              <span style={{ fontSize: '11px', color: 'var(--color-text-faint)' }}>
                 Total: {data.caregiver_observations.length} logs
               </span>
             </div>
@@ -675,8 +675,8 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                   style={{
                     padding: '12px 14px',
                     borderRadius: '8px',
-                    border: '1px solid #f1f5f9',
-                    backgroundColor: '#f8fafc',
+                    border: '1px solid var(--color-surface-alt)',
+                    backgroundColor: 'var(--color-bg)',
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
@@ -685,24 +685,24 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                         fontSize: '10px',
                         fontWeight: 700,
                         textTransform: 'uppercase',
-                        backgroundColor: '#e0f2fe',
-                        color: '#0369a1',
+                        backgroundColor: 'var(--color-accent-soft)',
+                        color: 'var(--color-accent-dark)',
                         padding: '2px 6px',
                         borderRadius: '4px',
                       }}
                     >
                       {obs.category}
                     </span>
-                    <span style={{ fontSize: '11px', color: '#64748b' }}>
+                    <span style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>
                       {obs.observed_at ? obs.observed_at.slice(0, 10) : '—'}
                     </span>
                   </div>
 
-                  <div style={{ fontSize: '13px', color: '#1e293b', lineHeight: '1.4', fontStyle: 'italic' }}>
+                  <div style={{ fontSize: '13px', color: 'var(--color-text-main)', lineHeight: '1.4', fontStyle: 'italic' }}>
                     "{obs.observation_text}"
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px', fontSize: '11px', color: '#94a3b8' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px', fontSize: '11px', color: 'var(--color-text-faint)' }}>
                     <span>Observer: {obs.caregiver_id}</span>
                     <span style={{ fontFamily: 'monospace' }}>{obs.evidence_code}</span>
                   </div>

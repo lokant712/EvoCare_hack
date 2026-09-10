@@ -115,10 +115,10 @@ export const CaregiverRequestNotificationBanner: React.FC<CaregiverRequestNotifi
           style={{
             padding: '10px 14px',
             borderRadius: '8px',
-            backgroundColor: message.type === 'success' ? '#f0fdf4' : '#fef2f2',
+            backgroundColor: message.type === 'success' ? 'var(--color-success-soft)' : 'var(--color-danger-soft)',
             border: '1px solid',
-            borderColor: message.type === 'success' ? '#bbf7d0' : '#fecaca',
-            color: message.type === 'success' ? '#166534' : '#b91c1c',
+            borderColor: message.type === 'success' ? 'var(--color-success-border)' : 'var(--color-danger-border)',
+            color: message.type === 'success' ? 'var(--color-success-dark)' : 'var(--color-danger-dark)',
             fontSize: '13px',
             marginBottom: '12px',
             display: 'flex',
@@ -138,8 +138,8 @@ export const CaregiverRequestNotificationBanner: React.FC<CaregiverRequestNotifi
           style={{
             padding: '16px 20px',
             borderRadius: '12px',
-            backgroundColor: '#fefce8',
-            border: '1.5px solid #fde047',
+            backgroundColor: 'var(--color-warning-soft)',
+            border: '1.5px solid var(--color-warning-border)',
             boxShadow: '0 2px 4px rgba(0,0,0,0.03)',
             marginBottom: '12px',
             display: 'flex',
@@ -150,14 +150,14 @@ export const CaregiverRequestNotificationBanner: React.FC<CaregiverRequestNotifi
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: '#fef08a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#854d0e' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'var(--color-warning-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-warning-dark)' }}>
               <HeartHandshake size={22} />
             </div>
             <div>
-              <div style={{ fontSize: '14px', fontWeight: 800, color: '#713f12' }}>
+              <div style={{ fontSize: '14px', fontWeight: 800, color: 'var(--color-warning-dark)' }}>
                 Incoming Patient Pairing Request
               </div>
-              <div style={{ fontSize: '13px', color: '#854d0e', marginTop: '2px' }}>
+              <div style={{ fontSize: '13px', color: 'var(--color-warning-dark)', marginTop: '2px' }}>
                 Patient <b>{req.patient_name}</b> ({req.patient_code}) requested you as their primary caretaker.
                 {req.notes && <span style={{ fontStyle: 'italic', marginLeft: '6px' }}>"{req.notes}"</span>}
               </div>
@@ -174,7 +174,7 @@ export const CaregiverRequestNotificationBanner: React.FC<CaregiverRequestNotifi
                 padding: '8px 16px',
                 borderRadius: '6px',
                 border: 'none',
-                backgroundColor: '#16a34a',
+                backgroundColor: 'var(--color-success)',
                 color: '#ffffff',
                 fontSize: '13px',
                 fontWeight: 700,
@@ -195,9 +195,9 @@ export const CaregiverRequestNotificationBanner: React.FC<CaregiverRequestNotifi
               style={{
                 padding: '8px 14px',
                 borderRadius: '6px',
-                border: '1px solid #cbd5e1',
-                backgroundColor: '#ffffff',
-                color: '#475569',
+                border: '1px solid var(--color-border-strong)',
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text-secondary)',
                 fontSize: '13px',
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -215,8 +215,8 @@ export const CaregiverRequestNotificationBanner: React.FC<CaregiverRequestNotifi
           style={{
             padding: '12px 16px',
             borderRadius: '10px',
-            backgroundColor: '#ffffff',
-            border: '1px solid #e2e8f0',
+            backgroundColor: 'var(--color-surface)',
+            border: '1px solid var(--color-border)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -225,8 +225,8 @@ export const CaregiverRequestNotificationBanner: React.FC<CaregiverRequestNotifi
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Users size={16} color="#059669" />
-            <span style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a' }}>
+            <Users size={16} color="var(--color-success)" />
+            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-text-main)' }}>
               Connected Patients ({approvedConnections.length}):
             </span>
             <div style={{ display: 'flex', gap: '6px' }}>
@@ -238,8 +238,8 @@ export const CaregiverRequestNotificationBanner: React.FC<CaregiverRequestNotifi
                     fontWeight: 600,
                     padding: '2px 8px',
                     borderRadius: '4px',
-                    backgroundColor: '#dcfce7',
-                    color: '#166534',
+                    backgroundColor: 'var(--color-success-soft)',
+                    color: 'var(--color-success-dark)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
@@ -252,7 +252,7 @@ export const CaregiverRequestNotificationBanner: React.FC<CaregiverRequestNotifi
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: '#b91c1c',
+                      color: 'var(--color-danger-dark)',
                       cursor: 'pointer',
                       padding: 0,
                       display: 'flex',

@@ -142,9 +142,9 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
   const content = (
     <div
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '16px',
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--color-border)',
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04)',
         width: '100%',
         maxWidth: '560px',
@@ -154,9 +154,9 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
       {/* Header Banner */}
       <div
         style={{
-          background: 'linear-gradient(135deg, #0369a1 0%, #0284c7 50%, #0ea5e9 100%)',
+          background: 'linear-gradient(135deg, var(--color-accent-dark) 0%, var(--color-accent) 50%, var(--color-accent-bright) 100%)',
           padding: '24px',
-          color: '#ffffff',
+          color: 'var(--color-surface)',
           position: 'relative',
         }}
       >
@@ -192,7 +192,7 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
       <div style={{ padding: '24px' }}>
         {/* Step 1: Patient Code Selection */}
         <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: 'var(--color-text-secondary)', marginBottom: '6px' }}>
             Step 1: Patient ID / Code
           </label>
           <div style={{ display: 'flex', gap: '8px' }}>
@@ -206,7 +206,7 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                 flex: 1,
                 padding: '10px 14px',
                 borderRadius: '8px',
-                border: '1.5px solid #cbd5e1',
+                border: '1.5px solid var(--color-border-strong)',
                 fontSize: '14px',
                 fontFamily: "'IBM Plex Mono', monospace",
                 fontWeight: 600,
@@ -221,9 +221,9 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
               style={{
                 padding: '10px 16px',
                 borderRadius: '8px',
-                border: '1px solid #cbd5e1',
-                backgroundColor: '#f8fafc',
-                color: '#334155',
+                border: '1px solid var(--color-border-strong)',
+                backgroundColor: 'var(--color-bg)',
+                color: 'var(--color-text-secondary)',
                 fontSize: '13px',
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -239,7 +239,7 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
 
           {/* Preset patient quick chips */}
           <div style={{ marginTop: '8px' }}>
-            <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
+            <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
               Quick Select Demo Patient:
             </span>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -262,9 +262,9 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                     padding: '3px 8px',
                     borderRadius: '4px',
                     border: '1px solid',
-                    borderColor: patientCode === p.code ? '#0284c7' : '#e2e8f0',
-                    backgroundColor: patientCode === p.code ? '#e0f2fe' : '#ffffff',
-                    color: patientCode === p.code ? '#0369a1' : '#475569',
+                    borderColor: patientCode === p.code ? 'var(--color-accent)' : 'var(--color-border)',
+                    backgroundColor: patientCode === p.code ? 'var(--color-accent-soft)' : 'var(--color-surface)',
+                    color: patientCode === p.code ? 'var(--color-accent-dark)' : 'var(--color-text-secondary)',
                     fontSize: '11px',
                     fontWeight: 600,
                     cursor: 'pointer',
@@ -277,7 +277,7 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
           </div>
 
           {lookupError && (
-            <div style={{ marginTop: '8px', padding: '8px 12px', borderRadius: '6px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ marginTop: '8px', padding: '8px 12px', borderRadius: '6px', backgroundColor: 'var(--color-danger-soft)', border: '1px solid var(--color-danger-border)', color: 'var(--color-danger-dark)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <AlertCircle size={14} />
               {lookupError}
             </div>
@@ -290,8 +290,8 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                 marginTop: '12px',
                 padding: '12px 14px',
                 borderRadius: '8px',
-                backgroundColor: '#f0fdf4',
-                border: '1px solid #bbf7d0',
+                backgroundColor: 'var(--color-success-soft)',
+                border: '1px solid var(--color-success-border)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -299,21 +299,21 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
             >
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <UserCheck size={16} color="#15803d" />
-                  <span style={{ fontWeight: 700, color: '#166534', fontSize: '14px' }}>{patientInfo.name}</span>
-                  <span style={{ fontSize: '11px', padding: '1px 6px', borderRadius: '4px', backgroundColor: '#dcfce7', color: '#166534', fontWeight: 600 }}>
+                  <UserCheck size={16} color="var(--color-success)" />
+                  <span style={{ fontWeight: 700, color: 'var(--color-success-dark)', fontSize: '14px' }}>{patientInfo.name}</span>
+                  <span style={{ fontSize: '11px', padding: '1px 6px', borderRadius: '4px', backgroundColor: 'var(--color-success-soft)', color: 'var(--color-success-dark)', fontWeight: 600 }}>
                     {patientCode}
                   </span>
                 </div>
-                <div style={{ fontSize: '12px', color: '#15803d', marginTop: '2px' }}>
+                <div style={{ fontSize: '12px', color: 'var(--color-success)', marginTop: '2px' }}>
                   {patientInfo.age} yrs · {patientInfo.sex} · {patientInfo.location}
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#166534', marginTop: '4px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'var(--color-success-dark)', marginTop: '4px' }}>
                   <Mail size={12} />
                   <span>Patient Gmail: <b>{patientInfo.email || 'lokanthsrihari7@gmail.com'}</b></span>
                 </div>
               </div>
-              <span style={{ fontSize: '11px', color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--color-success)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <CheckCircle2 size={13} /> Active Profile
               </span>
             </div>
@@ -322,9 +322,9 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
 
         {/* Step 2: Patient Consent Code Generation & Input */}
         {patientInfo && (
-          <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '18px', marginTop: '16px' }}>
+          <div style={{ borderTop: '1px solid var(--color-surface-alt)', paddingTop: '18px', marginTop: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <label style={{ fontSize: '13px', fontWeight: 700, color: '#334155' }}>
+              <label style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-text-secondary)' }}>
                 Step 2: Patient 2-Step Consent Code (Sent to Gmail)
               </label>
               {!otpRequested ? (
@@ -337,8 +337,8 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                     padding: '6px 12px',
                     borderRadius: '6px',
                     border: 'none',
-                    backgroundColor: '#0284c7',
-                    color: '#ffffff',
+                    backgroundColor: 'var(--color-accent)',
+                    color: 'var(--color-surface)',
                     fontSize: '12px',
                     fontWeight: 700,
                     cursor: 'pointer',
@@ -357,7 +357,7 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#0284c7',
+                    color: 'var(--color-accent)',
                     fontSize: '11px',
                     fontWeight: 600,
                     cursor: 'pointer',
@@ -376,21 +376,21 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                   marginBottom: '16px',
                   padding: '12px 14px',
                   borderRadius: '8px',
-                  backgroundColor: '#f0fdf4',
-                  border: '1px solid #86efac',
+                  backgroundColor: 'var(--color-success-soft)',
+                  border: '1px solid var(--color-success-border)',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}>
+                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: 'var(--color-success-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-success)' }}>
                       <Mail size={15} />
                     </div>
                     <div>
-                      <div style={{ fontSize: '12px', fontWeight: 700, color: '#166534' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-success-dark)' }}>
                         Verification Code Dispatched to Gmail
                       </div>
-                      <div style={{ fontSize: '11px', color: '#15803d' }}>
+                      <div style={{ fontSize: '11px', color: 'var(--color-success)' }}>
                         Sent to: <b>{patientInfo.email || 'lokanthsrihari7@gmail.com'}</b>
                       </div>
                     </div>
@@ -405,19 +405,19 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                         fontSize: '16px',
                         fontWeight: 800,
                         letterSpacing: '0.1em',
-                        backgroundColor: '#fef08a',
-                        color: '#713f12',
+                        backgroundColor: 'var(--color-warning-border)',
+                        color: 'var(--color-warning-dark)',
                         padding: '3px 10px',
                         borderRadius: '6px',
                         cursor: 'pointer',
-                        border: '1px dashed #ca8a04',
+                        border: '1px dashed var(--color-warning)',
                       }}
                     >
                       {generatedOtp}
                     </div>
                   )}
                 </div>
-                <div style={{ fontSize: '11px', color: '#166534', marginTop: '6px', fontStyle: 'italic' }}>
+                <div style={{ fontSize: '11px', color: 'var(--color-success-dark)', marginTop: '6px', fontStyle: 'italic' }}>
                   The patient has received their 6-digit consent code at <b>{patientInfo.email || 'lokanthsrihari7@gmail.com'}</b>. Ask the patient for the code to unlock this profile.
                 </div>
               </div>
@@ -438,32 +438,32 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                       width: '100%',
                       padding: '12px 16px',
                       borderRadius: '8px',
-                      border: '1.5px solid #cbd5e1',
+                      border: '1.5px solid var(--color-border-strong)',
                       fontSize: '18px',
                       fontFamily: "'IBM Plex Mono', monospace",
                       fontWeight: 700,
                       letterSpacing: '0.2em',
                       textAlign: 'center',
-                      backgroundColor: !otpRequested ? '#f8fafc' : '#ffffff',
+                      backgroundColor: !otpRequested ? 'var(--color-bg)' : 'var(--color-surface)',
                       outline: 'none',
                       boxSizing: 'border-box',
                     }}
                   />
                 </div>
-                <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px', textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginTop: '4px', textAlign: 'center' }}>
                   {otpRequested ? 'Code sent to patient phone/app. Ask patient for the 6 digits.' : 'Click "Request Consent Code" above to generate code.'}
                 </div>
               </div>
 
               {verifyError && (
-                <div style={{ marginBottom: '14px', padding: '8px 12px', borderRadius: '6px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ marginBottom: '14px', padding: '8px 12px', borderRadius: '6px', backgroundColor: 'var(--color-danger-soft)', border: '1px solid var(--color-danger-border)', color: 'var(--color-danger-dark)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <AlertCircle size={14} />
                   {verifyError}
                 </div>
               )}
 
               {verifySuccess && (
-                <div style={{ marginBottom: '14px', padding: '10px 12px', borderRadius: '6px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', color: '#166534', fontSize: '13px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ marginBottom: '14px', padding: '10px 12px', borderRadius: '6px', backgroundColor: 'var(--color-success-soft)', border: '1px solid var(--color-success-border)', color: 'var(--color-success-dark)', fontSize: '13px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <CheckCircle2 size={16} />
                   2-Step Verification verified! Unlocking records...
                 </div>
@@ -478,9 +478,9 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                       flex: 1,
                       padding: '12px 16px',
                       borderRadius: '8px',
-                      border: '1px solid #cbd5e1',
-                      backgroundColor: '#ffffff',
-                      color: '#475569',
+                      border: '1px solid var(--color-border-strong)',
+                      backgroundColor: 'var(--color-surface)',
+                      color: 'var(--color-text-secondary)',
                       fontSize: '13px',
                       fontWeight: 700,
                       cursor: 'pointer',
@@ -498,8 +498,8 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                     padding: '12px 20px',
                     borderRadius: '8px',
                     border: 'none',
-                    backgroundColor: verifySuccess ? '#16a34a' : (!otpRequested || !enteredOtp.trim()) ? '#94a3b8' : '#0284c7',
-                    color: '#ffffff',
+                    backgroundColor: verifySuccess ? 'var(--color-success)' : (!otpRequested || !enteredOtp.trim()) ? 'var(--color-text-faint)' : 'var(--color-accent)',
+                    color: 'var(--color-surface)',
                     fontSize: '14px',
                     fontWeight: 700,
                     cursor: (!otpRequested || !enteredOtp.trim() || verifyLoading) ? 'not-allowed' : 'pointer',
@@ -507,7 +507,7 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '8px',
-                    boxShadow: '0 2px 4px rgba(2, 132, 199, 0.2)',
+                    boxShadow: '0 2px 4px rgba(13, 110, 100, 0.2)',
                     transition: 'all 0.15s ease',
                   }}
                 >
@@ -531,7 +531,7 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(15, 23, 42, 0.65)',
+          backgroundColor: 'rgba(28, 26, 20, 0.65)',
           backdropFilter: 'blur(4px)',
           display: 'flex',
           alignItems: 'center',

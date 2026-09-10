@@ -27,9 +27,9 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
               fontWeight: 700,
               padding: '2px 8px',
               borderRadius: '9999px',
-              backgroundColor: '#ecfdf5',
-              color: '#047857',
-              border: '1px solid #a7f3d0',
+              backgroundColor: 'var(--color-success-soft)',
+              color: 'var(--color-success-dark)',
+              border: '1px solid var(--color-success-border)',
             }}
           >
             <TrendingUp size={12} /> IMPROVEMENT
@@ -46,9 +46,9 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
               fontWeight: 700,
               padding: '2px 8px',
               borderRadius: '9999px',
-              backgroundColor: '#fef2f2',
-              color: '#b91c1c',
-              border: '1px solid #fca5a5',
+              backgroundColor: 'var(--color-danger-soft)',
+              color: 'var(--color-danger-dark)',
+              border: '1px solid var(--color-danger-border)',
             }}
           >
             <TrendingDown size={12} /> DECLINE / ALERT
@@ -65,9 +65,9 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
               fontWeight: 700,
               padding: '2px 8px',
               borderRadius: '9999px',
-              backgroundColor: '#fffbeb',
-              color: '#b45309',
-              border: '1px solid #fde68a',
+              backgroundColor: 'var(--color-warning-soft)',
+              color: 'var(--color-warning-dark)',
+              border: '1px solid var(--color-warning-border)',
             }}
           >
             <RefreshCw size={12} /> FLUCTUATION
@@ -84,9 +84,9 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
               fontWeight: 700,
               padding: '2px 8px',
               borderRadius: '9999px',
-              backgroundColor: '#f1f5f9',
-              color: '#475569',
-              border: '1px solid #cbd5e1',
+              backgroundColor: 'var(--color-surface-alt)',
+              color: 'var(--color-text-secondary)',
+              border: '1px solid var(--color-border-strong)',
             }}
           >
             NEW OBSERVATION
@@ -98,9 +98,9 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
   return (
     <div
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '12px',
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--color-border)',
         padding: '20px',
         marginBottom: '24px',
         boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
@@ -109,15 +109,15 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-text-main)', margin: 0 }}>
               Recent Patient Health Trajectory & Changes
             </h2>
             <span
               style={{
                 fontSize: '11px',
                 fontWeight: 600,
-                backgroundColor: '#e0f2fe',
-                color: '#0369a1',
+                backgroundColor: 'var(--color-accent-soft)',
+                color: 'var(--color-accent-dark)',
                 padding: '2px 8px',
                 borderRadius: '9999px',
               }}
@@ -125,7 +125,7 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
               PRIORITY DOCTOR VIEW
             </span>
           </div>
-          <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0' }}>
+          <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', margin: '4px 0 0 0' }}>
             What has changed in this patient recently? (Derived from verified caregiver & clinical evidence)
           </p>
         </div>
@@ -137,9 +137,9 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
             key={idx}
             style={{
               padding: '16px 18px',
-              backgroundColor: '#f8fafc',
+              backgroundColor: 'var(--color-bg)',
               borderRadius: '10px',
-              border: '1px solid #e2e8f0',
+              border: '1px solid var(--color-border)',
               display: 'flex',
               flexDirection: 'column',
               gap: '12px',
@@ -148,15 +148,15 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
             {/* Header: Title, Badges, Direction */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a' }}>{change.title}</span>
+                <span style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-text-main)' }}>{change.title}</span>
                 <span
                   style={{
                     fontSize: '11px',
                     fontFamily: "'IBM Plex Mono', monospace",
                     fontWeight: 600,
                     padding: '2px 6px',
-                    backgroundColor: '#e2e8f0',
-                    color: '#334155',
+                    backgroundColor: 'var(--color-border)',
+                    color: 'var(--color-text-secondary)',
                     borderRadius: '4px',
                   }}
                 >
@@ -167,7 +167,7 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <SourceBadge type={change.source_type} size="sm" />
-                <span style={{ fontSize: '12px', color: '#64748b', fontFamily: "'IBM Plex Mono', monospace" }}>
+                <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: "'IBM Plex Mono', monospace" }}>
                   {change.observed_date}
                 </span>
               </div>
@@ -179,35 +179,35 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
                 gap: '12px',
-                backgroundColor: '#ffffff',
+                backgroundColor: 'var(--color-surface)',
                 padding: '12px 14px',
                 borderRadius: '8px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
               }}
             >
               <div>
-                <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '2px' }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '2px' }}>
                   Previous State
                 </div>
-                <div style={{ fontSize: '13px', color: '#475569' }}>{change.previous_state}</div>
+                <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>{change.previous_state}</div>
               </div>
-              <div style={{ borderLeft: '1px solid #e2e8f0', paddingLeft: '12px' }}>
-                <div style={{ fontSize: '11px', fontWeight: 700, color: '#0284c7', textTransform: 'uppercase', marginBottom: '2px' }}>
+              <div style={{ borderLeft: '1px solid var(--color-border)', paddingLeft: '12px' }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-accent)', textTransform: 'uppercase', marginBottom: '2px' }}>
                   Latest Observation
                 </div>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: '#0f172a' }}>{change.latest_state}</div>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text-main)' }}>{change.latest_state}</div>
               </div>
             </div>
 
             {/* Synthesized longitudinal claim */}
-            <div style={{ fontSize: '13px', color: '#334155', lineHeight: 1.4 }}>
+            <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: 1.4 }}>
               <strong>Synthesized Claim:</strong> {change.change_summary}
             </div>
 
             {/* Action Bar: Evidence Count, Provenance [Why?] button */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '4px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '12px', color: '#64748b' }}>
+                <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
                   Evidence ({change.evidence_count} records):
                 </span>
                 {change.evidence_ids.map((ev) => (
@@ -220,9 +220,9 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
                       fontWeight: 600,
                       padding: '2px 6px',
                       borderRadius: '4px',
-                      backgroundColor: '#e0f2fe',
-                      color: '#0369a1',
-                      border: '1px solid #bae6fd',
+                      backgroundColor: 'var(--color-accent-soft)',
+                      color: 'var(--color-accent-dark)',
+                      border: '1px solid var(--color-accent-border)',
                       cursor: 'pointer',
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -245,15 +245,15 @@ export const RecentChangesPanel: React.FC<RecentChangesPanelProps> = ({
                   fontWeight: 700,
                   padding: '5px 12px',
                   borderRadius: '6px',
-                  backgroundColor: '#0284c7',
+                  backgroundColor: 'var(--color-accent)',
                   color: '#ffffff',
                   border: 'none',
                   cursor: 'pointer',
-                  boxShadow: '0 1px 2px rgba(2, 132, 199, 0.2)',
+                  boxShadow: '0 1px 2px rgba(13, 110, 100, 0.2)',
                   transition: 'background-color 0.15s',
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#0369a1')}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0284c7')}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-accent-dark)')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-accent)')}
               >
                 <HelpCircle size={14} />
                 Why? (Trace Provenance)

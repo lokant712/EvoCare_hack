@@ -11,12 +11,12 @@ export const LoadingSpinner: React.FC<{ message?: string }> = ({ message = 'Load
         justifyContent: 'center',
         minHeight: '380px',
         gap: '16px',
-        color: '#475569',
+        color: 'var(--color-text-secondary)',
       }}
     >
-      <Loader2 size={36} className="animate-spin" style={{ color: '#0284c7' }} />
+      <Loader2 size={36} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
       <div style={{ fontSize: '15px', fontWeight: 500 }}>{message}</div>
-      <div style={{ fontSize: '12px', color: '#94a3b8' }}>Retrieving longitudinal memory & evidence from backend...</div>
+      <div style={{ fontSize: '12px', color: 'var(--color-text-faint)' }}>Retrieving longitudinal memory & evidence from backend...</div>
     </div>
   );
 };

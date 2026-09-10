@@ -62,9 +62,9 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
   return (
     <div
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '16px',
-        border: '1px solid #cbd5e1',
+        border: '1px solid var(--color-border-strong)',
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
         padding: '24px',
         marginBottom: '28px'
@@ -77,23 +77,23 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          backgroundColor: '#eff6ff',
-          border: '1px solid #bfdbfe',
+          backgroundColor: 'var(--color-accent-soft)',
+          border: '1px solid var(--color-accent-border)',
           borderRadius: '8px',
           padding: '10px 16px',
           marginBottom: '18px'
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Stethoscope size={18} style={{ color: '#2563eb' }} />
-          <span style={{ fontSize: '12px', fontWeight: 800, color: '#1e40af', letterSpacing: '0.05em' }}>
+          <Stethoscope size={18} style={{ color: 'var(--color-accent)' }} />
+          <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-accent-dark)', letterSpacing: '0.05em' }}>
             DOCTOR-ONLY CLINICAL REASONING
           </span>
           <span
             style={{
               fontSize: '11px',
-              backgroundColor: '#dbeafe',
-              color: '#1d4ed8',
+              backgroundColor: 'var(--color-accent-soft)',
+              color: 'var(--color-accent-dark)',
               padding: '2px 8px',
               borderRadius: '4px',
               fontWeight: 600
@@ -102,7 +102,7 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
             DEMO MODE — AUTHENTICATION NOT YET ENABLED (PHASE 8)
           </span>
         </div>
-        <div style={{ fontSize: '11px', color: '#64748b' }}>
+        <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>
           Strictly Read-Only Analytical Decision Support
         </div>
       </div>
@@ -115,7 +115,7 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
               width: '36px',
               height: '36px',
               borderRadius: '10px',
-              backgroundColor: '#4f46e5',
+              backgroundColor: 'var(--color-plum)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -125,10 +125,10 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
             <Brain size={20} />
           </div>
           <div>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--color-text-main)', margin: 0 }}>
               Clinical Reasoning Assistant
             </h2>
-            <p style={{ fontSize: '13px', color: '#64748b', margin: '2px 0 0 0' }}>
+            <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', margin: '2px 0 0 0' }}>
               Synthesizes longitudinal patient memory, doctor assessments, caregiver observations, labs, and medications into evidence-linked clinical considerations.
             </p>
           </div>
@@ -137,7 +137,7 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
 
       {/* Example Prompt Chips */}
       <div style={{ marginBottom: '14px' }}>
-        <div style={{ fontSize: '12px', fontWeight: 600, color: '#475569', marginBottom: '6px' }}>
+        <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: '6px' }}>
           Example Clinical Inquiries:
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -147,21 +147,21 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
               onClick={() => handleAnalyze(eq)}
               disabled={loading}
               style={{
-                backgroundColor: '#f8fafc',
-                border: '1px solid #e2e8f0',
+                backgroundColor: 'var(--color-bg)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '6px',
                 padding: '6px 12px',
                 fontSize: '12px',
-                color: '#334155',
+                color: 'var(--color-text-secondary)',
                 cursor: loading ? 'not-allowed' : 'pointer',
                 textAlign: 'left',
                 transition: 'all 0.15s ease'
               }}
               onMouseEnter={(e) => {
-                if (!loading) (e.currentTarget.style.backgroundColor = '#f1f5f9');
+                if (!loading) (e.currentTarget.style.backgroundColor = 'var(--color-surface-alt)');
               }}
               onMouseLeave={(e) => {
-                if (!loading) (e.currentTarget.style.backgroundColor = '#f8fafc');
+                if (!loading) (e.currentTarget.style.backgroundColor = 'var(--color-bg)');
               }}
             >
               "{eq}"
@@ -183,10 +183,10 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
             flex: 1,
             padding: '12px 16px',
             fontSize: '14px',
-            border: '1px solid #cbd5e1',
+            border: '1px solid var(--color-border-strong)',
             borderRadius: '8px',
             outline: 'none',
-            backgroundColor: '#ffffff'
+            backgroundColor: 'var(--color-surface)'
           }}
           data-testid="reasoning-input"
         />
@@ -194,7 +194,7 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
           onClick={() => handleAnalyze()}
           disabled={loading || !question.trim()}
           style={{
-            backgroundColor: loading || !question.trim() ? '#94a3b8' : '#4f46e5',
+            backgroundColor: loading || !question.trim() ? 'var(--color-text-faint)' : 'var(--color-plum)',
             color: '#ffffff',
             border: 'none',
             borderRadius: '8px',
@@ -226,11 +226,11 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
       {error && (
         <div
           style={{
-            backgroundColor: '#fef2f2',
-            border: '1px solid #fecaca',
+            backgroundColor: 'var(--color-danger-soft)',
+            border: '1px solid var(--color-danger-border)',
             borderRadius: '8px',
             padding: '14px 18px',
-            color: '#991b1b',
+            color: 'var(--color-danger-dark)',
             fontSize: '13px',
             marginBottom: '20px',
             display: 'flex',
@@ -239,7 +239,7 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
           }}
           data-testid="reasoning-error"
         >
-          <ShieldAlert size={18} style={{ color: '#dc2626', flexShrink: 0, marginTop: '2px' }} />
+          <ShieldAlert size={18} style={{ color: 'var(--color-danger)', flexShrink: 0, marginTop: '2px' }} />
           <div>
             <div style={{ fontWeight: 700, marginBottom: '2px' }}>Clinical Reasoning Safety Alert:</div>
             <div>{error}</div>
@@ -253,51 +253,51 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
           {/* Patient Context Summary Pill Header */}
           <div
             style={{
-              backgroundColor: '#f8fafc',
-              border: '1px solid #e2e8f0',
+              backgroundColor: 'var(--color-bg)',
+              border: '1px solid var(--color-border)',
               borderRadius: '10px',
               padding: '14px 18px',
               marginBottom: '20px'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '12px', fontWeight: 800, color: '#334155', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-text-secondary)', textTransform: 'uppercase' }}>
                 Relevant Context Extracted for Evaluation
               </span>
-              <span style={{ fontSize: '11px', color: '#64748b' }}>
+              <span style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>
                 {reasoningData.context_summary.total_evidence_count} Total Patient Evidence Records
               </span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', fontSize: '12px' }}>
               <div>
-                <span style={{ fontWeight: 700, color: '#475569' }}>Diagnoses: </span>
-                <span style={{ color: '#0f172a' }}>{reasoningData.context_summary.diagnoses.join(', ')}</span>
+                <span style={{ fontWeight: 700, color: 'var(--color-text-secondary)' }}>Diagnoses: </span>
+                <span style={{ color: 'var(--color-text-main)' }}>{reasoningData.context_summary.diagnoses.join(', ')}</span>
               </div>
               <div>
-                <span style={{ fontWeight: 700, color: '#475569' }}>Active Medications: </span>
-                <span style={{ color: '#0f172a' }}>{reasoningData.context_summary.active_medications.join(', ')}</span>
+                <span style={{ fontWeight: 700, color: 'var(--color-text-secondary)' }}>Active Medications: </span>
+                <span style={{ color: 'var(--color-text-main)' }}>{reasoningData.context_summary.active_medications.join(', ')}</span>
               </div>
               <div>
-                <span style={{ fontWeight: 700, color: '#475569' }}>Known Unknowns: </span>
-                <span style={{ color: '#b45309' }}>{reasoningData.context_summary.known_unknowns.length} parameters unconfirmed</span>
+                <span style={{ fontWeight: 700, color: 'var(--color-text-secondary)' }}>Known Unknowns: </span>
+                <span style={{ color: 'var(--color-warning-dark)' }}>{reasoningData.context_summary.known_unknowns.length} parameters unconfirmed</span>
               </div>
             </div>
           </div>
 
           {/* AI Clinical Considerations Heading */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--color-text-main)', margin: 0 }}>
               Possible Clinical Considerations
             </h3>
             <span
               style={{
                 fontSize: '11px',
                 fontWeight: 700,
-                backgroundColor: '#fef3c7',
-                color: '#92400e',
+                backgroundColor: 'var(--color-warning-soft)',
+                color: 'var(--color-warning-dark)',
                 padding: '4px 10px',
                 borderRadius: '6px',
-                border: '1px solid #fde68a'
+                border: '1px solid var(--color-warning-border)'
               }}
               data-testid="not-a-diagnosis-badge"
             >
@@ -311,9 +311,9 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
               <div
                 key={idx}
                 style={{
-                  backgroundColor: '#ffffff',
+                  backgroundColor: 'var(--color-surface)',
                   borderRadius: '12px',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                   boxShadow: '0 2px 4px rgba(0, 0, 0, 0.04)',
                   padding: '20px'
                 }}
@@ -327,8 +327,8 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
                         style={{
                           fontSize: '11px',
                           fontWeight: 700,
-                          backgroundColor: '#e0e7ff',
-                          color: '#3730a3',
+                          backgroundColor: 'var(--color-plum-soft)',
+                          color: 'var(--color-plum-dark)',
                           padding: '2px 8px',
                           borderRadius: '4px'
                         }}
@@ -339,8 +339,8 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
                         style={{
                           fontSize: '11px',
                           fontWeight: 700,
-                          backgroundColor: '#f1f5f9',
-                          color: '#475569',
+                          backgroundColor: 'var(--color-surface-alt)',
+                          color: 'var(--color-text-secondary)',
                           padding: '2px 8px',
                           borderRadius: '4px'
                         }}
@@ -353,16 +353,16 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
                           fontWeight: 700,
                           backgroundColor:
                             c.evidence_strength === 'STRONG'
-                              ? '#dcfce7'
+                              ? 'var(--color-success-soft)'
                               : c.evidence_strength === 'MODERATE'
-                              ? '#fef9c3'
-                              : '#f1f5f9',
+                              ? 'var(--color-warning-soft)'
+                              : 'var(--color-surface-alt)',
                           color:
                             c.evidence_strength === 'STRONG'
-                              ? '#166534'
+                              ? 'var(--color-success-dark)'
                               : c.evidence_strength === 'MODERATE'
-                              ? '#854d0e'
-                              : '#475569',
+                              ? 'var(--color-warning-dark)'
+                              : 'var(--color-text-secondary)',
                           padding: '2px 8px',
                           borderRadius: '4px'
                         }}
@@ -370,29 +370,29 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
                         EVIDENCE STRENGTH: {c.evidence_strength}
                       </span>
                     </div>
-                    <h4 style={{ fontSize: '16px', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+                    <h4 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--color-text-main)', margin: 0 }}>
                       {idx + 1}. {c.title}
                     </h4>
                   </div>
                 </div>
 
                 {/* Description */}
-                <p style={{ fontSize: '13px', color: '#334155', lineHeight: '1.5', margin: '0 0 12px 0' }}>
+                <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: '1.5', margin: '0 0 12px 0' }}>
                   {c.description}
                 </p>
 
                 {/* Clinical Reasoning Details */}
                 <div
                   style={{
-                    backgroundColor: '#f8fafc',
+                    backgroundColor: 'var(--color-bg)',
                     borderRadius: '8px',
                     padding: '12px 14px',
                     marginBottom: '14px',
                     fontSize: '12px',
-                    color: '#334155'
+                    color: 'var(--color-text-secondary)'
                   }}
                 >
-                  <div style={{ fontWeight: 700, color: '#1e293b', marginBottom: '4px' }}>Clinical Rationale:</div>
+                  <div style={{ fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>Clinical Rationale:</div>
                   <div style={{ lineHeight: '1.5' }}>{c.reasoning}</div>
                 </div>
 
@@ -401,31 +401,31 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
                   {/* Supporting Evidence */}
                   <div
                     style={{
-                      backgroundColor: '#f0fdf4',
-                      border: '1px solid #bbf7d0',
+                      backgroundColor: 'var(--color-success-soft)',
+                      border: '1px solid var(--color-success-border)',
                       borderRadius: '8px',
                       padding: '12px'
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                      <CheckCircle2 size={14} style={{ color: '#16a34a' }} />
-                      <span style={{ fontSize: '12px', fontWeight: 700, color: '#166534' }}>
+                      <CheckCircle2 size={14} style={{ color: 'var(--color-success)' }} />
+                      <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-success-dark)' }}>
                         Supporting Evidence ({c.supporting_evidence.length})
                       </span>
                     </div>
                     {c.supporting_evidence.length > 0 ? (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                         {c.supporting_evidence.map((ev, i) => (
-                          <div key={i} style={{ fontSize: '12px', color: '#14532d' }}>
+                          <div key={i} style={{ fontSize: '12px', color: 'var(--color-success-dark)' }}>
                             <button
                               onClick={() => onSelectEvidence(ev.evidence_id)}
                               style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
                                 gap: '4px',
-                                backgroundColor: '#dcfce7',
-                                color: '#15803d',
-                                border: '1px solid #86efac',
+                                backgroundColor: 'var(--color-success-soft)',
+                                color: 'var(--color-success)',
+                                border: '1px solid var(--color-success-border)',
                                 borderRadius: '4px',
                                 padding: '2px 6px',
                                 fontSize: '11px',
@@ -438,7 +438,7 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
                               <span>{ev.evidence_id}</span>
                               <ChevronRight size={10} />
                             </button>
-                            <span style={{ fontSize: '11px', color: '#166534' }}>({ev.source_type})</span>
+                            <span style={{ fontSize: '11px', color: 'var(--color-success-dark)' }}>({ev.source_type})</span>
                             <div style={{ fontSize: '11px', marginTop: '2px', fontStyle: 'italic' }}>
                               "{ev.original_statement}"
                             </div>
@@ -446,48 +446,48 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
                         ))}
                       </div>
                     ) : (
-                      <div style={{ fontSize: '11px', color: '#64748b' }}>No direct supporting citations.</div>
+                      <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>No direct supporting citations.</div>
                     )}
                   </div>
 
                   {/* Contradicting / Weakening Evidence */}
                   <div
                     style={{
-                      backgroundColor: '#fffbeb',
-                      border: '1px solid #fde68a',
+                      backgroundColor: 'var(--color-warning-soft)',
+                      border: '1px solid var(--color-warning-border)',
                       borderRadius: '8px',
                       padding: '12px'
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                      <HelpCircle size={14} style={{ color: '#d97706' }} />
-                      <span style={{ fontSize: '12px', fontWeight: 700, color: '#92400e' }}>
+                      <HelpCircle size={14} style={{ color: 'var(--color-warning)' }} />
+                      <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-warning-dark)' }}>
                         Contradicting / Weakening Evidence
                       </span>
                     </div>
                     {c.contradicting_evidence.length > 0 ? (
-                      <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '11px', color: '#78350f', lineHeight: '1.4' }}>
+                      <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '11px', color: 'var(--color-warning-dark)', lineHeight: '1.4' }}>
                         {c.contradicting_evidence.map((ce, i) => (
                           <li key={i}>{ce}</li>
                         ))}
                       </ul>
                     ) : (
-                      <div style={{ fontSize: '11px', color: '#64748b' }}>No contradicting evidence identified.</div>
+                      <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>No contradicting evidence identified.</div>
                     )}
                   </div>
                 </div>
 
                 {/* Missing Info & Uncertainty */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '11px', color: '#64748b' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '11px', color: 'var(--color-text-muted)' }}>
                   {c.missing_information.length > 0 && (
                     <div>
-                      <strong style={{ color: '#475569' }}>Parameters needed to evaluate:</strong>{' '}
+                      <strong style={{ color: 'var(--color-text-secondary)' }}>Parameters needed to evaluate:</strong>{' '}
                       {c.missing_information.join('; ')}
                     </div>
                   )}
                   {c.uncertainty && (
                     <div>
-                      <strong style={{ color: '#475569' }}>Evidentiary Uncertainty:</strong> {c.uncertainty}
+                      <strong style={{ color: 'var(--color-text-secondary)' }}>Evidentiary Uncertainty:</strong> {c.uncertainty}
                     </div>
                   )}
                 </div>
@@ -500,19 +500,19 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
             {/* Recent Longitudinal Changes */}
             <div
               style={{
-                backgroundColor: '#f8fafc',
-                border: '1px solid #e2e8f0',
+                backgroundColor: 'var(--color-bg)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '10px',
                 padding: '16px'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
-                <Clock size={16} style={{ color: '#4f46e5' }} />
-                <h4 style={{ fontSize: '13px', fontWeight: 800, color: '#1e293b', margin: 0 }}>
+                <Clock size={16} style={{ color: 'var(--color-plum)' }} />
+                <h4 style={{ fontSize: '13px', fontWeight: 800, color: 'var(--color-text-main)', margin: 0 }}>
                   Relevant Longitudinal Trajectory
                 </h4>
               </div>
-              <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '12px', color: '#334155', lineHeight: '1.5' }}>
+              <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '12px', color: 'var(--color-text-secondary)', lineHeight: '1.5' }}>
                 {reasoningData.relevant_changes.map((rc, i) => (
                   <li key={i} style={{ marginBottom: '4px' }}>{rc}</li>
                 ))}
@@ -522,26 +522,26 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
             {/* Red Flags for Clinical Attention */}
             <div
               style={{
-                backgroundColor: '#fff7ed',
-                border: '1px solid #fed7aa',
+                backgroundColor: 'var(--color-warning-soft)',
+                border: '1px solid var(--color-warning-border)',
                 borderRadius: '10px',
                 padding: '16px'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
-                <AlertOctagon size={16} style={{ color: '#ea580c' }} />
-                <h4 style={{ fontSize: '13px', fontWeight: 800, color: '#9a3412', margin: 0 }}>
+                <AlertOctagon size={16} style={{ color: 'var(--color-warning)' }} />
+                <h4 style={{ fontSize: '13px', fontWeight: 800, color: 'var(--color-warning-dark)', margin: 0 }}>
                   Red Flags for Prompt Clinical Assessment
                 </h4>
               </div>
               {reasoningData.red_flags.length > 0 ? (
-                <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '12px', color: '#7c2d12', lineHeight: '1.5' }}>
+                <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '12px', color: 'var(--color-warning-dark)', lineHeight: '1.5' }}>
                   {reasoningData.red_flags.map((rf, i) => (
                     <li key={i} style={{ marginBottom: '4px' }}>{rf}</li>
                   ))}
                 </ul>
               ) : (
-                <div style={{ fontSize: '12px', color: '#9a3412' }}>No acute red flags identified in context.</div>
+                <div style={{ fontSize: '12px', color: 'var(--color-warning-dark)' }}>No acute red flags identified in context.</div>
               )}
             </div>
           </div>
@@ -550,15 +550,15 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
           {reasoningData.missing_information.length > 0 && (
             <div
               style={{
-                backgroundColor: '#f1f5f9',
+                backgroundColor: 'var(--color-surface-alt)',
                 borderRadius: '8px',
                 padding: '12px 16px',
                 marginBottom: '18px',
                 fontSize: '12px',
-                color: '#334155'
+                color: 'var(--color-text-secondary)'
               }}
             >
-              <div style={{ fontWeight: 700, color: '#1e293b', marginBottom: '4px' }}>
+              <div style={{ fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>
                 Information that may help clarify this question:
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -566,12 +566,12 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
                   <span
                     key={i}
                     style={{
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #cbd5e1',
+                      backgroundColor: 'var(--color-surface)',
+                      border: '1px solid var(--color-border-strong)',
                       borderRadius: '4px',
                       padding: '2px 8px',
                       fontSize: '11px',
-                      color: '#475569'
+                      color: 'var(--color-text-secondary)'
                     }}
                   >
                     • {mi}
@@ -584,8 +584,8 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
           {/* Doctor Decision Disclaimer Banner */}
           <div
             style={{
-              backgroundColor: '#f8fafc',
-              border: '1px solid #cbd5e1',
+              backgroundColor: 'var(--color-bg)',
+              border: '1px solid var(--color-border-strong)',
               borderRadius: '8px',
               padding: '12px 16px',
               display: 'flex',
@@ -593,8 +593,8 @@ export const ClinicalReasoningPanel: React.FC<ClinicalReasoningPanelProps> = ({
               gap: '10px'
             }}
           >
-            <Info size={18} style={{ color: '#0284c7', flexShrink: 0 }} />
-            <div style={{ fontSize: '12px', color: '#475569', lineHeight: '1.4' }}>
+            <Info size={18} style={{ color: 'var(--color-accent)', flexShrink: 0 }} />
+            <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', lineHeight: '1.4' }}>
               <strong>Doctor Decision Disclaimer:</strong> {reasoningData.disclaimer}
             </div>
           </div>

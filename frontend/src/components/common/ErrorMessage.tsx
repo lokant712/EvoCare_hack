@@ -16,9 +16,9 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry }) 
         justifyContent: 'center',
         minHeight: '380px',
         padding: '32px',
-        backgroundColor: '#fff',
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '12px',
-        border: '1px solid #fee2e2',
+        border: '1px solid var(--color-danger-soft)',
         textAlign: 'center',
         maxWidth: '540px',
         margin: '40px auto',
@@ -30,19 +30,19 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry }) 
           width: '56px',
           height: '56px',
           borderRadius: '50%',
-          backgroundColor: '#fef2f2',
+          backgroundColor: 'var(--color-danger-soft)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           marginBottom: '16px',
         }}
       >
-        <AlertCircle size={32} style={{ color: '#dc2626' }} />
+        <AlertCircle size={32} style={{ color: 'var(--color-danger)' }} />
       </div>
-      <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1e293b', marginBottom: '8px' }}>
+      <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '8px' }}>
         Unable to load patient information
       </h3>
-      <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '24px', lineHeight: 1.5 }}>
+      <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '24px', lineHeight: 1.5 }}>
         {message}
       </p>
       {onRetry && (
@@ -53,7 +53,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry }) 
             alignItems: 'center',
             gap: '8px',
             padding: '10px 20px',
-            backgroundColor: '#0284c7',
+            backgroundColor: 'var(--color-accent)',
             color: '#fff',
             border: 'none',
             borderRadius: '8px',
@@ -62,8 +62,8 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry }) 
             cursor: 'pointer',
             transition: 'background-color 0.2s',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#0369a1')}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0284c7')}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-accent-dark)')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-accent)')}
         >
           <RefreshCw size={16} />
           Retry Connection

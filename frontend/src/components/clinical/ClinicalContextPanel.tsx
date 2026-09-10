@@ -21,9 +21,9 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
   return (
     <div
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '12px',
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--color-border)',
         padding: '20px',
         marginBottom: '24px',
         boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
@@ -33,18 +33,18 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+            <h2 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', margin: 0 }}>
               Clinician-Confirmed Medical Context
             </h2>
             <SourceBadge type="CLINICIAN-CONFIRMED" size="sm" />
           </div>
-          <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 0 0' }}>
+          <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', margin: '2px 0 0 0' }}>
             Verified hospital & outpatient records (Separated from caregiver-reported observations)
           </p>
         </div>
 
         {/* Tab Buttons */}
-        <div style={{ display: 'flex', gap: '4px', backgroundColor: '#f1f5f9', padding: '3px', borderRadius: '8px' }}>
+        <div style={{ display: 'flex', gap: '4px', backgroundColor: 'var(--color-surface-alt)', padding: '3px', borderRadius: '8px' }}>
           <button
             onClick={() => setActiveTab('diagnoses')}
             style={{
@@ -57,8 +57,8 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
               fontWeight: 600,
               border: 'none',
               cursor: 'pointer',
-              backgroundColor: activeTab === 'diagnoses' ? '#ffffff' : 'transparent',
-              color: activeTab === 'diagnoses' ? '#0f172a' : '#64748b',
+              backgroundColor: activeTab === 'diagnoses' ? 'var(--color-surface)' : 'transparent',
+              color: activeTab === 'diagnoses' ? 'var(--color-text-main)' : 'var(--color-text-muted)',
               boxShadow: activeTab === 'diagnoses' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none',
             }}
           >
@@ -77,8 +77,8 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
               fontWeight: 600,
               border: 'none',
               cursor: 'pointer',
-              backgroundColor: activeTab === 'medications' ? '#ffffff' : 'transparent',
-              color: activeTab === 'medications' ? '#0f172a' : '#64748b',
+              backgroundColor: activeTab === 'medications' ? 'var(--color-surface)' : 'transparent',
+              color: activeTab === 'medications' ? 'var(--color-text-main)' : 'var(--color-text-muted)',
               boxShadow: activeTab === 'medications' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none',
             }}
           >
@@ -97,8 +97,8 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
               fontWeight: 600,
               border: 'none',
               cursor: 'pointer',
-              backgroundColor: activeTab === 'labs' ? '#ffffff' : 'transparent',
-              color: activeTab === 'labs' ? '#0f172a' : '#64748b',
+              backgroundColor: activeTab === 'labs' ? 'var(--color-surface)' : 'transparent',
+              color: activeTab === 'labs' ? 'var(--color-text-main)' : 'var(--color-text-muted)',
               boxShadow: activeTab === 'labs' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none',
             }}
           >
@@ -116,9 +116,9 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
               key={idx}
               style={{
                 padding: '12px 14px',
-                backgroundColor: '#f8fafc',
+                backgroundColor: 'var(--color-bg)',
                 borderRadius: '8px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
@@ -127,22 +127,22 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
                     fontSize: '11px',
                     fontFamily: "'IBM Plex Mono', monospace",
                     fontWeight: 700,
-                    backgroundColor: '#e0f2fe',
-                    color: '#0369a1',
+                    backgroundColor: 'var(--color-accent-soft)',
+                    color: 'var(--color-accent-dark)',
                     padding: '2px 6px',
                     borderRadius: '4px',
                   }}
                 >
                   ICD-10: {diag.code}
                 </span>
-                <span style={{ fontSize: '11px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <Calendar size={11} /> {diag.confirmed_date}
                 </span>
               </div>
-              <div style={{ fontSize: '13px', fontWeight: 600, color: '#0f172a', marginBottom: '4px' }}>
+              <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
                 {diag.description}
               </div>
-              <div style={{ fontSize: '11px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <UserCheck size={11} /> {diag.doctor}
               </div>
             </div>
@@ -155,7 +155,7 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
             <thead>
-              <tr style={{ borderBottom: '2px solid #e2e8f0', color: '#64748b', fontSize: '11px', textTransform: 'uppercase' }}>
+              <tr style={{ borderBottom: '2px solid var(--color-border)', color: 'var(--color-text-muted)', fontSize: '11px', textTransform: 'uppercase' }}>
                 <th style={{ padding: '8px 12px' }}>Medication Name</th>
                 <th style={{ padding: '8px 12px' }}>Dose</th>
                 <th style={{ padding: '8px 12px' }}>Frequency</th>
@@ -166,11 +166,11 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
             </thead>
             <tbody>
               {medications.map((med, idx) => (
-                <tr key={idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '10px 12px', fontWeight: 600, color: '#0f172a' }}>{med.name}</td>
-                  <td style={{ padding: '10px 12px', color: '#334155' }}>{med.dose}</td>
-                  <td style={{ padding: '10px 12px', color: '#334155' }}>{med.frequency}</td>
-                  <td style={{ padding: '10px 12px', color: '#64748b' }}>{med.indication}</td>
+                <tr key={idx} style={{ borderBottom: '1px solid var(--color-surface-alt)' }}>
+                  <td style={{ padding: '10px 12px', fontWeight: 600, color: 'var(--color-text-main)' }}>{med.name}</td>
+                  <td style={{ padding: '10px 12px', color: 'var(--color-text-secondary)' }}>{med.dose}</td>
+                  <td style={{ padding: '10px 12px', color: 'var(--color-text-secondary)' }}>{med.frequency}</td>
+                  <td style={{ padding: '10px 12px', color: 'var(--color-text-muted)' }}>{med.indication}</td>
                   <td style={{ padding: '10px 12px' }}>
                     <span
                       style={{
@@ -178,8 +178,8 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
                         fontWeight: 600,
                         padding: '2px 6px',
                         borderRadius: '4px',
-                        backgroundColor: med.status === 'ACTIVE' ? '#ecfdf5' : '#f1f5f9',
-                        color: med.status === 'ACTIVE' ? '#047857' : '#475569',
+                        backgroundColor: med.status === 'ACTIVE' ? 'var(--color-success-soft)' : 'var(--color-surface-alt)',
+                        color: med.status === 'ACTIVE' ? 'var(--color-success-dark)' : 'var(--color-text-secondary)',
                       }}
                     >
                       {med.status}
@@ -191,7 +191,7 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
                       style={{
                         fontSize: '11px',
                         fontFamily: "'IBM Plex Mono', monospace",
-                        color: '#0284c7',
+                        color: 'var(--color-accent)',
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer',
@@ -214,7 +214,7 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
           <div style={{ overflowX: 'auto', marginBottom: '8px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
               <thead>
-                <tr style={{ borderBottom: '2px solid #e2e8f0', color: '#64748b', fontSize: '11px', textTransform: 'uppercase' }}>
+                <tr style={{ borderBottom: '2px solid var(--color-border)', color: 'var(--color-text-muted)', fontSize: '11px', textTransform: 'uppercase' }}>
                   <th style={{ padding: '8px 12px' }}>Date</th>
                   <th style={{ padding: '8px 12px' }}>Test Parameter</th>
                   <th style={{ padding: '8px 12px' }}>Observed Value</th>
@@ -225,21 +225,21 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
               </thead>
               <tbody>
                 {labs.map((lab, idx) => (
-                  <tr key={idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '10px 12px', fontFamily: "'IBM Plex Mono', monospace", color: '#64748b' }}>
+                  <tr key={idx} style={{ borderBottom: '1px solid var(--color-surface-alt)' }}>
+                    <td style={{ padding: '10px 12px', fontFamily: "'IBM Plex Mono', monospace", color: 'var(--color-text-muted)' }}>
                       {lab.date}
                     </td>
-                    <td style={{ padding: '10px 12px', fontWeight: 600, color: '#0f172a' }}>{lab.test_name}</td>
-                    <td style={{ padding: '10px 12px', fontWeight: 700, color: '#0284c7' }}>{lab.value}</td>
-                    <td style={{ padding: '10px 12px', color: '#64748b' }}>{lab.unit}</td>
-                    <td style={{ padding: '10px 12px', color: '#64748b', fontSize: '12px' }}>{lab.reference_range}</td>
+                    <td style={{ padding: '10px 12px', fontWeight: 600, color: 'var(--color-text-main)' }}>{lab.test_name}</td>
+                    <td style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--color-accent)' }}>{lab.value}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--color-text-muted)' }}>{lab.unit}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--color-text-muted)', fontSize: '12px' }}>{lab.reference_range}</td>
                     <td style={{ padding: '10px 12px' }}>
                       <button
                         onClick={() => onSelectEvidence?.(lab.evidence_code)}
                         style={{
                           fontSize: '11px',
                           fontFamily: "'IBM Plex Mono', monospace",
-                          color: '#0284c7',
+                          color: 'var(--color-accent)',
                           background: 'none',
                           border: 'none',
                           cursor: 'pointer',
@@ -254,7 +254,7 @@ export const ClinicalContextPanel: React.FC<ClinicalContextPanelProps> = ({
               </tbody>
             </table>
           </div>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontStyle: 'italic', paddingLeft: '4px' }}>
+          <div style={{ fontSize: '11px', color: 'var(--color-text-faint)', fontStyle: 'italic', paddingLeft: '4px' }}>
             * Note: Laboratory results are displayed chronologically without speculative AI reinterpretation.
           </div>
         </div>
