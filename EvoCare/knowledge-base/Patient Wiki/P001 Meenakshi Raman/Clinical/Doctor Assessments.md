@@ -1,0 +1,69 @@
+# Doctor Assessments: Meenakshi Raman (P001)
+
+> **FABRICATED / SYNTHETIC DEMO PATIENT DATASET REFERENCE**
+
+---
+
+## Current State
+Serial clinical assessments conducted by Dr. S. Chandran, MD at Apollo Clinics, Chennai across 2025–2026.
+
+---
+
+## Chronological Assessment Log
+
+### Assessment 1: 2025-12-15
+- **Type**: Routine Consultation
+- **Findings**: Stable T2DM, HTN, Hyperlipidemia, Bilateral Knee OA. Independent mobility, steady gait. Occasional benign forgetfulness noted. No acute neurological concerns.
+- **Evidence**: [[Raw Evidence/Doctor/EV-DR-001|EV-DR-001]]
+
+### Assessment 2: 2026-02-18
+- **Type**: Bimonthly Follow-up
+- **Findings**: Chronic conditions stable. HbA1c 7.1%. Intermittent knee discomfort. Ambulation independent. No falls reported since January slip.
+- **Evidence**: [[Raw Evidence/Doctor/EV-DR-002|EV-DR-002]]
+
+### Assessment 3: 2026-04-12
+- **Type**: Routine Follow-up
+- **Findings**: BP 132/82 mmHg. Conditions stable. Independent mobility preserved. Benign forgetfulness without functional impairment.
+- **Evidence**: [[Raw Evidence/Doctor/EV-DR-003|EV-DR-003]]
+
+### Assessment 4: 2026-06-14
+- **Type**: Follow-up Examination
+- **Findings**: Independent walking continues without aids. Occasional knee discomfort on prolonged standing. No falls reported.
+- **Evidence**: [[Raw Evidence/Doctor/EV-DR-004|EV-DR-004]]
+
+### Assessment 5: 2026-08-18
+- **Type**: Routine Review
+- **Findings**: Patient ambulates independently into consultation room. No acute focal neurological deficits. Glycemic control stable (HbA1c 7.4%). Family assists with pill organization.
+- **Evidence**: [[Raw Evidence/Doctor/EV-DR-005|EV-DR-005]]
+
+---
+
+## Baseline
+Consistently documents independent mobility, baseline orientation, and stable chronic disease status.
+
+---
+
+## AI-Derived Pattern
+Clinical encounters capture periodic stable snapshots. The physician assessments document independent mobility and absence of acute symptoms up to 2026-08-18, just prior to the late-August / early-September caregiver observations.
+
+---
+
+## Conflicts
+- Clinician documented independent mobility on 2026-08-18 ([[Raw Evidence/Doctor/EV-DR-005|EV-DR-005]]), whereas caregiver logs recorded progressive unsteadiness, support requirements, and a near-fall between 2026-08-24 and 2026-09-08 ([[Derived/Conflicts|Conflicts]]).
+
+---
+
+## Evidence
+- [[Raw Evidence/Doctor/EV-DR-001|EV-DR-001]]
+- [[Raw Evidence/Doctor/EV-DR-002|EV-DR-002]]
+- [[Raw Evidence/Doctor/EV-DR-003|EV-DR-003]]
+- [[Raw Evidence/Doctor/EV-DR-004|EV-DR-004]]
+- [[Raw Evidence/Doctor/EV-DR-005|EV-DR-005]]
+
+---
+
+## Related Concepts
+- [[Clinical/Medical History|Medical History]]
+- [[Clinical/Diagnoses|Diagnoses]]
+- [[Derived/Conflicts|Conflicts]]
+- [[Patient Overview]]

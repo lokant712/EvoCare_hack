@@ -1,0 +1,201 @@
+{
+  "main": {
+    "id": "31b277f5ae4ba7e4",
+    "type": "split",
+    "children": [
+      {
+        "id": "9b2e8d9e4d06a96e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7d6f22e4e5624f99",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Patient Wiki/P001 Meenakshi Raman/Caregiver/Falls.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Falls"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "31b7353b2e77041d",
+    "type": "split",
+    "children": [
+      {
+        "id": "1a56782bef5ab261",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cccc0c3919642348",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "1cbf9766bb94896f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "1c46c2608171e2f0",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "b1917b1667387953",
+    "type": "split",
+    "children": [
+      {
+        "id": "404d3b62638498cb",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "db9b08e053e9453d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Patient Wiki/P001 Meenakshi Raman/Caregiver/Falls.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "f6d3697c73b4e096",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Patient Wiki/P001 Meenakshi Raman/Caregiver/Falls.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "1aeed686de572602",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "964a263840cf6f4e",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "8f5486a4f0e0d8d4",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Patient Wiki/P001 Meenakshi Raman/Caregiver/Falls.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "7d6f22e4e5624f99",
+  "lastOpenFiles": [
+    "Demo/Demo Questions.md",
+    "Patient Wiki/P001 Meenakshi Raman/Caregiver/Behavior.md",
+    "Raw Evidence/Doctor/EV-DR-003.md",
+    "Raw Evidence/Medications/EV-MED-001.md",
+    "Raw Evidence/Medical Records/EV-MR-002.md",
+    "Raw Evidence/Doctor/EV-DR-001.md",
+    "Patient Wiki/P001 Meenakshi Raman/Patient Overview.md"
+  ]
+}
