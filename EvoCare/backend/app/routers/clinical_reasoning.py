@@ -17,7 +17,7 @@ from app.schemas.clinical_reasoning import (
 )
 from app.services.clinical_context_service import ClinicalContextService
 from app.services.clinical_reasoning_validator import ClinicalReasoningValidator
-from app.services.llm.anthropic_provider import AnthropicProvider
+from app.services.llm.resilient_provider import ResilientLLMProvider
 from app.services.audit_service import AuditService
 
 logger = logging.getLogger(__name__)
@@ -106,8 +106,8 @@ def get_clinical_reasoning(
             detail=f"Context extraction error: {str(e)}"
         )
 
-    # 4. Call LLM Provider for Structured Candidate
-    llm_provider = AnthropicProvider()
+    # 4. Call Resilient LLM Provider (Gemini Flash -> Groq -> Mock Fallback)
+    llm_provider = ResilientLLMProvider()
     try:
         candidate_reasoning = llm_provider.generate_clinical_reasoning(request_data.question, context)
     except Exception as e:
@@ -116,6 +116,8 @@ def get_clinical_reasoning(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Clinical reasoning generation error: {str(e)}"
         )
+
+    model_used = candidate_reasoning.get("_llm_model_used", "gemini-2.5-flash")
 
     # 5. Deterministic Safety & Provenance Validation
     is_safe, violations, sanitized_data = ClinicalReasoningValidator.validate_safety_and_provenance(
@@ -137,13 +139,14 @@ def get_clinical_reasoning(
             question=request_data.question,
             created_at=datetime.now(timezone.utc),
             evidence_ids_used=[],
-            model_used="claude-3-5-sonnet-20241022",
+            model_used=model_used,
             validation_status="SAFETY_REJECTED",
             summary=f"Violations: {'; '.join(violations)}"
         )
         db.add(audit_session)
         db.commit()
 
+        # Security audit log
         AuditService.log_audit_event(
             db=db,
             action="CLINICAL_REASONING_REJECTED",
@@ -185,7 +188,7 @@ def get_clinical_reasoning(
             question=request_data.question,
             created_at=datetime.now(timezone.utc),
             evidence_ids_used=list(evidence_ids_used),
-            model_used="claude-3-5-sonnet-20241022",
+            model_used=model_used,
             validation_status="PASSED",
             summary=f"Generated {len(sanitized_data.get('considerations', []))} considerations."
         )

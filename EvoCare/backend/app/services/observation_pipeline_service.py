@@ -21,7 +21,7 @@ from app.services.llm.schemas import (
     ConfidenceLevel,
 )
 from app.services.llm.provider import LLMProvider
-from app.services.llm.anthropic_provider import AnthropicProvider
+from app.services.llm.resilient_provider import ResilientLLMProvider
 
 class ObservationPipelineService:
     # Active default LLM provider instance (can be overridden in tests via set_llm_provider)
@@ -35,7 +35,7 @@ class ObservationPipelineService:
     def get_llm_provider(cls) -> LLMProvider:
         if cls._default_llm_provider is not None:
             return cls._default_llm_provider
-        return AnthropicProvider()
+        return ResilientLLMProvider()
 
     @classmethod
     def start_session(

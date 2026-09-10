@@ -45,20 +45,18 @@ class DoctorEntryService:
         ts_slug = now.strftime("%H%M%S")
         evidence_codes_generated: List[str] = []
 
-        # Count existing evidences to generate sequential readable codes
-        dr_count = db.query(Evidence).filter(
-            Evidence.patient_id == patient.id,
-            Evidence.source_type == SourceType.DOCTOR
-        ).count()
-
-        med_count = db.query(Medication).filter(
-            Medication.patient_id == patient.id
-        ).count()
+        def get_unique_evidence_code(prefix: str) -> str:
+            count = db.query(Evidence).filter(Evidence.evidence_code.like(f"{prefix}-%")).count() + 1
+            candidate = f"{prefix}-{count:03d}"
+            while db.query(Evidence).filter(Evidence.evidence_code == candidate).first() is not None:
+                count += 1
+                candidate = f"{prefix}-{count:03d}"
+            return candidate
 
         # 1. Process Diagnoses
         diagnosis_rows: List[Tuple[DiagnosisEntryItem, str]] = []
-        for idx, diag in enumerate(data.diagnoses, start=1):
-            ev_code = f"EV-DR-{patient.patient_code}-{dr_count + idx:03d}"
+        for diag in data.diagnoses:
+            ev_code = get_unique_evidence_code(f"EV-DR-{patient.patient_code}")
             evidence_codes_generated.append(ev_code)
 
             # Create immutable Evidence row
@@ -93,8 +91,8 @@ class DoctorEntryService:
 
         # 2. Process Prescriptions
         prescription_rows: List[Tuple[PrescriptionEntryItem, str]] = []
-        for idx, med in enumerate(data.prescriptions, start=1):
-            ev_code = f"EV-MED-{patient.patient_code}-{med_count + idx:03d}"
+        for med in data.prescriptions:
+            ev_code = get_unique_evidence_code(f"EV-MED-{patient.patient_code}")
             evidence_codes_generated.append(ev_code)
 
             # Create immutable Evidence row
@@ -194,10 +192,8 @@ class DoctorEntryService:
 
         from app.core.config import settings
         kb_root = Path(settings.KNOWLEDGE_BASE_DIR)
-        sve_root = kb_root.parent
         candidate_dirs = [
-            kb_root / "Doctor Records",
-            sve_root / "EvoCare-Knowledge-Base" / "Doctor Records"
+            kb_root / "Doctor Records"
         ]
 
         for target_dir in candidate_dirs:

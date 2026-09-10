@@ -1,5 +1,18 @@
 import os
 from pathlib import Path
+try:
+    from dotenv import load_dotenv
+    # Load backend .env or root .env
+    backend_env = Path(__file__).resolve().parent.parent.parent / ".env"
+    root_env = Path(__file__).resolve().parent.parent.parent.parent / ".env"
+    if backend_env.exists():
+        load_dotenv(backend_env)
+    elif root_env.exists():
+        load_dotenv(root_env)
+    else:
+        load_dotenv()
+except Exception:
+    pass
 
 class Settings:
     PROJECT_NAME: str = "EvoCare Longitudinal Patient Memory System"
@@ -13,10 +26,17 @@ class Settings:
         str(Path(__file__).resolve().parent.parent.parent.parent / "knowledge-base")
     )
 
-    # Phase 4 & Phase 7 LLM Settings
-    ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
-    ANTHROPIC_MODEL: str = os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-20241022")
-    CLINICAL_REASONING_MODEL: str = os.getenv("CLINICAL_REASONING_MODEL", "claude-3-5-sonnet-20241022")
+    # Multi-Tier AI Provider Settings (Gemini Flash + Groq + Deterministic Fallback)
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", os.getenv("GOOGLE_API_KEY", "")).strip()
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash").strip()
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "").strip()
+    GROQ_MODEL: str = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile").strip()
+
+    # Legacy compatibility
+    ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "").strip()
+    ANTHROPIC_MODEL: str = os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-20241022").strip()
+    CLINICAL_REASONING_MODEL: str = GEMINI_MODEL
+
     LLM_ENABLED: bool = os.getenv("LLM_ENABLED", "true").lower() in ("true", "1")
 
     # Phase 8 Security & Authentication Settings
