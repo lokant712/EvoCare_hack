@@ -1,10 +1,15 @@
 import os
 import smtplib
 import logging
+from pathlib import Path
 from datetime import datetime, timezone
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from typing import Dict, Any, List, Optional
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    load_dotenv = None
 
 logger = logging.getLogger(__name__)
 
@@ -23,12 +28,20 @@ class EmailService:
         """
         Sends 6-digit access OTP to patient's email (default: lokanthsrihari7@gmail.com).
         """
+        # Dynamically reload .env to ensure fresh credentials
+        if load_dotenv:
+            env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+            if env_path.exists():
+                load_dotenv(env_path, override=True)
+
         target_email = (patient_email or "lokanthsrihari7@gmail.com").strip()
-        smtp_host = os.getenv("SMTP_HOST", "smtp.gmail.com")
+        smtp_host = os.getenv("SMTP_HOST", "smtp.gmail.com").strip()
         smtp_port = int(os.getenv("SMTP_PORT", "587"))
-        smtp_user = os.getenv("SMTP_USER", "")
-        smtp_password = os.getenv("SMTP_PASSWORD", "")
-        sender_email = os.getenv("EMAIL_FROM", smtp_user or "no-reply@evocare-health.org")
+        smtp_user = os.getenv("SMTP_USER", "").strip()
+        raw_password = os.getenv("SMTP_PASSWORD", "").strip()
+        # Google App Passwords are 16 chars with spaces like 'onvq jxdx olku edlo'
+        smtp_password = raw_password.replace(" ", "")
+        sender_email = os.getenv("EMAIL_FROM", smtp_user or "lokanthsrihari7@gmail.com").strip()
 
         subject = f"[EvoCare Security] Physician Access Verification Code for {patient_name} ({patient_code})"
 
