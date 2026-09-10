@@ -54,6 +54,7 @@ The caregiver log captures functional ambulation, postural stability, assistive 
 | **2026-09-10** | CG002 | *"She needed someone's arm while walking outside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-297|EV-CG-297]] |
 | **2026-09-10** | CG001 | *"She walked normally inside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-298|EV-CG-298]] |
 | **2026-09-10** | CG002 | *"She needed support and was holding onto furniture today while walking."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-299|EV-CG-299]] |
+| **2026-09-10** | CG001 | *"She was unsteady and needed help walking to the bathroom."* | Location: bathroom; Severity: Not sure / Unknown; Duration: Not sure / Unknown | [[Raw Evidence/Caregiver/EV-CG-301|EV-CG-301]] |
 
 ---
 

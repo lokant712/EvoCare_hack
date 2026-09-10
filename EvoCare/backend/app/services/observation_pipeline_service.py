@@ -110,15 +110,18 @@ class ObservationPipelineService:
                 else:
                     missing_fields = ClarificationEngine.get_missing_fields(category, initial_extracted)
 
-                # Safety-net: run heuristic-only extraction (no LLM inferences) to detect
-                # fields genuinely missing from the caregiver's raw text.
-                # This prevents vague sentences like "She was unsteady and needed help." from
-                # bypassing clarification when the LLM fills associated_details by inference
-                # (violating Rule 2: ABSOLUTE UNKNOWN RULE).
-                heuristic_extracted = ClarificationEngine.extract_initial_fields(category, raw_text)
-                heuristic_missing = ClarificationEngine.get_missing_fields(category, heuristic_extracted)
+                # Safety-net: re-detect category from raw text using heuristics only.
+                # If the LLM misclassified OR was too lenient, override with heuristic result.
+                # This ensures proper question templates (with full option sets) are used.
+                heuristic_category = ClarificationEngine.detect_category(raw_text)
+                heuristic_extracted = ClarificationEngine.extract_initial_fields(heuristic_category, raw_text)
+                heuristic_missing = ClarificationEngine.get_missing_fields(heuristic_category, heuristic_extracted)
                 if not missing_fields and heuristic_missing:
+                    # Use heuristic category and missing fields so generate_questions
+                    # picks the right template (with full options, not just "Not sure")
+                    category = heuristic_category
                     missing_fields = heuristic_missing
+
 
             else:
                 # Safe Fallback to Deterministic Parser

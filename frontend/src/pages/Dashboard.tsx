@@ -67,6 +67,100 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     );
   }
 
+  // Admin Login Mode: System Administration Panel (no patient record required)
+  if (user.role === 'ADMIN') {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', color: '#0f172a', fontFamily: 'Inter, system-ui, sans-serif' }}>
+        {/* Admin Header */}
+        <div style={{ backgroundColor: '#1e293b', borderBottom: '1px solid #334155', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ShieldCheck size={20} color="#1e293b" />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '15px', color: '#f8fafc' }}>EvoCare — Admin Console</div>
+              <div style={{ fontSize: '11px', color: '#94a3b8' }}>System Administration & Oversight</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '13px', color: '#94a3b8' }}>Logged in as <b style={{ color: '#f8fafc' }}>{user.full_name || user.username}</b></span>
+            <button onClick={onLogout} style={{ padding: '6px 14px', borderRadius: '6px', border: '1px solid #475569', backgroundColor: 'transparent', color: '#94a3b8', fontSize: '12px', cursor: 'pointer', fontWeight: 600 }}>
+              Sign Out
+            </button>
+          </div>
+        </div>
+
+        {/* Admin Body */}
+        <div style={{ maxWidth: '960px', margin: '40px auto', padding: '0 24px' }}>
+          {/* Welcome Banner */}
+          <div style={{ backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', padding: '24px 28px', marginBottom: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '10px', backgroundColor: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <ShieldCheck size={24} color="#d97706" />
+              </div>
+              <div>
+                <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#0f172a' }}>System Administrator Dashboard</h2>
+                <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>EvoCare Longitudinal Health Memory Platform — Admin Oversight</p>
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+              {[
+                { label: 'Active Patients', value: '2', color: '#0ea5e9' },
+                { label: 'Active Users', value: '5', color: '#059669' },
+                { label: 'System Status', value: 'LIVE', color: '#10b981' },
+              ].map(({ label, value, color }) => (
+                <div key={label} style={{ backgroundColor: '#f8fafc', borderRadius: '8px', padding: '14px 16px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                  <div style={{ fontSize: '24px', fontWeight: 800, color }}>{value}</div>
+                  <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Demo Accounts */}
+          <div style={{ backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', padding: '24px 28px', marginBottom: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+            <h3 style={{ margin: '0 0 16px', fontSize: '15px', fontWeight: 700, color: '#0f172a' }}>Demo Account Directory</h3>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#f8fafc' }}>
+                  {['Username', 'Password', 'Role', 'Access'].map(h => (
+                    <th key={h} style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, color: '#475569', borderBottom: '1px solid #e2e8f0' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { username: 'doctor.demo', password: 'DoctorPass123!', role: 'DOCTOR', access: 'Patient P001 — Full Clinical Dashboard' },
+                  { username: 'doctor.other', password: 'DoctorPass123!', role: 'DOCTOR', access: 'Patient P002 — Isolation Test' },
+                  { username: 'caregiver.demo', password: 'CaregiverPass123!', role: 'CAREGIVER', access: 'Patient P001 — Caregiver Notes Portal' },
+                  { username: 'patient.demo', password: 'PatientPass123!', role: 'PATIENT', access: 'Patient P001 — Informational Chatbot Only' },
+                  { username: 'admin.demo', password: 'AdminPass123!', role: 'ADMIN', access: 'System Administration Console' },
+                ].map(row => (
+                  <tr key={row.username} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '10px 12px', fontFamily: 'monospace', color: '#0f172a', fontWeight: 600 }}>{row.username}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'monospace', color: '#475569' }}>{row.password}</td>
+                    <td style={{ padding: '10px 12px' }}>
+                      <span style={{ padding: '2px 8px', borderRadius: '10px', fontSize: '11px', fontWeight: 700,
+                        backgroundColor: row.role === 'DOCTOR' ? '#eff6ff' : row.role === 'CAREGIVER' ? '#f0fdf4' : row.role === 'PATIENT' ? '#fdf4ff' : '#fffbeb',
+                        color: row.role === 'DOCTOR' ? '#1d4ed8' : row.role === 'CAREGIVER' ? '#065f46' : row.role === 'PATIENT' ? '#7e22ce' : '#92400e'
+                      }}>{row.role}</span>
+                    </td>
+                    <td style={{ padding: '10px 12px', color: '#64748b' }}>{row.access}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Security Note */}
+          <div style={{ backgroundColor: '#fef9c3', border: '1px solid #fde68a', borderRadius: '10px', padding: '14px 18px', fontSize: '12px', color: '#78350f' }}>
+            <b>⚠ Admin Notice:</b> This console is for system oversight only. Patient clinical records, caregiver observations, and diagnostic data must be accessed through the respective role-specific portals. All actions are audit-logged.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (error || !data) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', padding: '40px 20px' }}>
@@ -74,6 +168,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       </div>
     );
   }
+
 
   // Patient Login Mode: Exclusively Chatbot Interface for Informational Use Only
   if (user.role === 'PATIENT') {
