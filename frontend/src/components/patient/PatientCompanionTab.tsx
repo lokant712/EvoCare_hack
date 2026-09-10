@@ -35,6 +35,48 @@ const PATIENT_PROMPTS = [
   'How have my sleep and walking been lately?'
 ];
 
+const renderFormattedMessage = (text: string, isUser: boolean) => {
+  const lines = text.split('\n');
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+      {lines.map((line, lineIdx) => {
+        if (!line.trim()) {
+          return <div key={lineIdx} style={{ height: '6px' }} />;
+        }
+        const parts = line.split(/(\*\*.*?\*\*)/g);
+        const isBullet = line.trim().startsWith('•') || line.trim().startsWith('-');
+        return (
+          <div
+            key={lineIdx}
+            style={{
+              paddingLeft: isBullet ? '14px' : '0',
+              textIndent: isBullet ? '-14px' : '0',
+              lineHeight: '1.6',
+            }}
+          >
+            {parts.map((part, partIdx) => {
+              if (part.startsWith('**') && part.endsWith('**') && part.length >= 4) {
+                return (
+                  <strong
+                    key={partIdx}
+                    style={{
+                      fontWeight: 700,
+                      color: isUser ? '#ffffff' : '#0f172a',
+                    }}
+                  >
+                    {part.slice(2, -2)}
+                  </strong>
+                );
+              }
+              return part;
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 export const PatientCompanionTab: React.FC<PatientCompanionTabProps> = ({ data, user }) => {
   const patientName = user.full_name || data.patient.name || 'Meenakshi Raman';
   const firstName = patientName.split(' ')[0];
@@ -277,12 +319,10 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
                   <div
                     style={{
                       fontSize: '14px',
-                      lineHeight: '1.6',
-                      whiteSpace: 'pre-line',
                       letterSpacing: '-0.01em',
                     }}
                   >
-                    {msg.text}
+                    {renderFormattedMessage(msg.text, isUser)}
                   </div>
 
                   {msg.isWelcome && (

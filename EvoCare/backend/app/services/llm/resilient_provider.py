@@ -137,7 +137,7 @@ class ResilientLLMProvider(LLMProvider):
         patient_location = demographics.get("location", "Chennai, Tamil Nadu")
 
         pcode = patient_code
-        cache_key = hashlib.md5(f"patient_v2:{pcode}:{question.strip().lower()}".encode()).hexdigest()
+        cache_key = hashlib.md5(f"patient_v3:{pcode}:{question.strip().lower()}".encode()).hexdigest()
         now = time.time()
 
         if cache_key in self._reasoning_cache:
@@ -284,16 +284,39 @@ Instructions:
             med_lines = []
             if meds:
                 for m in meds:
-                    med_lines.append(f"• **{m.get('name')}** ({m.get('dose')}): {m.get('frequency')}. Timing: {m.get('indication', 'As prescribed')}")
+                    name = m.get('name', 'Medication')
+                    dose = m.get('dose', '')
+                    freq = m.get('frequency', '')
+                    ind = m.get('indication', '')
+                    
+                    nl = name.lower()
+                    if "metformin" in nl:
+                        timing = "Take twice daily — with your morning breakfast and evening dinner (always with food)"
+                    elif "amlodipine" in nl:
+                        timing = "Take once daily in the morning with a full glass of water"
+                    elif "atorvastatin" in nl:
+                        timing = "Take once daily at night before going to bed"
+                    elif "paracetamol" in nl:
+                        timing = "Take only as needed for knee pain (maximum 2 grams per day)"
+                    elif "betahistine" in nl:
+                        timing = "Take twice daily with meals to help relieve dizziness and unsteadiness"
+                    elif "glimepiride" in nl:
+                        timing = "Take once daily in the morning right before breakfast"
+                    else:
+                        timing = f"{freq} as directed by your physician"
+
+                    purpose = f" • Purpose: {ind}" if ind else ""
+                    med_lines.append(f"• **{name}** ({dose}): {timing}{purpose}")
             else:
                 med_lines = [
-                    "• **Metformin (500 mg)**: Twice daily with morning and evening meals.",
-                    "• **Amlodipine (5 mg)**: Once daily in the morning.",
-                    "• **Atorvastatin (10 mg)**: Once nightly at bedtime.",
-                    "• **Paracetamol (500 mg)**: As needed for knee pain (maximum 2 grams/day)."
+                    "• **Metformin** (500 mg): Take twice daily with morning and evening meals (with food).",
+                    "• **Amlodipine** (5 mg): Take once daily in the morning with a glass of water.",
+                    "• **Atorvastatin** (10 mg): Take once nightly at bedtime.",
+                    "• **Paracetamol** (500 mg): Take only as needed for knee pain (maximum 2 grams/day).",
+                    "• **Betahistine** (16 mg): Take twice daily with meals for dizziness and vertigo."
                 ]
             return (
-                f"Hello {first_name}. Here is your current daily medication schedule as documented by your care team:\n\n"
+                f"Hello {first_name}. Here is your daily medication schedule and timing as documented by your care team:\n\n"
                 + "\n".join(med_lines)
                 + "\n\n💡 **Tip**: Taking your medications with water at the same scheduled times helps maintain steady health. If you feel dizzy or notice any side effects, please reach out to your doctor or caregiver."
             )
