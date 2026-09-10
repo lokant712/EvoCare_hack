@@ -7,11 +7,13 @@ import {
   Info,
   ShieldCheck,
   HelpCircle,
-  RotateCcw
+  RotateCcw,
+  HeartHandshake
 } from 'lucide-react';
 import { DashboardResponse } from '../../types';
 import { apiService } from '../../services/api';
 import { AuthUser } from '../../services/auth';
+import { PatientCaregiverConnectionModal } from '../connection/PatientCaregiverConnectionModal';
 
 interface PatientCompanionTabProps {
   data: DashboardResponse;
@@ -96,6 +98,7 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
   const [messages, setMessages] = useState<CompanionMessage[]>([initialWelcomeMsg]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showCaretakerModal, setShowCaretakerModal] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -235,6 +238,27 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button
+            id="evocare-patient-caretaker-btn"
+            onClick={() => setShowCaretakerModal(true)}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '6px',
+              border: '1px solid #bbf7d0',
+              backgroundColor: '#f0fdf4',
+              color: '#166534',
+              fontSize: '12px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            <HeartHandshake size={14} />
+            <span>My Caretaker</span>
+          </button>
+
+          <button
             onClick={handleResetChat}
             title="Start new conversation"
             style={{
@@ -256,6 +280,14 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
           </button>
         </div>
       </div>
+
+      <PatientCaregiverConnectionModal
+        isOpen={showCaretakerModal}
+        onClose={() => setShowCaretakerModal(false)}
+        patientCode={data.patient.patient_code}
+        patientName={data.patient.name}
+        user={user}
+      />
 
       {/* Main Conversation Area */}
       <div

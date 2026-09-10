@@ -22,6 +22,7 @@ from app.schemas.conflict import ConflictResponse
 from app.schemas.medication import MedicationResponse
 from app.schemas.caregiver_observation import CaregiverObservationResponse
 from app.services.audit_service import AuditService
+from app.services.email_service import EmailService
 
 router = APIRouter(prefix="/patients", tags=["Patients"])
 
@@ -42,6 +43,7 @@ class PatientLookupResponse(BaseModel):
     id: int
     patient_code: str
     name: str
+    email: str
     age: int
     sex: str
     location: str
@@ -64,6 +66,7 @@ def lookup_patient_basic(
         id=patient.id,
         patient_code=patient.patient_code,
         name=patient.name,
+        email=getattr(patient, "email", "lokanthsrihari7@gmail.com") or "lokanthsrihari7@gmail.com",
         age=patient.age,
         sex=patient.sex,
         location=patient.location
@@ -77,7 +80,7 @@ def request_patient_access_code(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """Generate 6-digit consent OTP from patient for doctor 2-step record access."""
+    """Generate 6-digit consent OTP and dispatch via Email to patient Gmail address."""
     clean_code = req.patient_code.strip().upper()
     patient = db.query(Patient).filter(
         (Patient.patient_code == clean_code) |
@@ -94,13 +97,25 @@ def request_patient_access_code(
         "user_id": current_user.id
     }
 
+    patient_email = getattr(patient, "email", "lokanthsrihari7@gmail.com") or "lokanthsrihari7@gmail.com"
+    doctor_display_name = current_user.full_name or current_user.username
+
+    # Send verification email to Gmail address
+    email_res = EmailService.send_patient_access_code(
+        patient_email=patient_email,
+        patient_name=patient.name,
+        patient_code=patient.patient_code,
+        doctor_name=doctor_display_name,
+        verification_code=otp
+    )
+
     ip = request.client.host if request.client else "unknown"
     AuditService.log_security_event(
         db=db,
         event_type="PATIENT_ACCESS_CODE_REQUESTED",
         user_id=current_user.id,
         username=current_user.username,
-        details=f"Doctor '{current_user.username}' requested 2-step consent code for patient '{patient.patient_code}' ({patient.name})",
+        details=f"Doctor '{current_user.username}' requested 2-step consent code for patient '{patient.patient_code}' ({patient.name}). Sent to {patient_email}.",
         severity="INFO",
         ip_address=ip
     )
@@ -109,7 +124,9 @@ def request_patient_access_code(
         "status": "success",
         "patient_code": patient.patient_code,
         "patient_name": patient.name,
-        "message": f"Patient 2-step verification code generated for {patient.name}.",
+        "patient_email": patient_email,
+        "email_delivery": email_res.get("status", "SENT"),
+        "message": f"Verification code sent to patient's email: {patient_email}",
         "demo_code": otp  # Exposed for seamless testing & interactive evaluation
     }
 

@@ -15,6 +15,7 @@ import {
 import { DashboardResponse } from '../../types';
 import { apiService } from '../../services/api';
 import { AuthUser } from '../../services/auth';
+import { CaregiverRequestNotificationBanner } from '../connection/CaregiverRequestNotificationBanner';
 
 interface CaregiverNotesTabProps {
   data: DashboardResponse;
@@ -266,6 +267,9 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Patient Pairing Requests & Active Pairings Banner */}
+      <CaregiverRequestNotificationBanner onConnectionsChanged={onObservationSaved} />
 
       {/* Main Grid: Input Column & History Feed */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>

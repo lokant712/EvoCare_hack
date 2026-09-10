@@ -10,6 +10,7 @@ class Patient(Base):
     id = Column(Integer, primary_key=True, index=True)
     patient_code = Column(String(50), unique=True, index=True, nullable=False)
     name = Column(String(255), nullable=False)
+    email = Column(String(255), default="lokanthsrihari7@gmail.com", nullable=False)
     age = Column(Integer, nullable=False)
     sex = Column(String(20), nullable=False)
     location = Column(String(255), nullable=False)

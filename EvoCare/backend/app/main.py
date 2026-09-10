@@ -68,12 +68,14 @@ from app.routers import (
     clarification,
     dashboard,
     clinical_reasoning,
-    patient_companion
+    patient_companion,
+    caregiver_connections
 )
 
 app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(admin.router, prefix=settings.API_V1_STR)
 app.include_router(patients.router, prefix=settings.API_V1_STR)
+app.include_router(caregiver_connections.router, prefix=settings.API_V1_STR)
 app.include_router(evidence.router, prefix=settings.API_V1_STR)
 app.include_router(caregiver.router, prefix=settings.API_V1_STR)
 app.include_router(clinical.router, prefix=settings.API_V1_STR)

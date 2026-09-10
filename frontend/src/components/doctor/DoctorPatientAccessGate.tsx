@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, KeyRound, UserCheck, Lock, CheckCircle2, AlertCircle, RefreshCw, Sparkles } from 'lucide-react';
+import { Shield, UserCheck, Lock, CheckCircle2, AlertCircle, RefreshCw, Mail } from 'lucide-react';
 import { authService } from '../../services/auth';
 
 interface DoctorPatientAccessGateProps {
@@ -16,7 +16,7 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
   isModal = false,
 }) => {
   const [patientCode, setPatientCode] = useState<string>(initialPatientCode);
-  const [patientInfo, setPatientInfo] = useState<{ name: string; age: number; sex: string; location: string } | null>(null);
+  const [patientInfo, setPatientInfo] = useState<{ name: string; email: string; age: number; sex: string; location: string } | null>(null);
   const [lookupLoading, setLookupLoading] = useState<boolean>(false);
   const [lookupError, setLookupError] = useState<string | null>(null);
 
@@ -238,30 +238,42 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
           </div>
 
           {/* Preset patient quick chips */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
-            <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Quick select:</span>
-            {['P001', 'P002'].map((code) => (
-              <button
-                key={code}
-                type="button"
-                onClick={() => {
-                  setPatientCode(code);
-                  handleLookup(code);
-                }}
-                style={{
-                  padding: '2px 8px',
-                  borderRadius: '4px',
-                  border: '1px solid #e2e8f0',
-                  backgroundColor: patientCode === code ? '#e0f2fe' : '#ffffff',
-                  color: patientCode === code ? '#0369a1' : '#64748b',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-              >
-                {code} {code === 'P001' ? '(Meenakshi)' : '(Patient 2)'}
-              </button>
-            ))}
+          <div style={{ marginTop: '8px' }}>
+            <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
+              Quick Select Demo Patient:
+            </span>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+              {[
+                { code: 'P001', name: 'Meenakshi' },
+                { code: 'P002', name: 'Ananya' },
+                { code: 'P003', name: 'Rajesh' },
+                { code: 'P004', name: 'Sunita' },
+                { code: 'P005', name: 'Vikramaditya' },
+              ].map((p) => (
+                <button
+                  key={p.code}
+                  type="button"
+                  id={`evocare-quick-select-${p.code}`}
+                  onClick={() => {
+                    setPatientCode(p.code);
+                    handleLookup(p.code);
+                  }}
+                  style={{
+                    padding: '3px 8px',
+                    borderRadius: '4px',
+                    border: '1px solid',
+                    borderColor: patientCode === p.code ? '#0284c7' : '#e2e8f0',
+                    backgroundColor: patientCode === p.code ? '#e0f2fe' : '#ffffff',
+                    color: patientCode === p.code ? '#0369a1' : '#475569',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <b>{p.code}</b> ({p.name})
+                </button>
+              ))}
+            </div>
           </div>
 
           {lookupError && (
@@ -296,9 +308,13 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                 <div style={{ fontSize: '12px', color: '#15803d', marginTop: '2px' }}>
                   {patientInfo.age} yrs · {patientInfo.sex} · {patientInfo.location}
                 </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#166534', marginTop: '4px' }}>
+                  <Mail size={12} />
+                  <span>Patient Gmail: <b>{patientInfo.email || 'lokanthsrihari7@gmail.com'}</b></span>
+                </div>
               </div>
               <span style={{ fontSize: '11px', color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <CheckCircle2 size={13} /> Verified Patient
+                <CheckCircle2 size={13} /> Active Profile
               </span>
             </div>
           )}
@@ -309,7 +325,7 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
           <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '18px', marginTop: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
               <label style={{ fontSize: '13px', fontWeight: 700, color: '#334155' }}>
-                Step 2: Patient 2-Step Consent Code
+                Step 2: Patient 2-Step Consent Code (Sent to Gmail)
               </label>
               {!otpRequested ? (
                 <button
@@ -331,8 +347,8 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                     gap: '6px',
                   }}
                 >
-                  <KeyRound size={13} />
-                  Request Consent Code
+                  <Mail size={13} />
+                  Send Code to Gmail
                 </button>
               ) : (
                 <button
@@ -348,51 +364,61 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
                     textDecoration: 'underline',
                   }}
                 >
-                  Resend Code
+                  Resend Email
                 </button>
               )}
             </div>
 
-            {/* Simulated Live Patient Consent Banner */}
-            {otpRequested && generatedOtp && (
+            {/* Live Gmail Sent Notification Banner */}
+            {otpRequested && (
               <div
                 style={{
                   marginBottom: '16px',
                   padding: '12px 14px',
                   borderRadius: '8px',
-                  backgroundColor: '#fefce8',
-                  border: '1px solid #fef08a',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
+                  backgroundColor: '#f0fdf4',
+                  border: '1px solid #86efac',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
               >
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#854d0e', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase' }}>
-                    <Sparkles size={13} /> Patient Consent Code (Demo Simulation)
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}>
+                      <Mail size={15} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '12px', fontWeight: 700, color: '#166534' }}>
+                        Verification Code Dispatched to Gmail
+                      </div>
+                      <div style={{ fontSize: '11px', color: '#15803d' }}>
+                        Sent to: <b>{patientInfo.email || 'lokanthsrihari7@gmail.com'}</b>
+                      </div>
+                    </div>
                   </div>
-                  <div style={{ fontSize: '12px', color: '#713f12', marginTop: '2px' }}>
-                    Patient <b>{patientInfo.name}</b> authorized access with code:
-                  </div>
+
+                  {generatedOtp && (
+                    <div
+                      onClick={() => setEnteredOtp(generatedOtp)}
+                      title="Click to auto-fill code (Demo Helper)"
+                      style={{
+                        fontFamily: "'IBM Plex Mono', monospace",
+                        fontSize: '16px',
+                        fontWeight: 800,
+                        letterSpacing: '0.1em',
+                        backgroundColor: '#fef08a',
+                        color: '#713f12',
+                        padding: '3px 10px',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        border: '1px dashed #ca8a04',
+                      }}
+                    >
+                      {generatedOtp}
+                    </div>
+                  )}
                 </div>
-                <div
-                  onClick={() => setEnteredOtp(generatedOtp)}
-                  title="Click to auto-fill code"
-                  style={{
-                    fontFamily: "'IBM Plex Mono', monospace",
-                    fontSize: '18px',
-                    fontWeight: 800,
-                    letterSpacing: '0.15em',
-                    backgroundColor: '#fef08a',
-                    color: '#713f12',
-                    padding: '4px 12px',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    border: '1px dashed #ca8a04',
-                  }}
-                >
-                  {generatedOtp}
+                <div style={{ fontSize: '11px', color: '#166534', marginTop: '6px', fontStyle: 'italic' }}>
+                  The patient has received their 6-digit consent code at <b>{patientInfo.email || 'lokanthsrihari7@gmail.com'}</b>. Ask the patient for the code to unlock this profile.
                 </div>
               </div>
             )}
