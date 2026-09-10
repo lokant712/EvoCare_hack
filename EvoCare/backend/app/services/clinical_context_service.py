@@ -42,7 +42,11 @@ class ClinicalContextService:
         kb_dir = Path(settings.KNOWLEDGE_BASE_DIR)
         wiki_root = kb_dir / "Patient Wiki"
         if not wiki_root.exists():
-            return {}
+            alt_root = Path(__file__).resolve().parent.parent.parent.parent / "EvoCare-Knowledge-Base" / "Patient Wiki"
+            if alt_root.exists():
+                wiki_root = alt_root
+            else:
+                return {}
 
         patient_dirs = [d for d in wiki_root.iterdir() if d.is_dir() and d.name.startswith(patient_code)]
         if not patient_dirs:
@@ -101,12 +105,16 @@ class ClinicalContextService:
                 p_dir / "Caregiver" / "Nutrition.md",
                 p_dir / "Caregiver" / "Falls.md"
             ])
-
-        for tf in targets:
+        # Collect all markdown files in patient wiki directory
+        all_md_files = sorted(list(p_dir.glob("**/*.md")))
+        # Prioritize matching targets first, then include all other wiki domain files
+        prioritized = [t for t in targets if t.exists()] + [f for f in all_md_files if f not in targets and f != overview_file]
+        for tf in prioritized:
             rel_name = str(tf.relative_to(p_dir)).replace("\\", "/")
             if tf.exists() and rel_name not in wiki_files:
                 try:
-                    wiki_files[rel_name] = tf.read_text(encoding="utf-8")
+                    txt = tf.read_text(encoding="utf-8")
+                    wiki_files[rel_name] = txt
                 except Exception as e:
                     logger.warning(f"Failed to read {tf}: {e}")
 

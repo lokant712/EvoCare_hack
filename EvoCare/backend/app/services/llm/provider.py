@@ -226,6 +226,69 @@ class MockLLMProvider(LLMProvider):
 
         q = question.lower()
 
+        # Scenario: Previous Doctor Consultations / Clinic Reviews
+        if any(w in q for w in ["doctor", "consult", "consulted", "consultation", "physician", "specialist", "clinic visit", "who examined", "who treated", "encounters"]):
+            return {
+                "considerations": [
+                    {
+                        "title": "Documented Outpatient Clinical Reviews & Physician Encounters",
+                        "category": "Clinical Consultations",
+                        "description": "Patient has 5 documented clinician consultations (EV-DR-001 through EV-DR-005) for ongoing management of Type 2 Diabetes, Hypertension, Hyperlipidemia, and Knee Osteoarthritis. Consultations recorded stable glycemic control (HbA1c 7.1% - 7.4%), blood pressure maintenance (BP 132/82 mmHg), independent indoor ambulation, and no acute neurological deficits.",
+                        "status": "POSSIBLE_CONSIDERATION",
+                        "supporting_evidence": [
+                            {
+                                "evidence_id": "EV-DR-001",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-06-12",
+                                "original_statement": "Routine geriatric clinical review. Assessed for Type 2 Diabetes Mellitus, Hypertension, Hyperlipidemia, and bilateral Knee Osteoarthritis. Physical examination reveals independent mobility and steady gait without assistive devices."
+                            },
+                            {
+                                "evidence_id": "EV-DR-002",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-07-08",
+                                "original_statement": "Bimonthly follow-up visit. Chronic medical conditions remain reasonably stable. Diabetes monitoring continued with recent HbA1c 7.1%. Ambulation remains fully independent."
+                            },
+                            {
+                                "evidence_id": "EV-DR-003",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-08-01",
+                                "original_statement": "Routine clinical follow-up. Vital signs: BP 132/82 mmHg, Pulse 74 bpm. Patient remains independently mobile around her residence and community. Orientation to time, place, and person intact."
+                            },
+                            {
+                                "evidence_id": "EV-DR-005",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-09-02",
+                                "original_statement": "Routine clinical review. Patient ambulates independently into consultation room with steady pace. No acute focal neurological deficits. Glycemic control stable (HbA1c 7.4%)."
+                            }
+                        ],
+                        "contradicting_evidence": [
+                            "No contradictory clinical records found. Outpatient physician assessments consistently report independent ambulation and stable vitals."
+                        ],
+                        "missing_information": [
+                            "Annual ophthalmology diabetic eye examination report",
+                            "Formal physical therapy gait & balance assessment note"
+                        ],
+                        "evidence_strength": "STRONG",
+                        "reasoning": "Derived directly from 5 clinician-confirmed consultation records in the longitudinal health memory (EV-DR-001, EV-DR-002, EV-DR-003, EV-DR-005).",
+                        "uncertainty": "Clinic encounters confirm stability during structured evaluations; day-to-day balance fluctuations are tracked via caregiver observations.",
+                        "references": ["EV-DR-001", "EV-DR-002", "EV-DR-003", "EV-DR-005"]
+                    }
+                ],
+                "missing_information": [
+                    "Recent ophthalmology diabetic eye evaluation",
+                    "Comprehensive metabolic panel beyond routine HbA1c"
+                ],
+                "red_flags": [
+                    "Missed follow-up appointments or unmonitored chronic disease management warrant clinical review."
+                ],
+                "relevant_changes": [
+                    "Clinical consults indicate stable outpatient management (Metformin 500mg BID, Amlodipine 5mg OD, Atorvastatin 10mg ON, Paracetamol PRN)."
+                ],
+                "limitations": [
+                    "Records represent scheduled outpatient appointments; transient domestic symptoms rely on caregiver logging."
+                ]
+            }
+
         # Scenario 3: Dementia question
         if "dementia" in q or "alzheimer" in q:
             return {
@@ -447,6 +510,209 @@ class MockLLMProvider(LLMProvider):
                 ],
                 "limitations": [
                     "Home observations rely on caregiver witness availability and subjective difficulty estimation."
+                ]
+            }
+
+        # Scenario: Sleep / Night Waking / Nocturia
+        if any(w in q for w in ["sleep", "insomnia", "nocturia", "night", "waking", "rest", "tired"]):
+            return {
+                "considerations": [
+                    {
+                        "title": "Documented Sleep Architecture & Nocturnal Disturbance Patterns",
+                        "category": "Sleep & Circadian Profile",
+                        "description": "Longitudinal records and caregiver sleep logs indicate fragmented sleep pattern averaging 5-6 hours total, with 1-2 nocturia episodes per night. Patient baseline notes benign sleep fragmentation without reported daytime somnolence, though nocturnal bathroom trips increase nighttime fall vulnerability.",
+                        "status": "POSSIBLE_CONSIDERATION",
+                        "supporting_evidence": [
+                            {
+                                "evidence_id": "EV-CG-041",
+                                "source_type": "CAREGIVER-REPORTED",
+                                "observed_at": "2026-09-03",
+                                "original_statement": "Patient felt dizzy after getting out of bed; resolved after sitting back down for a few minutes."
+                            },
+                            {
+                                "evidence_id": "EV-DR-003",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-08-01",
+                                "original_statement": "Routine clinical follow-up. Chronic conditions stable. No major functional decline documented."
+                            }
+                        ],
+                        "contradicting_evidence": [
+                            "No documented primary sleep disorder or sedative hypnotic prescription in the medical record."
+                        ],
+                        "missing_information": [
+                            "Nighttime hallway lighting and bathroom path illumination check",
+                            "Fluid intake distribution in evening hours"
+                        ],
+                        "evidence_strength": "MODERATE",
+                        "reasoning": "Derived from baseline clinical sleep logs ([[Caregiver/Sleep]], [[Derived/Baseline]]) and observed morning postural transitions.",
+                        "uncertainty": "Nocturia frequency is stable; nocturnal mobilization poses primary risk for balance instability.",
+                        "references": ["EV-CG-041", "EV-DR-003"]
+                    }
+                ],
+                "missing_information": [
+                    "Evening fluid restriction adherence",
+                    "Overnight pulse oximetry or sleep apnea screening if snoring develops"
+                ],
+                "red_flags": [
+                    "Nocturnal dyspnea, orthopnea, or sudden confusion during nighttime waking warrant prompt cardiopulmonary evaluation."
+                ],
+                "relevant_changes": [
+                    "Sleep logs reflect stable 5-6 hours sleep with night waking managed with bedside nightlight."
+                ],
+                "limitations": [
+                    "Home sleep estimates are derived from self-report and caregiver morning check-ins."
+                ]
+            }
+
+        # Scenario: Pain / Knee Joint Osteoarthritis
+        if any(w in q for w in ["pain", "knee", "joint", "osteoarthritis", "ache", "stiffness", "arthritis"]):
+            return {
+                "considerations": [
+                    {
+                        "title": "Bilateral Knee Osteoarthritis & Activity-Related Joint Pain Trajectory",
+                        "category": "Musculoskeletal & Pain",
+                        "description": "Patient has confirmed Kellgren-Lawrence Grade II bilateral Knee Osteoarthritis (EV-DR-001). Caregiver logs note episodic joint stiffness and mild pain after prolonged ambulation or gardening, managed effectively with PRN Paracetamol (650mg). No acute joint swelling, erythema, or locked joint episodes documented.",
+                        "status": "POSSIBLE_CONSIDERATION",
+                        "supporting_evidence": [
+                            {
+                                "evidence_id": "EV-DR-001",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-06-12",
+                                "original_statement": "Diagnosed bilateral Knee Osteoarthritis. Physical examination reveals independent mobility and steady gait without assistive devices. Plan: Continue PRN Paracetamol for pain."
+                            },
+                            {
+                                "evidence_id": "EV-DR-002",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-07-08",
+                                "original_statement": "Bilateral knee joint discomfort is intermittent and managed with PRN paracetamol. Ambulation remains fully independent."
+                            }
+                        ],
+                        "contradicting_evidence": [
+                            "No evidence of acute inflammatory arthritis or joint effusion on clinical examination."
+                        ],
+                        "missing_information": [
+                            "Recent weight-bearing bilateral knee radiographs to assess interval joint space narrowing",
+                            "Current quad muscle strength score"
+                        ],
+                        "evidence_strength": "STRONG",
+                        "reasoning": "Synthesized directly from clinician assessment records (EV-DR-001, EV-DR-002) and longitudinal caregiver pain monitoring ([[Caregiver/Pain]]).",
+                        "uncertainty": "Knee OA pain is intermittent and stable with conservative management.",
+                        "references": ["EV-DR-001", "EV-DR-002"]
+                    }
+                ],
+                "missing_information": [
+                    "Updated knee X-ray imaging",
+                    "Physical therapy home exercise adherence score"
+                ],
+                "red_flags": [
+                    "Inability to bear weight, hot swollen joint, or fever requires immediate joint aspiration / emergency orthopedic review."
+                ],
+                "relevant_changes": [
+                    "Joint discomfort remains stable on PRN analgesics without daily requirement."
+                ],
+                "limitations": [
+                    "Pain intensity tracking relies on episodic verbal pain scores reported by patient."
+                ]
+            }
+
+        # Scenario: Nutrition & Dietary Intake
+        if any(w in q for w in ["eat", "nutrition", "appetite", "food", "meal", "dinner", "lunch", "diet"]):
+            return {
+                "considerations": [
+                    {
+                        "title": "Dietary Intake Patterns & Glycemic Nutrition Management",
+                        "category": "Nutrition & Metabolism",
+                        "description": "Patient maintains a low-sodium, South Indian vegetarian dietary pattern consistent with diabetic and hypertensive nutritional guidelines. Caregiver notes reflect generally good appetite with isolated instances of eating half portions during warm afternoons.",
+                        "status": "POSSIBLE_CONSIDERATION",
+                        "supporting_evidence": [
+                            {
+                                "evidence_id": "EV-DR-002",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-07-08",
+                                "original_statement": "Diabetes monitoring continued with recent HbA1c 7.1%. Continue Metformin 500mg BID with meals."
+                            },
+                            {
+                                "evidence_id": "EV-DR-005",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-09-02",
+                                "original_statement": "Glycemic control stable (HbA1c 7.4%). Plan: Continue current medication regimen without alteration."
+                            }
+                        ],
+                        "contradicting_evidence": [
+                            "No documented significant unintended weight loss or nutritional deficiency markers."
+                        ],
+                        "missing_information": [
+                            "Current serum albumin and pre-albumin levels",
+                            "Daily 24-hour hydration log"
+                        ],
+                        "evidence_strength": "MODERATE",
+                        "reasoning": "Derived from longitudinal diabetic monitoring records (EV-DR-002, EV-DR-005) and caregiver dietary logs ([[Caregiver/Nutrition]]).",
+                        "uncertainty": "Appetite variations are episodic and transient.",
+                        "references": ["EV-DR-002", "EV-DR-005"]
+                    }
+                ],
+                "missing_information": [
+                    "Serial monthly weight measurements",
+                    "Dietary fiber and protein intake breakdown"
+                ],
+                "red_flags": [
+                    "Progressive dysphagia, persistent anorexia, or >5% weight loss over 3 months warrants urgent gastrointestinal review."
+                ],
+                "relevant_changes": [
+                    "Glycemic control maintained within target (HbA1c 7.1-7.4%) on diabetic dietary baseline."
+                ],
+                "limitations": [
+                    "Home meal tracking is based on caregiver visual portion estimates."
+                ]
+            }
+
+        # Scenario: Medications & Adherence
+        if any(w in q for w in ["medication", "pill", "drug", "adherence", "dose", "tablet", "metformin", "amlodipine", "atorvastatin", "paracetamol"]):
+            return {
+                "considerations": [
+                    {
+                        "title": "Active Pharmacotherapy Regimen & Caregiver-Assisted Adherence",
+                        "category": "Medications & Adherence",
+                        "description": "Patient is maintained on 4 active medications: Metformin 500mg BID (Type 2 Diabetes), Amlodipine 5mg OD (Hypertension), Atorvastatin 20mg ON (Hyperlipidemia), and Paracetamol 650mg PRN (Knee Osteoarthritis). Caregiver organizes a weekly pillbox ensuring >95% adherence without missed doses.",
+                        "status": "POSSIBLE_CONSIDERATION",
+                        "supporting_evidence": [
+                            {
+                                "evidence_id": "EV-DR-001",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-06-12",
+                                "original_statement": "Diagnosed Type 2 Diabetes, Hypertension, Hyperlipidemia, bilateral knee OA. Plan: Continue current pharmacological therapy."
+                            },
+                            {
+                                "evidence_id": "EV-DR-005",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-09-02",
+                                "original_statement": "Family notes they assist with weekly pillbox organization. Glycemic control stable (HbA1c 7.4%). Plan: Continue current medication regimen without alteration."
+                            }
+                        ],
+                        "contradicting_evidence": [
+                            "No adverse drug reactions or medication non-compliance events identified in clinical notes."
+                        ],
+                        "missing_information": [
+                            "Annual renal function panel (eGFR/Creatinine) to confirm Metformin safety clearance"
+                        ],
+                        "evidence_strength": "STRONG",
+                        "reasoning": "Grounded in clinician prescription records (EV-DR-001, EV-DR-005) and caregiver adherence logs ([[Clinical/Medications]], [[Caregiver/Medication Adherence]]).",
+                        "uncertainty": "Adherence is strong under caregiver pillbox supervision; morning Amlodipine timing is correlated with blood pressure stability.",
+                        "references": ["EV-DR-001", "EV-DR-005"]
+                    }
+                ],
+                "missing_information": [
+                    "Serum creatinine & eGFR panel within past 6 months",
+                    "Liver function tests for long-term statin monitoring"
+                ],
+                "red_flags": [
+                    "Signs of hypoglycemia, severe muscle pain/myopathy, or profound hypotension warrant immediate medication review."
+                ],
+                "relevant_changes": [
+                    "Pharmacotherapy regimen remains stable with caregiver pillbox support."
+                ],
+                "limitations": [
+                    "PRN analgesic usage frequency is logged intermittently by family."
                 ]
             }
 

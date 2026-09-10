@@ -79,19 +79,19 @@ def build_clinical_reasoning_prompt(question: str, context: Dict[str, Any]) -> s
     evidence_catalog = context.get("evidence_catalog", {})
 
     # Token optimization for free-tier TPM ceilings (e.g. Groq 8000 TPM limit)
-    recent_caregiver_obs = caregiver_obs[-10:] if len(caregiver_obs) > 10 else caregiver_obs
+    recent_caregiver_obs = caregiver_obs[-6:] if len(caregiver_obs) > 6 else caregiver_obs
     compact_catalog = {
         k: f"[{v.get('source_type', '')}] ({str(v.get('observed_at', ''))[:10]}): {v.get('original_statement', '')}"
-        for k, v in list(evidence_catalog.items())[-20:]
+        for k, v in list(evidence_catalog.items())[-15:]
     }
 
-    # Format interconnected Wiki Markdown pages (top 3 relevant pages, up to 1,000 chars each)
+    # Format interconnected Wiki Markdown pages (top 4 relevant pages, up to 700 chars each)
     wiki_pages = context.get("wiki_pages", {})
     wiki_section = ""
     if wiki_pages:
         wiki_snippets = []
-        for fname, content in list(wiki_pages.items())[:3]:
-            trimmed = content[:1000] if len(content) > 1000 else content
+        for fname, content in list(wiki_pages.items())[:4]:
+            trimmed = content[:700] if len(content) > 700 else content
             wiki_snippets.append(f"--- WIKI FILE: [[{fname}]] ---\n{trimmed.strip()}")
         wiki_section = "\n\n9. INTERCONNECTED PATIENT WIKI (Authentic Markdown & [[Wiki-Links]]):\n" + "\n\n".join(wiki_snippets)
 
@@ -129,9 +129,9 @@ Claims: {json.dumps(claims, separators=(',', ':'))}
 {wiki_section}
 
 INSTRUCTIONS:
-Synthesize the available evidence to answer the doctor's question in the requested JSON structure.
-Ground your response directly in the interconnected Patient Wiki documents and evidence catalog above.
-If the doctor asks for medical history, baseline profile, or longitudinal summary, synthesize the authentic medical history directly from the wiki files (e.g. [[Clinical/Medical History]], [[Patient Overview]]), linking confirmed diagnoses, medications, baseline capacity, and trajectory facts.
-Adhere strictly to all safety rules. Do not diagnose or prescribe. Ensure all referenced evidence IDs exist in the catalog above.
+1. ANSWER THE EXACT QUESTION: Formulate your primary consideration card's title and description to directly, factually, and comprehensively answer the doctor's specific inquiry.
+2. WIKI & EVIDENCE GROUNDING: Extract and synthesize facts directly from the Patient Wiki files (e.g. [[Clinical/Doctor Assessments]], [[Clinical/Medical History]], [[Patient Overview]], Caregiver domain logs) and evidence catalog above.
+3. SPECIFIC DETAILS: If the doctor asks about previous consultations, doctors, specialists, medications, symptoms, falls, sleep, nutrition, or history, provide exact dates, physician names, findings, and trajectories from the records.
+4. SAFETY INVARIANTS: Adhere strictly to all safety rules. Do not diagnose or prescribe. Ensure all referenced evidence IDs exist in the catalog above.
 """
     return prompt
