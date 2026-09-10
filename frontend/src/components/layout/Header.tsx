@@ -156,8 +156,8 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          {/* Patient switcher — only shown if user has multiple authorized patients */}
-          {authorizedPatients.length > 1 && (
+          {/* Patient switcher — only shown for non-doctor roles if user has multiple authorized patients */}
+          {user.role !== 'DOCTOR' && authorizedPatients.length > 1 && (
             <div style={{ display: 'flex', gap: '4px' }}>
               {authorizedPatients.map((p) => (
                 <button
@@ -209,7 +209,7 @@ export const Header: React.FC<HeaderProps> = ({
                 }}
               >
                 <KeyRound size={12} />
-                <span>+ Unlock Patient (2FA)</span>
+                <span>Switch Patient (2FA)</span>
               </button>
             )}
             <div

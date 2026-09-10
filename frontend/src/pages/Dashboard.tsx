@@ -56,7 +56,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   }, []);
 
   const handlePatientUnlocked = (code: string) => {
-    setVerifiedPatientCodes((prev) => new Set([...prev, code]));
+    // Strictly one patient active per doctor at a time
+    setVerifiedPatientCodes(new Set([code]));
     setSelectedPatientCode(code);
     setShow2FAModal(false);
     reloadAuthorizedPatients();
