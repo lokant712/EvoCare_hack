@@ -85,28 +85,29 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
         onLogout={onLogout}
       />
 
-      {/* Main Content Area */}
-      <main style={{ maxWidth: '1440px', margin: '0 auto', padding: '20px 24px 40px 24px' }}>
-        {/* ============================================================ */}
-        {/* TAB NAVIGATION BAR                                           */}
-        {/* ============================================================ */}
+      {/* Full-Width Tab Navigation Subheader */}
+      <div
+        style={{
+          backgroundColor: '#ffffff',
+          borderBottom: '1px solid #e2e8f0',
+          padding: '8px 24px',
+          boxShadow: '0 1px 2px rgba(0, 0, 0, 0.03)',
+          zIndex: 30,
+        }}
+      >
         <div
           style={{
+            maxWidth: '1440px',
+            margin: '0 auto',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            borderBottom: '1px solid #e2e8f0',
-            marginBottom: '24px',
-            backgroundColor: '#ffffff',
-            padding: '8px 16px',
-            borderRadius: '12px',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)',
             flexWrap: 'wrap',
             gap: '12px',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {/* Tab 1: AI Assistant (Entrance Home) */}
+            {/* Tab 1: AI Assistant (Full Screen) */}
             <button
               onClick={() => setActiveTab('assistant')}
               style={{
@@ -136,7 +137,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                   color: activeTab === 'assistant' ? '#ffffff' : '#0369a1',
                 }}
               >
-                Home
+                Chat
               </span>
             </button>
 
@@ -217,53 +218,55 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
             </span>
           </div>
         </div>
+      </div>
 
-        {/* ============================================================ */}
-        {/* TAB CONTENTS                                                 */}
-        {/* ============================================================ */}
-        {activeTab === 'assistant' && (
+      {/* Main Content: Full Screen for Assistant, Centered Container for Records & Entry */}
+      {activeTab === 'assistant' ? (
+        <main style={{ flex: 1, display: 'flex', flexDirection: 'column', height: 'calc(100vh - 118px)', overflow: 'hidden' }}>
           <ClinicalAssistantTab
             data={data}
             user={user}
             onSelectEvidence={handleOpenEvidence}
             onSwitchToPatientRecords={() => setActiveTab('records')}
           />
-        )}
+        </main>
+      ) : (
+        <main style={{ maxWidth: '1440px', margin: '0 auto', padding: '20px 24px 40px 24px', width: '100%', boxSizing: 'border-box' }}>
+          {activeTab === 'records' && (
+            <PatientRecordsTab
+              data={data}
+              onOpenWhy={(change) => setSelectedWhyChange(change)}
+              onSelectEvidence={handleOpenEvidence}
+            />
+          )}
 
-        {activeTab === 'records' && (
-          <PatientRecordsTab
-            data={data}
-            onOpenWhy={(change) => setSelectedWhyChange(change)}
-            onSelectEvidence={handleOpenEvidence}
-          />
-        )}
+          {activeTab === 'entry' && (
+            <DoctorClinicalEntryTab
+              data={data}
+              onEntrySaved={refetch}
+              onSelectEvidence={handleOpenEvidence}
+            />
+          )}
 
-        {activeTab === 'entry' && (
-          <DoctorClinicalEntryTab
-            data={data}
-            onEntrySaved={refetch}
-            onSelectEvidence={handleOpenEvidence}
-          />
-        )}
-
-        {/* Footer Note */}
-        <footer
-          style={{
-            textAlign: 'center',
-            padding: '28px 0 16px 0',
-            borderTop: '1px solid #e2e8f0',
-            color: '#94a3b8',
-            fontSize: '12px',
-            marginTop: '32px',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '4px' }}>
-            <ShieldCheck size={14} style={{ color: '#0284c7' }} />
-            <span>EvoCare Clinical Intelligence Station • Doctor Portal • Multi-Tab Clinical Workflow</span>
-          </div>
-          <div>Patient {data.patient.patient_code} ({data.patient.name}) • Synthetic Demo Dataset</div>
-        </footer>
-      </main>
+          {/* Footer Note */}
+          <footer
+            style={{
+              textAlign: 'center',
+              padding: '28px 0 16px 0',
+              borderTop: '1px solid #e2e8f0',
+              color: '#94a3b8',
+              fontSize: '12px',
+              marginTop: '32px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '4px' }}>
+              <ShieldCheck size={14} style={{ color: '#0284c7' }} />
+              <span>EvoCare Clinical Intelligence Station • Doctor Portal • Multi-Tab Clinical Workflow</span>
+            </div>
+            <div>Patient {data.patient.patient_code} ({data.patient.name}) • Synthetic Demo Dataset</div>
+          </footer>
+        </main>
+      )}
 
       {/* Modals & Drawers */}
       <WhyModal
