@@ -34,11 +34,30 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     }
     return new Set<string>();
   });
+  const [sessionRemainingSeconds, setSessionRemainingSeconds] = useState<number | null>(null);
   const [show2FAModal, setShow2FAModal] = useState<boolean>(false);
 
   const { data, loading, error, refetch } = usePatient(selectedPatientCode);
   const [selectedWhyChange, setSelectedWhyChange] = useState<RecentChangeItem | null>(null);
   const [selectedEvidence, setSelectedEvidence] = useState<EvidenceDetailItem | null>(null);
+
+  // 10-Minute session timeout effect for doctors
+  useEffect(() => {
+    if (user.role !== 'DOCTOR' || sessionRemainingSeconds === null) return;
+
+    if (sessionRemainingSeconds <= 0) {
+      // 10 minutes session timed out -> auto-lock record immediately!
+      setVerifiedPatientCodes(new Set());
+      setSessionRemainingSeconds(null);
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setSessionRemainingSeconds((prev) => (prev !== null && prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [user.role, sessionRemainingSeconds]);
 
   const reloadAuthorizedPatients = async () => {
     const patients = await authService.getAuthorizedPatients();
@@ -59,6 +78,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     // Strictly one patient active per doctor at a time
     setVerifiedPatientCodes(new Set([code]));
     setSelectedPatientCode(code);
+    // Start 10-minute session countdown (600 seconds)
+    if (user.role === 'DOCTOR') {
+      setSessionRemainingSeconds(600);
+    }
     setShow2FAModal(false);
     reloadAuthorizedPatients();
     refetch();
@@ -204,6 +227,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
         user={user}
         authorizedPatients={authorizedPatients}
         selectedPatientCode={selectedPatientCode}
+        sessionRemainingSeconds={sessionRemainingSeconds}
         onSelectPatient={(code) => {
           setSelectedPatientCode(code);
         }}

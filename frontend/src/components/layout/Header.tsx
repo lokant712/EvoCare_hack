@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, User, MapPin, Calendar, Lock, LogOut, ChevronDown, Shield, KeyRound } from 'lucide-react';
+import { Activity, User, MapPin, Calendar, Lock, LogOut, ChevronDown, Shield, KeyRound, Clock } from 'lucide-react';
 import { PatientDemographics } from '../../types';
 import { AuthUser, AuthorizedPatient } from '../../services/auth';
 
@@ -11,6 +11,7 @@ interface HeaderProps {
   onSelectPatient: (code: string) => void;
   onLogout: () => void;
   onOpen2FA?: () => void;
+  sessionRemainingSeconds?: number | null;
 }
 
 const ROLE_COLORS: Record<string, string> = {
@@ -28,6 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectPatient,
   onLogout,
   onOpen2FA,
+  sessionRemainingSeconds,
 }) => {
   const roleColor = ROLE_COLORS[user.role] || '#64748b';
 
@@ -186,8 +188,37 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           )}
 
-          {/* Badges & 2FA Button */}
+          {/* Badges & 2FA Button & 10-min Session Timer */}
           <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+            {user.role === 'DOCTOR' && sessionRemainingSeconds !== undefined && sessionRemainingSeconds !== null && (
+              <div
+                id="evocare-session-timer-badge"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '3px 8px',
+                  borderRadius: '5px',
+                  backgroundColor: sessionRemainingSeconds < 120 ? '#fef2f2' : '#f0fdf4',
+                  border: '1px solid',
+                  borderColor: sessionRemainingSeconds < 120 ? '#fecaca' : '#bbf7d0',
+                  color: sessionRemainingSeconds < 120 ? '#b91c1c' : '#166534',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  fontFamily: "'IBM Plex Mono', monospace",
+                }}
+              >
+                <Clock size={11} />
+                <span>
+                  {Math.floor(sessionRemainingSeconds / 60).toString().padStart(2, '0')}:
+                  {(sessionRemainingSeconds % 60).toString().padStart(2, '0')}
+                </span>
+                <span style={{ fontSize: '10px', opacity: 0.85, fontFamily: 'Inter, sans-serif' }}>
+                  {sessionRemainingSeconds < 120 ? 'Expiring' : 'Session (10m)'}
+                </span>
+              </div>
+            )}
+
             {user.role === 'DOCTOR' && onOpen2FA && (
               <button
                 id="evocare-open-2fa-btn"
