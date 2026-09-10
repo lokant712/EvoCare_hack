@@ -19,6 +19,8 @@ All four diagnoses form the long-standing diagnostic baseline established prior 
 ---
 
 ## Clinical Information (Doctor)
+- **2026-09-10 Encounter**: Dr. Ramesh Varma, MD (Attending Physician) recorded 1 diagnosis(es): **Orthostatic Hypotension** (I95.1). Ref: [[Doctor Records/Consultation_P001_20260910_140030.md|Consultation_P001_20260910_140030.md]]
+- **2026-09-10 Encounter**: Dr. Ramesh Varma, MD (Attending Physician) recorded 1 diagnosis(es): **Orthostatic Hypotension** (I95.1). Ref: [[Doctor Records/Consultation_P001_20260910_135846.md|Consultation_P001_20260910_135846.md]]
 - **2026-09-10 Encounter**: Dr. Ramesh Varma, MD (Attending Physician) recorded 1 diagnosis(es): **Benign Positional Vertigo** (H81.10). Ref: [[Doctor Records/Consultation_P001_20260910_134618.md|Consultation_P001_20260910_134618.md]]
 - **2026-09-10 Encounter**: Dr. Ramesh Varma, MD (Attending Physician) recorded 1 diagnosis(es): **Orthostatic Hypotension** (I95.1). Ref: [[Doctor Records/Consultation_P001_20260910_134528.md|Consultation_P001_20260910_134528.md]]
 - Diagnosed and monitored by Dr. S. Chandran, MD across routine outpatient reviews.

@@ -4,6 +4,7 @@ import { Header } from '../components/layout/Header';
 import { PatientRecordsTab } from '../components/patient/PatientRecordsTab';
 import { ClinicalAssistantTab } from '../components/assistant/ClinicalAssistantTab';
 import { DoctorClinicalEntryTab } from '../components/clinical/DoctorClinicalEntryTab';
+import { PatientCompanionTab } from '../components/patient/PatientCompanionTab';
 import { WhyModal } from '../components/evidence/WhyModal';
 import { EvidenceDrawer } from '../components/evidence/EvidenceDrawer';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
@@ -69,6 +70,25 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', padding: '40px 20px' }}>
         <ErrorMessage message={error || `Patient ${selectedPatientCode} records unavailable.`} onRetry={refetch} />
+      </div>
+    );
+  }
+
+  // Patient Login Mode: Exclusively Chatbot Interface for Informational Use Only
+  if (user.role === 'PATIENT') {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', color: '#0f172a' }}>
+        <Header
+          patient={data.patient}
+          user={user}
+          authorizedPatients={authorizedPatients}
+          selectedPatientCode={selectedPatientCode}
+          onSelectPatient={setSelectedPatientCode}
+          onLogout={onLogout}
+        />
+        <main style={{ flex: 1 }}>
+          <PatientCompanionTab data={data} user={user} />
+        </main>
       </div>
     );
   }

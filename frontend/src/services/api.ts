@@ -116,4 +116,29 @@ export const apiService = {
       throw new ApiError(500, 'Failed to retrieve doctor entries.');
     }
   },
+
+  async queryPatientCompanion(patientId: string, question: string): Promise<{
+    patient_code: string;
+    patient_name: string;
+    question: string;
+    answer: string;
+    disclaimer: string;
+  }> {
+    try {
+      const res = await fetch(`${API_BASE}/patients/${patientId}/companion`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ question }),
+      });
+      if (res.status === 401) handleUnauthorized();
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new ApiError(res.status, errData.detail || 'Health Companion query failed');
+      }
+      return await res.json();
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      throw new ApiError(500, 'Failed to connect to Personal Health Companion.');
+    }
+  },
 };

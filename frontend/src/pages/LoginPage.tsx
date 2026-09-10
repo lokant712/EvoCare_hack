@@ -303,6 +303,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
           {[
             { label: 'Doctor (P001)', user: 'doctor.demo', pass: 'DoctorPass123!', color: '#0284c7' },
             { label: 'Caregiver (P001)', user: 'caregiver.demo', pass: 'CaregiverPass123!', color: '#059669' },
+            { label: 'Patient (P001)', user: 'patient.demo', pass: 'PatientPass123!', color: '#d97706' },
             { label: 'Admin', user: 'admin.demo', pass: 'AdminPass123!', color: '#7c3aed' },
           ].map(({ label, user, pass, color }) => (
             <button

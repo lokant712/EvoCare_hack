@@ -63,6 +63,13 @@ def seed_security_and_p002():
                 "full_name": "System Administrator",
                 "password": "AdminPass123!",
                 "role": UserRole.ADMIN,
+            },
+            {
+                "username": "patient.demo",
+                "email": "patient.demo@evocare.health",
+                "full_name": "Meenakshi Raman (Patient)",
+                "password": "PatientPass123!",
+                "role": UserRole.PATIENT,
             }
         ]
 
@@ -171,6 +178,7 @@ def seed_security_and_p002():
             {"username": "doctor.demo", "patient_code": "P001", "role": AccessRole.ATTENDING_PHYSICIAN},
             {"username": "doctor.other", "patient_code": "P002", "role": AccessRole.ATTENDING_PHYSICIAN},
             {"username": "caregiver.demo", "patient_code": "P001", "role": AccessRole.PRIMARY_CAREGIVER},
+            {"username": "patient.demo", "patient_code": "P001", "role": AccessRole.PATIENT_SELF},
         ]
 
         for g in grants_to_ensure:
