@@ -5,6 +5,15 @@ from sqlalchemy.orm import Session
 from app.core.database import SessionLocal, engine, Base
 from app.services.import_service import ImportService
 from app.main import app
+from app.core.config import settings
+
+@pytest.fixture(scope="session", autouse=True)
+def test_environment_isolation():
+    """Ensure automated tests don't consume user's free-tier rate limits"""
+    prev_llm = settings.LLM_ENABLED
+    settings.LLM_ENABLED = False
+    yield
+    settings.LLM_ENABLED = prev_llm
 
 @pytest.fixture(scope="session")
 def db_session():

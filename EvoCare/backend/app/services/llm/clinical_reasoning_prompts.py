@@ -78,6 +78,13 @@ def build_clinical_reasoning_prompt(question: str, context: Dict[str, Any]) -> s
     known_unknowns = context.get("known_unknowns", [])
     evidence_catalog = context.get("evidence_catalog", {})
 
+    # Token optimization for free-tier TPM ceilings (e.g. Groq 8000 TPM limit)
+    recent_caregiver_obs = caregiver_obs[-15:] if len(caregiver_obs) > 15 else caregiver_obs
+    compact_catalog = {
+        k: f"[{v.get('source_type', '')}] ({str(v.get('observed_at', ''))[:10]}): {v.get('original_statement', '')}"
+        for k, v in list(evidence_catalog.items())[-35:]
+    }
+
     prompt = f"""DOCTOR'S QUESTION:
 "{question}"
 
@@ -86,29 +93,29 @@ Patient ID: {demographics.get('patient_code')} ({demographics.get('name')}, Age:
 Synthetic Patient: {demographics.get('synthetic', True)}
 
 1. CLINICIAN-CONFIRMED DIAGNOSES:
-{json.dumps(diagnoses, indent=2)}
+{json.dumps(diagnoses, separators=(',', ':'))}
 
 2. ACTIVE MEDICATIONS:
-{json.dumps(meds, indent=2)}
+{json.dumps(meds, separators=(',', ':'))}
 
 3. OBJECTIVE LABORATORY RESULTS:
-{json.dumps(labs, indent=2)}
+{json.dumps(labs, separators=(',', ':'))}
 
 4. LONGITUDINAL BASELINES & ACTIVE MEMORY CLAIMS:
-Baselines: {json.dumps(baselines, indent=2)}
-Claims: {json.dumps(claims, indent=2)}
+Baselines: {json.dumps(baselines, separators=(',', ':'))}
+Claims: {json.dumps(claims, separators=(',', ':'))}
 
-5. RELEVANT CAREGIVER OBSERVATIONS:
-{json.dumps(caregiver_obs, indent=2)}
+5. RELEVANT CAREGIVER OBSERVATIONS (Recent):
+{json.dumps(recent_caregiver_obs, separators=(',', ':'))}
 
 6. CONTEXTUAL CONFLICTS (Clinic vs Home):
-{json.dumps(conflicts, indent=2)}
+{json.dumps(conflicts, separators=(',', ':'))}
 
 7. KNOWN UNKNOWNS & MISSING PARAMETERS:
-{json.dumps(known_unknowns, indent=2)}
+{json.dumps(known_unknowns, separators=(',', ':'))}
 
 8. AVAILABLE IMMUTABLE EVIDENCE CATALOG (Use ONLY these evidence IDs):
-{json.dumps({k: {"statement": v["original_statement"], "source": v["source_type"], "date": v["observed_at"]} for k, v in evidence_catalog.items()}, indent=2)}
+{json.dumps(compact_catalog, indent=1)}
 
 INSTRUCTIONS:
 Synthesize the available evidence to answer the doctor's question in the requested JSON structure.

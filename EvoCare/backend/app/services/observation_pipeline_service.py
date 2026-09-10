@@ -299,9 +299,15 @@ class ObservationPipelineService:
         structured["attributes"]["confidence"] = confidence
         structured["attributes"]["extraction_method"] = processing_method
 
-        # 1. Generate new Evidence Code (e.g. EV-CG-048, EV-CG-049)
+        # 1. Generate new Evidence Code (e.g. EV-CG-048, EV-CG-049) without collisions
         ev_count = db.query(Evidence).filter(Evidence.source_type == SourceType.CAREGIVER).count()
-        next_ev_code = f"EV-CG-{ev_count + 1:03d}"
+        counter = ev_count + 1
+        while True:
+            candidate_code = f"EV-CG-{counter:03d}"
+            if not db.query(Evidence).filter(Evidence.evidence_code == candidate_code).first():
+                next_ev_code = candidate_code
+                break
+            counter += 1
 
         # 2. Insert Evidence
         new_evidence = Evidence(

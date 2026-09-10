@@ -12,13 +12,15 @@ from app.services.llm.clinical_reasoning_prompts import (
 from app.services.llm.validator import ObservationValidator
 from app.services.llm.safety_validator import SafetyValidator
 
+import time
+
 logger = logging.getLogger(__name__)
 
 
 class GeminiProvider(LLMProvider):
     """
     Google Gemini LLM Provider using the modern `google.genai` SDK.
-    Optimized for Gemini 2.5 Flash / Gemini 1.5 Flash.
+    Optimized for Gemini Flash with Free-Tier Rate-Limit Circuit Breaker.
     """
 
     def __init__(
@@ -30,15 +32,29 @@ class GeminiProvider(LLMProvider):
         self.api_key = api_key if api_key is not None else settings.GEMINI_API_KEY
         self.model = model if model is not None else settings.GEMINI_MODEL
         self.enabled = enabled if enabled is not None else settings.LLM_ENABLED
+        self.rate_limited_until: float = 0.0
 
     def is_configured(self) -> bool:
         return bool(self.enabled and self.api_key and self.api_key.strip())
+
+    def is_rate_limited(self) -> bool:
+        """Returns True if the provider is currently cooling down from a 429 quota/rate limit."""
+        return time.time() < self.rate_limited_until
 
     def extract_observation(self, text: str, patient_context: Optional[Dict[str, Any]] = None) -> LLMResult:
         if not self.is_configured():
             return LLMResult(
                 status=LLMStatus.LLM_UNAVAILABLE,
                 error_message="GEMINI_API_KEY is not configured or LLM is disabled",
+                processing_method=ProcessingMethod.LLM_FALLBACK
+            )
+
+        if self.is_rate_limited():
+            remaining = int(self.rate_limited_until - time.time())
+            logger.info(f"Gemini is in free-tier rate-limit cool-down ({remaining}s remaining). Skipping immediately.")
+            return LLMResult(
+                status=LLMStatus.LLM_UNAVAILABLE,
+                error_message=f"Gemini free-tier quota cool-down ({remaining}s left)",
                 processing_method=ProcessingMethod.LLM_FALLBACK
             )
 
@@ -71,6 +87,10 @@ class GeminiProvider(LLMProvider):
 
             raw_response = response.text or ""
         except Exception as e:
+            err_str = str(e)
+            if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str or "quota" in err_str.lower():
+                self.rate_limited_until = time.time() + 60.0
+                logger.warning(f"Gemini free-tier quota reached (429). Activated 60s cool-down circuit breaker.")
             logger.warning(f"Gemini observation extraction API call failed: {e}")
             return LLMResult(
                 status=LLMStatus.ERROR,
@@ -115,6 +135,10 @@ class GeminiProvider(LLMProvider):
         if not self.is_configured():
             raise RuntimeError("Gemini API key is not configured or LLM is disabled")
 
+        if self.is_rate_limited():
+            remaining = int(self.rate_limited_until - time.time())
+            raise RuntimeError(f"Gemini free-tier rate limit cool-down active ({remaining}s remaining)")
+
         from google import genai
         from google.genai import types
 
@@ -127,11 +151,18 @@ class GeminiProvider(LLMProvider):
             response_mime_type="application/json"
         )
 
-        response = client.models.generate_content(
-            model=self.model,
-            contents=user_prompt,
-            config=config
-        )
+        try:
+            response = client.models.generate_content(
+                model=self.model,
+                contents=user_prompt,
+                config=config
+            )
+        except Exception as e:
+            err_str = str(e)
+            if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str or "quota" in err_str.lower():
+                self.rate_limited_until = time.time() + 60.0
+                logger.warning(f"Gemini free-tier quota reached (429). Activated 60s cool-down circuit breaker.")
+            raise e
 
         raw_text = response.text or "{}"
         clean_json = raw_text.strip()

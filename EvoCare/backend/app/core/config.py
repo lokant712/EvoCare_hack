@@ -28,9 +28,11 @@ class Settings:
 
     # Multi-Tier AI Provider Settings (Gemini Flash + Groq + Deterministic Fallback)
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", os.getenv("GOOGLE_API_KEY", "")).strip()
-    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash").strip()
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.6-flash").strip()
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "").strip()
-    GROQ_MODEL: str = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile").strip()
+    GROQ_PRIMARY_MODEL: str = os.getenv("GROQ_PRIMARY_MODEL", os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")).strip()
+    GROQ_FALLBACK_MODEL: str = os.getenv("GROQ_FALLBACK_MODEL", "openai/gpt-oss-20b").strip()
+    GROQ_MODEL: str = GROQ_PRIMARY_MODEL
 
     # Legacy compatibility
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "").strip()
