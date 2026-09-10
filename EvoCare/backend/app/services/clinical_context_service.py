@@ -94,6 +94,13 @@ class ClinicalContextService:
                 p_dir / "Caregiver" / "Cognition.md",
                 p_dir / "Derived" / "Cognition Trends.md"
             ])
+        if any(w in q_lower for w in ["caregiver", "caretaker", "notes", "past week", "carer", "home observations"]):
+            targets.extend([
+                p_dir / "Caregiver" / "Mobility.md",
+                p_dir / "Caregiver" / "Dizziness.md",
+                p_dir / "Caregiver" / "Nutrition.md",
+                p_dir / "Caregiver" / "Falls.md"
+            ])
 
         for tf in targets:
             rel_name = str(tf.relative_to(p_dir)).replace("\\", "/")

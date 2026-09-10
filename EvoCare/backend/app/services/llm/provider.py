@@ -335,6 +335,69 @@ class MockLLMProvider(LLMProvider):
                 ]
             }
 
+        # Scenario 6: Caregiver / Caretaker notes for past week
+        if any(w in q for w in ["caretaker", "caregiver", "notes", "past week", "recent observations"]):
+            return {
+                "considerations": [
+                    {
+                        "title": "Recent Caregiver Observations & Home Trajectory (Past Week)",
+                        "category": "Caregiver Observations",
+                        "description": "Caregivers logged multiple home observations including morning dizziness upon rising, bilateral knee pain after walking in the garden, temporary appetite reduction (eating half lunch), transient evening confusion, and a near-fall on 2026-09-06 where she was caught before ground impact.",
+                        "status": "POSSIBLE_CONSIDERATION",
+                        "supporting_evidence": [
+                            {
+                                "evidence_id": "EV-CG-045",
+                                "source_type": "CAREGIVER-REPORTED",
+                                "observed_at": "2026-09-01",
+                                "original_statement": "Stumbled near bathroom door; caught by caregiver before hitting floor. No ground impact, no injury."
+                            },
+                            {
+                                "evidence_id": "EV-CG-041",
+                                "source_type": "CAREGIVER-REPORTED",
+                                "observed_at": "2026-09-03",
+                                "original_statement": "Patient felt dizzy after getting out of bed; resolved after sitting back down for a few minutes."
+                            },
+                            {
+                                "evidence_id": "EV-CG-046",
+                                "source_type": "CAREGIVER-REPORTED",
+                                "observed_at": "2026-09-02",
+                                "original_statement": "Walked normally inside the house today without holding furniture."
+                            },
+                            {
+                                "evidence_id": "EV-CG-040",
+                                "source_type": "CAREGIVER-REPORTED",
+                                "observed_at": "2026-08-30",
+                                "original_statement": "Patient seemed confused about what day of the week it was this morning."
+                            }
+                        ],
+                        "contradicting_evidence": [
+                            "Independent clinic exam on 2026-09-02 (EV-DR-005) showed steady unassisted gait, contrasting with domestic balance fluctuations."
+                        ],
+                        "missing_information": [
+                            "Orthostatic vital signs during dizzy spells",
+                            "Formal home environmental safety assessment"
+                        ],
+                        "evidence_strength": "MODERATE",
+                        "reasoning": "Caregiver observations capture daily functional variability at home that outpatient clinic visits cannot detect.",
+                        "uncertainty": "Dizziness etiology is unconfirmed; near-fall had zero ground impact and zero trauma.",
+                        "references": ["EV-CG-045", "EV-CG-041", "EV-CG-046", "EV-CG-040"]
+                    }
+                ],
+                "missing_information": [
+                    "Orthostatic blood pressure & pulse",
+                    "Timing of Amlodipine administration relative to morning symptoms"
+                ],
+                "red_flags": [
+                    "Near-fall event (EV-CG-045) and episodic dizziness warrant fall risk review."
+                ],
+                "relevant_changes": [
+                    "Longitudinal shift: Independent baseline -> intermittent assistance needed -> near-fall on Sep 06 (no injury) -> spontaneous recovery."
+                ],
+                "limitations": [
+                    "Caregiver observations rely on subjective family reports without calibrated instrumentation."
+                ]
+            }
+
         # Scenario 4: Mobility worsening question
         if "mobility" in q and ("worsen" in q or "change" in q or "decline" in q or "how has" in q):
             return {
