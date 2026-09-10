@@ -7,21 +7,21 @@ REM   2. EvoCare React / Vite Frontend on port 9000
 REM ============================================================================
 
 echo ============================================================================
-echo   Starting EvoCare Longitudinal Health Memory & Clinical Reasoning Demo
+echo   Starting EvoCare Longitudinal Health Memory and Clinical Reasoning Demo
 echo ============================================================================
 
 cd /d "%~dp0"
 
-echo [1/3] Checking environment & dependencies...
+echo [1/3] Checking environment and directories...
 if not exist "EvoCare\backend\data" mkdir "EvoCare\backend\data"
 
-echo [2/3] Seeding Phase 8 Security & Multi-Patient Data...
+echo [2/3] Seeding Phase 8 Security and Multi-Patient Data...
 python EvoCare\backend\scripts\seed_security_demo.py
 if %ERRORLEVEL% NEQ 0 (
     echo [WARNING] Seed script exited with non-zero code. Continuing startup...
 )
 
-echo [3/3] Launching Backend & Frontend services...
+echo [3/3] Launching Backend and Frontend services...
 
 REM Start backend in a new command window
 start "EvoCare Backend API (Port 8000)" cmd /k "cd /d %~dp0EvoCare\backend && python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload"
