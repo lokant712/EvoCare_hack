@@ -24,6 +24,8 @@ Exertional joint discomfort reports related to bilateral knee osteoarthritis.
 | **2026-08-30** | CG002 | *"She said her knee pain was mild."* | Mild self-reported pain | [[Raw Evidence/Caregiver/EV-CG-015|EV-CG-015]] |
 | **2026-09-04** | CG003 | *"She did not complain about knee pain today."* | **Pain-free day** | [[Raw Evidence/Caregiver/EV-CG-027|EV-CG-027]] |
 | **2026-09-08** | CG002 | *"She said her knees hurt after going outside."* | Post-exertional knee pain outdoors | [[Raw Evidence/Caregiver/EV-CG-038|EV-CG-038]] |
+| **2026-09-10** | CG001 | *"Her knees hurt."* | Location: Bilateral knees; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-233|EV-CG-233]] |
+| **2026-09-10** | CG001 | *"She had knee pain."* | Location: Bilateral knees | [[Raw Evidence/Caregiver/EV-CG-236|EV-CG-236]] |
 
 ---
 

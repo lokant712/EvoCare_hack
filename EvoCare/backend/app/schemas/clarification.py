@@ -69,6 +69,8 @@ class ObservationCompleteResponse(BaseModel):
     evidence_code: str
     observation_id: int
     created_at: datetime
+    wiki_updated: Optional[bool] = False
+    wiki_files: Optional[List[str]] = None
 
 class StructuredObservationDetailResponse(BaseModel):
     id: int

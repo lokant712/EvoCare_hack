@@ -28,6 +28,9 @@ Meal intake, appetite variation, and hydration logs recorded by caregivers.
 | **2026-09-03** | CG001 | *"She only had a few bites of dinner."* | Significant dip (few bites) | [[Raw Evidence/Caregiver/EV-CG-023|EV-CG-023]] |
 | **2026-09-05** | CG001 | *"Her appetite seemed better today."* | **Appetite recovery** | [[Raw Evidence/Caregiver/EV-CG-029|EV-CG-029]] |
 | **2026-09-08** | CG001 | *"She ate about three quarters of her meal."* | **Sustained intake (~75%)** | [[Raw Evidence/Caregiver/EV-CG-037|EV-CG-037]] |
+| **2026-09-10** | CG001 | *"She didn't eat much."* | Meal: Dinner (Only a few bites (<25%)) | [[Raw Evidence/Caregiver/EV-CG-231|EV-CG-231]] |
+| **2026-09-10** | CG001 | *"She ate half her lunch."* | Meal: Lunch (About half (50%)) | [[Raw Evidence/Caregiver/EV-CG-242|EV-CG-242]] |
+| **2026-09-10** | CG001 | *"She ate all her dinner."* | Meal: Dinner (UNKNOWN) | [[Raw Evidence/Caregiver/EV-CG-243|EV-CG-243]] |
 
 ---
 

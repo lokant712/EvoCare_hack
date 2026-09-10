@@ -26,6 +26,10 @@ Recurring episodic dizziness reported by family caregivers between late August a
 | **2026-09-01** | CG003 | *"She felt dizzy after getting out of bed but it went away after sitting down."* | **Postural / Orthostatic component**: Triggered by rising from bed, resolved on sitting | Severity: Mild-Moderate<br>Duration: Minutes<br>Cause: `UNKNOWN` (Postural trigger) | [[Raw Evidence/Caregiver/EV-CG-018|EV-CG-018]] |
 | **2026-09-05** | CG001 | *"She complained of dizziness again in the evening."* | Evening recurrence | Severity: `UNKNOWN`<br>Duration: `UNKNOWN`<br>Cause: `UNKNOWN` | [[Raw Evidence/Caregiver/EV-CG-028|EV-CG-028]] |
 | **2026-09-06** | CG003 | *"She felt dizzy and held the wall for a few seconds."* | Associated with balance instability, held wall | Duration: ~Few seconds<br>Cause: `UNKNOWN` | [[Raw Evidence/Caregiver/EV-CG-032|EV-CG-032]] |
+| **2026-09-10** | CG001 | *"She felt dizzy and held the wall in the morning."* | Caregiver observation (dizziness) | Severity: UNKNOWN<br>Duration: UNKNOWN | [[Raw Evidence/Caregiver/EV-CG-224|EV-CG-224]] |
+| **2026-09-10** | CG002 | *"She is dizzy."* | Severity: Moderate; Duration: 5 minutes | Severity: Moderate<br>Duration: 5 minutes | [[Raw Evidence/Caregiver/EV-CG-225|EV-CG-225]] |
+| **2026-09-10** | CG001 | *"She was severely dizzy this morning."* | Severity: Severe | Severity: Severe<br>Duration: UNKNOWN | [[Raw Evidence/Caregiver/EV-CG-226|EV-CG-226]] |
+| **2026-09-10** | CG001 | *"She is dizzy."* | Severity: Mild; Duration: A few seconds | Severity: Mild<br>Duration: A few seconds | [[Raw Evidence/Caregiver/EV-CG-229|EV-CG-229]] |
 
 ---
 

@@ -5,6 +5,7 @@ import { PatientRecordsTab } from '../components/patient/PatientRecordsTab';
 import { ClinicalAssistantTab } from '../components/assistant/ClinicalAssistantTab';
 import { DoctorClinicalEntryTab } from '../components/clinical/DoctorClinicalEntryTab';
 import { PatientCompanionTab } from '../components/patient/PatientCompanionTab';
+import { CaregiverNotesTab } from '../components/caregiver/CaregiverNotesTab';
 import { WhyModal } from '../components/evidence/WhyModal';
 import { EvidenceDrawer } from '../components/evidence/EvidenceDrawer';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
@@ -88,6 +89,25 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
         />
         <main style={{ flex: 1 }}>
           <PatientCompanionTab data={data} user={user} />
+        </main>
+      </div>
+    );
+  }
+
+  // Caregiver Login Mode: Exclusively Caregiver Observation & Clarification Notes Portal
+  if (user.role === 'CAREGIVER') {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', color: '#0f172a' }}>
+        <Header
+          patient={data.patient}
+          user={user}
+          authorizedPatients={authorizedPatients}
+          selectedPatientCode={selectedPatientCode}
+          onSelectPatient={setSelectedPatientCode}
+          onLogout={onLogout}
+        />
+        <main style={{ flex: 1 }}>
+          <CaregiverNotesTab data={data} user={user} onObservationSaved={refetch} />
         </main>
       </div>
     );

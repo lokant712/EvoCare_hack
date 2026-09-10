@@ -1,4 +1,5 @@
 import uuid
+import logging
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
@@ -12,6 +13,7 @@ from app.models.audit import AuditLog
 from app.models.clarification import SessionStatus, ClarificationSession, ClarificationQuestion, ClarificationAnswer
 from app.models.enums import SourceType, InformationState, EvidenceStatus
 from app.services.clarification_engine import ClarificationEngine
+from app.services.memory.wiki_sync import WikiSynchronizer
 from app.services.llm.schemas import (
     ProcessingMode,
     ProcessingMethod,
@@ -22,6 +24,8 @@ from app.services.llm.schemas import (
 )
 from app.services.llm.provider import LLMProvider
 from app.services.llm.resilient_provider import ResilientLLMProvider
+
+logger = logging.getLogger(__name__)
 
 class ObservationPipelineService:
     # Active default LLM provider instance (can be overridden in tests via set_llm_provider)
@@ -359,7 +363,43 @@ class ObservationPipelineService:
         )
         db.add(audit)
 
-        # 6. Update Session
+        # 6. Update existing Caregiver Wiki markdown file without creating new files
+        updated_wiki_paths = []
+        try:
+            observed_date_str = new_evidence.observed_at.strftime("%Y-%m-%d") if new_evidence.observed_at else datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            interp_parts = []
+            attrs = structured.get("attributes", {})
+            if attrs.get("location"):
+                interp_parts.append(f"Location: {attrs['location']}")
+            if attrs.get("assistance_required"):
+                interp_parts.append(f"Assistance: {attrs['assistance_required']}")
+            if attrs.get("trigger"):
+                interp_parts.append(f"Trigger: {attrs['trigger']}")
+            if attrs.get("injury"):
+                interp_parts.append(f"Injury: {attrs['injury']}")
+            if attrs.get("meal"):
+                interp_parts.append(f"Meal: {attrs['meal']} ({attrs.get('amount_eaten', '')})")
+            if attrs.get("severity") and attrs.get("severity") != "UNKNOWN":
+                interp_parts.append(f"Severity: {attrs['severity']}")
+            if attrs.get("duration") and attrs.get("duration") != "UNKNOWN":
+                interp_parts.append(f"Duration: {attrs['duration']}")
+
+            functional_interp = "; ".join(interp_parts) if interp_parts else f"Caregiver observation ({sess.detected_category})"
+
+            updated_wiki_paths = WikiSynchronizer.append_caregiver_observation_row(
+                patient_code=patient.patient_code,
+                category=sess.detected_category,
+                observed_date_str=observed_date_str,
+                observer=caregiver_id,
+                raw_statement=sess.raw_text,
+                functional_interpretation=functional_interp,
+                evidence_code=new_evidence.evidence_code,
+                extra_attributes=attrs
+            )
+        except Exception as e:
+            logger.error(f"Failed to append caregiver observation to wiki: {e}")
+
+        # 7. Update Session
         sess.status = SessionStatus.COMPLETED
         sess.completed_at = datetime.now(timezone.utc)
         sess.resulting_evidence_id = new_evidence.id
@@ -373,5 +413,7 @@ class ObservationPipelineService:
             "evidence_id": new_evidence.id,
             "evidence_code": new_evidence.evidence_code,
             "observation_id": cg_obs.id,
-            "created_at": new_evidence.created_at
+            "created_at": new_evidence.created_at,
+            "wiki_updated": len(updated_wiki_paths) > 0,
+            "wiki_files": updated_wiki_paths
         }

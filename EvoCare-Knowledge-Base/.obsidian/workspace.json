@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "9b2e8d9e4d06a96e",
+        "id": "dbe6fc3c6f552087",
         "type": "tabs",
         "children": [
           {
-            "id": "7d6f22e4e5624f99",
+            "id": "39401cbd0d587705",
             "type": "leaf",
             "state": {
               "type": "graph",
@@ -184,8 +184,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "7d6f22e4e5624f99",
+  "active": "39401cbd0d587705",
   "lastOpenFiles": [
+    "Raw Evidence/Caregiver/EV-CG-004.md",
     "Raw Evidence/Doctor/EV-MED-P001-003.md",
     "Raw Evidence/Doctor/EV-DR-P001-003.md",
     "Doctor Records/Consultation_P001_20260910_140030.md",

@@ -24,6 +24,7 @@ Caregiver support with administration, weekly pillbox prep, and timing reminders
 | **2026-09-01** | CG001 | *"She almost forgot her evening medicine, so I reminded her."* | Evening reminder provided | [[Raw Evidence/Caregiver/EV-CG-020|EV-CG-020]] |
 | **2026-09-06** | CG001 | *"I organized her medicines for the week."* | Weekly pill organizer sorted | [[Raw Evidence/Caregiver/EV-CG-033|EV-CG-033]] |
 | **2026-09-09** | CG002 | *"She took her medicines on time today."* | On-time compliance | [[Raw Evidence/Caregiver/EV-CG-042|EV-CG-042]] |
+| **2026-09-10** | CG001 | *"She took her evening medicines."* | Caregiver observation (medication_adherence) | [[Raw Evidence/Caregiver/EV-CG-238|EV-CG-238]] |
 
 ---
 

@@ -24,6 +24,9 @@ Daily mood, social interaction, and emotional demeanor recorded by family member
 | **2026-08-30** | CG001 | *"She was quiet in the afternoon."* | Quiet demeanor (afternoon) | [[Raw Evidence/Caregiver/EV-CG-016|EV-CG-016]] |
 | **2026-09-05** | CG002 | *"She was laughing and watching television with everyone."* | Cheerful, shared family entertainment | [[Raw Evidence/Caregiver/EV-CG-030|EV-CG-030]] |
 | **2026-09-08** | CG001 | *"She seemed frustrated because she was walking slowly."* | Situational frustration linked to gait | [[Raw Evidence/Caregiver/EV-CG-039|EV-CG-039]] |
+| **2026-09-10** | CG001 | *"She seemed agitated and restless during the evening."* | Caregiver observation (behavior) | [[Raw Evidence/Caregiver/EV-CG-228|EV-CG-228]] |
+| **2026-09-10** | CG001 | *"She is in a good mood."* | Caregiver observation (behavior) | [[Raw Evidence/Caregiver/EV-CG-239|EV-CG-239]] |
+| **2026-09-10** | CG001 | *"She was quiet in the room."* | Caregiver observation (behavior) | [[Raw Evidence/Caregiver/EV-CG-240|EV-CG-240]] |
 
 ---
 

@@ -30,8 +30,8 @@ class WikiSynchronizer:
         """
         candidates = [
             Path(settings.KNOWLEDGE_BASE_DIR),
-            Path(__file__).resolve().parent.parent.parent.parent.parent / "EvoCare-Knowledge-Base",
-            Path(__file__).resolve().parent.parent.parent.parent / "knowledge-base",
+            Path(__file__).resolve().parents[5] / "EvoCare-Knowledge-Base",
+            Path(__file__).resolve().parents[4] / "knowledge-base",
             Path(__file__).resolve().parent.parent.parent / "knowledge-base"
         ]
         valid = []
@@ -151,3 +151,123 @@ class WikiSynchronizer:
             raise IOError(f"Wiki write failure: {str(e)}")
 
         return str(target_path)
+
+    CATEGORY_TO_PAGE = {
+        "mobility": "Mobility",
+        "movement": "Mobility",
+        "walking": "Mobility",
+        "ambulation": "Mobility",
+        "fall": "Falls",
+        "falls": "Falls",
+        "near_fall": "Falls",
+        "dizziness": "Dizziness",
+        "dizzy": "Dizziness",
+        "vertigo": "Dizziness",
+        "lightheaded": "Dizziness",
+        "cognition": "Cognition",
+        "confusion": "Cognition",
+        "memory": "Cognition",
+        "nutrition": "Nutrition",
+        "appetite": "Nutrition",
+        "meal": "Nutrition",
+        "eating": "Nutrition",
+        "sleep": "Sleep",
+        "insomnia": "Sleep",
+        "pain": "Pain",
+        "knee": "Pain",
+        "behavior": "Behavior",
+        "mood": "Behavior",
+        "medication": "Medication Adherence",
+        "medication_adherence": "Medication Adherence"
+    }
+
+    @classmethod
+    def append_caregiver_observation_row(
+        cls,
+        patient_code: str,
+        category: str,
+        observed_date_str: str,
+        observer: str,
+        raw_statement: str,
+        functional_interpretation: str,
+        evidence_code: str,
+        extra_attributes: Optional[Dict[str, Any]] = None
+    ) -> List[str]:
+        """
+        Appends an observation row into the existing Caregiver markdown file
+        in all active wiki directories without creating new files.
+        """
+        cat_key = (category or "").lower().replace(" ", "_").strip()
+        page_name = cls.CATEGORY_TO_PAGE.get(cat_key, "Mobility")
+        rel_subpath = PAGE_FILE_MAPPING.get(page_name, f"Caregiver/{page_name}.md")
+        patient_folder_name = f"{patient_code} Meenakshi Raman" if patient_code == "P001" else patient_code
+
+        clean_stmt = raw_statement.replace("\n", " ").replace("|", "/").strip()
+        clean_interp = functional_interpretation.replace("\n", " ").replace("|", "/").strip() if functional_interpretation else "Caregiver recorded home observation"
+        evidence_link = f"- [[Raw Evidence/Caregiver/{evidence_code}|{evidence_code}]]"
+
+        updated_paths = []
+        for root in cls.get_wiki_root_dirs():
+            candidates = [
+                root / "Patient Wiki" / patient_folder_name / rel_subpath,
+                root / patient_folder_name / rel_subpath
+            ]
+            for target_path in candidates:
+                if target_path.exists() and target_path.is_file():
+                    try:
+                        content = target_path.read_text(encoding="utf-8")
+
+                        # Inspect table header columns
+                        header_match = re.search(r"(\|\s*Date\s*\|[^\n]+\|)", content)
+                        col_count = 5
+                        if header_match:
+                            header_line = header_match.group(1)
+                            # count pipes minus 1
+                            col_count = len([c for c in header_line.split("|") if c.strip()])
+
+                        if col_count >= 6:
+                            # e.g. Dizziness: Date | Observer | Statement | Context | Details | Evidence ID
+                            attrs = extra_attributes or {}
+                            sev = attrs.get("severity", "Noted")
+                            dur = attrs.get("duration", "Transient")
+                            detail_str = f"Severity: {sev}<br>Duration: {dur}"
+                            new_row = f"| **{observed_date_str}** | {observer} | *\"{clean_stmt}\"* | {clean_interp} | {detail_str} | [[Raw Evidence/Caregiver/{evidence_code}|{evidence_code}]] |"
+                        else:
+                            # 5 columns: Date | Observer | Statement | Interpretation | Evidence ID
+                            new_row = f"| **{observed_date_str}** | {observer} | *\"{clean_stmt}\"* | {clean_interp} | [[Raw Evidence/Caregiver/{evidence_code}|{evidence_code}]] |"
+
+                        # 1. Insert row into existing table
+                        table_match = re.search(r"(\|\s*:?---.*?\n)((?:\|[^\n]+\n)+)", content)
+                        if table_match:
+                            full_table_rows = table_match.group(0)
+                            if evidence_code not in full_table_rows:
+                                updated_table = full_table_rows.rstrip("\n") + f"\n{new_row}\n"
+                                content = content.replace(full_table_rows, updated_table, 1)
+                        elif "## Chronological" in content:
+                            content = re.sub(
+                                r"(## Chronological[^\n]+\n)",
+                                rf"\1\n{new_row}\n",
+                                content,
+                                count=1
+                            )
+
+                        # 2. Append to Evidence section if not already present
+                        if evidence_code not in content:
+                            if "## Evidence" in content:
+                                content = re.sub(
+                                    r"(## Evidence\n)",
+                                    rf"\1{evidence_link}\n",
+                                    content,
+                                    count=1
+                                )
+                            else:
+                                content += f"\n\n## Evidence\n{evidence_link}\n"
+
+                        target_path.write_text(content, encoding="utf-8")
+                        updated_paths.append(str(target_path))
+                        logger.info(f"Appended observation row to existing Wiki file: {target_path}")
+                    except Exception as e:
+                        logger.error(f"Failed to append to Wiki file {target_path}: {e}")
+
+        return updated_paths
+

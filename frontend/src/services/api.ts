@@ -141,4 +141,101 @@ export const apiService = {
       throw new ApiError(500, 'Failed to connect to Personal Health Companion.');
     }
   },
+
+  async startObservation(patientCode: string, text: string, caregiverId: string = 'CG001'): Promise<{
+    session_id: number;
+    session_code: string;
+    patient_code: string;
+    raw_text: string;
+    requires_clarification: boolean;
+    detected_category: string;
+    extracted_data?: any;
+    questions?: Array<{
+      id: number;
+      session_id: number;
+      field_name: string;
+      question_text: string;
+      options: string[];
+      is_answered: boolean;
+    }>;
+  }> {
+    try {
+      const res = await fetch(`${API_BASE}/observations/start`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({
+          patient_code: patientCode,
+          text,
+          caregiver_id: caregiverId,
+          processing_mode: 'AUTO',
+        }),
+      });
+      if (res.status === 401) handleUnauthorized();
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new ApiError(res.status, errData.detail || 'Failed to analyze caregiver observation');
+      }
+      return await res.json();
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      throw new ApiError(500, 'Failed to connect to observation processing engine.');
+    }
+  },
+
+  async answerClarification(
+    sessionId: number,
+    questionId: number,
+    fieldName: string,
+    answer: string
+  ): Promise<any> {
+    try {
+      const res = await fetch(`${API_BASE}/clarification/${sessionId}/answer`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({
+          question_id: questionId,
+          field_name: fieldName,
+          answer,
+        }),
+      });
+      if (res.status === 401) handleUnauthorized();
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new ApiError(res.status, errData.detail || 'Failed to submit clarification answer');
+      }
+      return await res.json();
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      throw new ApiError(500, 'Failed to record clarification answer.');
+    }
+  },
+
+  async completeClarification(sessionId: number): Promise<{
+    session_id: number;
+    status: string;
+    category: string;
+    structured_observation: any;
+    evidence_id: number;
+    evidence_code: string;
+    observation_id: number;
+    created_at: string;
+    wiki_updated?: boolean;
+    wiki_files?: string[];
+  }> {
+    try {
+      const res = await fetch(`${API_BASE}/clarification/${sessionId}/complete`, {
+        method: 'POST',
+        headers: authHeaders(),
+      });
+      if (res.status === 401) handleUnauthorized();
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new ApiError(res.status, errData.detail || 'Failed to finalize observation');
+      }
+      return await res.json();
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      throw new ApiError(500, 'Failed to finalize caregiver observation and synchronize records.');
+    }
+  },
 };

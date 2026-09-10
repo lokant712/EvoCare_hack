@@ -29,6 +29,9 @@ Longitudinal behavioral and cognitive notes recorded by family members.
 | **2026-09-04** | CG001 | *"She was completely normal and chatting with us in the morning."* | **Intact morning cognition & social chat** | [[Raw Evidence/Caregiver/EV-CG-026|EV-CG-026]] |
 | **2026-09-07** | CG002 | *"She became confused again around dinner time."* | Evening confusion note | [[Raw Evidence/Caregiver/EV-CG-034|EV-CG-034]] |
 | **2026-09-09** | CG001 | *"She recognized everyone and was talking normally."* | **Full recognition & normal communication** | [[Raw Evidence/Caregiver/EV-CG-041|EV-CG-041]] |
+| **2026-09-10** | CG001 | *"She forgot what day it was and seemed confused."* | Caregiver observation (cognition) | [[Raw Evidence/Caregiver/EV-CG-227|EV-CG-227]] |
+| **2026-09-10** | CG001 | *"She seems confused."* | Duration: Brief moment (few minutes) | [[Raw Evidence/Caregiver/EV-CG-232|EV-CG-232]] |
+| **2026-09-10** | CG001 | *"She seems confused today."* | Caregiver observation (cognition) | [[Raw Evidence/Caregiver/EV-CG-245|EV-CG-245]] |
 
 ---
 
