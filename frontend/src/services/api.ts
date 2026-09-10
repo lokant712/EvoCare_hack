@@ -80,4 +80,40 @@ export const apiService = {
       throw new ApiError(500, 'Failed to connect to Clinical Reasoning Assistant.');
     }
   },
+
+  async recordDoctorEntries(patientId: string, payload: any): Promise<any> {
+    try {
+      const res = await fetch(`${API_BASE}/patients/${patientId}/entries`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify(payload),
+      });
+      if (res.status === 401) handleUnauthorized();
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        const msg = errorData.detail || `Failed to record doctor entry (HTTP ${res.status})`;
+        throw new ApiError(res.status, typeof msg === 'string' ? msg : JSON.stringify(msg));
+      }
+      return await res.json();
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      throw new ApiError(500, 'Failed to save doctor clinical entries.');
+    }
+  },
+
+  async getDoctorEntries(patientId: string): Promise<any> {
+    try {
+      const res = await fetch(`${API_BASE}/patients/${patientId}/entries`, {
+        headers: authHeaders(),
+      });
+      if (res.status === 401) handleUnauthorized();
+      if (!res.ok) {
+        throw new ApiError(res.status, `Failed to load doctor entries for ${patientId}`);
+      }
+      return await res.json();
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      throw new ApiError(500, 'Failed to retrieve doctor entries.');
+    }
+  },
 };

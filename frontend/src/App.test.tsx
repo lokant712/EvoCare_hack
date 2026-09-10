@@ -15,6 +15,8 @@ import { SourceBadge } from './components/common/SourceBadge';
 import { ErrorMessage } from './components/common/ErrorMessage';
 import { LoadingSpinner } from './components/common/LoadingSpinner';
 import { ClinicalReasoningPanel } from './components/reasoning/ClinicalReasoningPanel';
+import { DoctorClinicalEntryTab } from './components/clinical/DoctorClinicalEntryTab';
+import { ClinicalAssistantTab } from './components/assistant/ClinicalAssistantTab';
 import { apiService } from './services/api';
 import { DashboardResponse } from './types';
 
@@ -457,7 +459,7 @@ describe('Doctor Dashboard Frontend Unit Test Suite (21 Tests)', () => {
     }));
     render(<App />);
     await waitFor(() => {
-      expect(screen.getByText('Meenakshi Raman')).toBeInTheDocument();
+      expect(screen.getAllByText('Meenakshi Raman').length).toBeGreaterThan(0);
     });
     localStorage.clear();
   });
@@ -609,5 +611,79 @@ describe('Doctor Dashboard Frontend Unit Test Suite (21 Tests)', () => {
 
     fireEvent.click(screen.getByText('EV-CG-045'));
     expect(handleSelect).toHaveBeenCalledWith('EV-CG-045');
+  });
+
+  // ==========================================
+  // PHASE 9: CHATBOT ASSISTANT & STRUCTURED ENTRY
+  // ==========================================
+
+  it('26. ClinicalAssistantTab renders patient essential medical record and conversational chat input', () => {
+    const handleEvidence = vi.fn();
+    const handleSwitch = vi.fn();
+    render(
+      <ClinicalAssistantTab
+        data={mockDashboardData}
+        user={mockHeaderUser}
+        onSelectEvidence={handleEvidence}
+        onSwitchToPatientRecords={handleSwitch}
+      />
+    );
+
+    expect(screen.getByText(/Essential Patient Summary/i)).toBeInTheDocument();
+    expect(screen.getByText(/Type 2 Diabetes/i)).toBeInTheDocument();
+    expect(screen.getByText(/Hypertension/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Ask about patient trajectory/i)).toBeInTheDocument();
+    expect(screen.getByText(/View Full Patient Records Tab/i)).toBeInTheDocument();
+  });
+
+  it('27. DoctorClinicalEntryTab renders structured diagnosis and medication table inputs', () => {
+    const handleSave = vi.fn();
+    render(
+      <DoctorClinicalEntryTab
+        data={mockDashboardData}
+        onEntrySaved={handleSave}
+      />
+    );
+
+    expect(screen.getByText(/Doctor Clinical Entry & Markdown Generator/i)).toBeInTheDocument();
+    expect(screen.getByText(/1\. Structured Diagnoses Table/i)).toBeInTheDocument();
+    expect(screen.getByText(/2\. Structured Medications & Prescriptions Table/i)).toBeInTheDocument();
+    expect(screen.getByText(/Save & Convert to Markdown Note \(\.md\)/i)).toBeInTheDocument();
+  });
+
+  it('28. DoctorClinicalEntryTab submits clinical records and displays generated Markdown note with immutable evidence codes', async () => {
+    const handleSave = vi.fn();
+    const handleSelectEvidence = vi.fn();
+    const mockBatchResponse = {
+      success: true,
+      message: 'Recorded 1 diagnoses and 1 prescriptions. Markdown saved.',
+      markdown_content: '# Clinical Encounter Note\n\n## Diagnoses\n- Orthostatic Hypotension (I95.1)\n\n## Prescriptions\n- Meclizine 25 mg',
+      markdown_filename: 'Doctor_Encounter_P001_20260910.md',
+      file_path: 'knowledge-base/Doctor Records/Doctor_Encounter_P001_20260910.md',
+      created_evidence_ids: ['EV-DR-999', 'EV-MED-999'],
+      created_records: [],
+      timestamp: '2026-09-10T12:00:00Z',
+    };
+
+    vi.spyOn(apiService, 'recordDoctorEntries').mockResolvedValueOnce(mockBatchResponse);
+
+    render(
+      <DoctorClinicalEntryTab
+        data={mockDashboardData}
+        onEntrySaved={handleSave}
+        onSelectEvidence={handleSelectEvidence}
+      />
+    );
+
+    fireEvent.click(screen.getByText(/Save & Convert to Markdown Note \(\.md\)/i));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Generated Clinical Markdown Note \(\.md\)/i)).toBeInTheDocument();
+      expect(screen.getByText('EV-DR-999')).toBeInTheDocument();
+      expect(screen.getByText('EV-MED-999')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('EV-DR-999'));
+    expect(handleSelectEvidence).toHaveBeenCalledWith('EV-DR-999');
   });
 });

@@ -239,6 +239,33 @@ class DashboardService:
             )
         ]
 
+        # Dynamically append doctor-recorded diagnoses from DoctorRecord
+        dynamic_dr_diagnoses = db.query(DoctorRecord).filter(
+            DoctorRecord.patient_id == pid,
+            DoctorRecord.record_type == "diagnosis"
+        ).order_by(DoctorRecord.observed_at.desc()).all()
+
+        for ddr in dynamic_dr_diagnoses:
+            # Parse code and description from content if available
+            parsed_code = "CLINICAL"
+            parsed_desc = ddr.content
+            if "[" in ddr.content and "]" in ddr.content:
+                parts = ddr.content.split("[", 1)
+                parsed_desc = parts[0].replace("Diagnosis:", "").strip()
+                code_part = parts[1].split("]")[0].strip()
+                parsed_code = code_part if code_part != "N/A" else "CLINICAL"
+            elif ":" in ddr.content:
+                parsed_desc = ddr.content.split(":", 1)[1].strip()
+
+            diagnoses.append(
+                DiagnosisItem(
+                    code=parsed_code,
+                    description=parsed_desc,
+                    confirmed_date=ddr.observed_at.strftime("%Y-%m-%d") if ddr.observed_at else "Recent",
+                    doctor=f"{ddr.doctor_id} (Attending Physician)"
+                )
+            )
+
         # 6. Medications
         db_meds = db.query(Medication).filter(Medication.patient_id == pid).all()
         medications = [

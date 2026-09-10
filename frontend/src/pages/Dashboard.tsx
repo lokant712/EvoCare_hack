@@ -1,21 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { usePatient } from '../hooks/usePatient';
 import { Header } from '../components/layout/Header';
-import { SafetyAlert } from '../components/common/SafetyAlert';
-import { PatientOverviewCard } from '../components/patient/PatientOverviewCard';
-import { RecentChangesPanel } from '../components/patient/RecentChangesPanel';
-import { ClinicalContextPanel } from '../components/clinical/ClinicalContextPanel';
-import { CaregiverObservationsPanel } from '../components/caregiver/CaregiverObservationsPanel';
-import { LongitudinalMemoryPanel } from '../components/memory/LongitudinalMemoryPanel';
-import { ClinicalReasoningPanel } from '../components/reasoning/ClinicalReasoningPanel';
-import { PatientTimeline } from '../components/timeline/PatientTimeline';
-import { ConflictCard } from '../components/common/ConflictCard';
+import { PatientRecordsTab } from '../components/patient/PatientRecordsTab';
+import { ClinicalAssistantTab } from '../components/assistant/ClinicalAssistantTab';
+import { DoctorClinicalEntryTab } from '../components/clinical/DoctorClinicalEntryTab';
 import { WhyModal } from '../components/evidence/WhyModal';
 import { EvidenceDrawer } from '../components/evidence/EvidenceDrawer';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { ErrorMessage } from '../components/common/ErrorMessage';
 import { RecentChangeItem, EvidenceDetailItem } from '../types';
-import { ShieldCheck, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, MessageSquare, ClipboardList, PenSquare } from 'lucide-react';
 import { authService, AuthUser, AuthorizedPatient } from '../services/auth';
 
 interface DashboardProps {
@@ -23,7 +17,10 @@ interface DashboardProps {
   onLogout: () => void;
 }
 
+type TabType = 'assistant' | 'records' | 'entry';
+
 export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
+  const [activeTab, setActiveTab] = useState<TabType>('assistant');
   const [authorizedPatients, setAuthorizedPatients] = useState<AuthorizedPatient[]>([]);
   const [selectedPatientCode, setSelectedPatientCode] = useState<string>('P001');
 
@@ -31,11 +28,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   const [selectedWhyChange, setSelectedWhyChange] = useState<RecentChangeItem | null>(null);
   const [selectedEvidence, setSelectedEvidence] = useState<EvidenceDetailItem | null>(null);
 
-  // Fetch authorized patient list from backend (not hardcoded)
+  // Fetch authorized patient list from backend
   useEffect(() => {
     authService.getAuthorizedPatients().then((patients) => {
       setAuthorizedPatients(patients);
-      // Auto-select first authorized patient if available
       if (patients.length > 0) {
         setSelectedPatientCode(patients[0].patient_code);
       }
@@ -90,97 +86,182 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       />
 
       {/* Main Content Area */}
-      <main style={{ maxWidth: '1440px', margin: '0 auto', padding: '24px' }}>
-        {/* Safety & Read-Only Banner */}
-        <SafetyAlert />
+      <main style={{ maxWidth: '1440px', margin: '0 auto', padding: '20px 24px 40px 24px' }}>
+        {/* ============================================================ */}
+        {/* TAB NAVIGATION BAR                                           */}
+        {/* ============================================================ */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottom: '1px solid #e2e8f0',
+            marginBottom: '24px',
+            backgroundColor: '#ffffff',
+            padding: '8px 16px',
+            borderRadius: '12px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)',
+            flexWrap: 'wrap',
+            gap: '12px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Tab 1: AI Assistant (Entrance Home) */}
+            <button
+              onClick={() => setActiveTab('assistant')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '10px 18px',
+                borderRadius: '8px',
+                border: 'none',
+                backgroundColor: activeTab === 'assistant' ? '#0284c7' : 'transparent',
+                color: activeTab === 'assistant' ? '#ffffff' : '#475569',
+                fontWeight: 700,
+                fontSize: '13px',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease-in-out',
+                boxShadow: activeTab === 'assistant' ? '0 2px 4px rgba(2, 132, 199, 0.25)' : 'none',
+              }}
+            >
+              <MessageSquare size={16} />
+              <span>Clinical AI Assistant</span>
+              <span
+                style={{
+                  fontSize: '10px',
+                  padding: '2px 6px',
+                  borderRadius: '10px',
+                  backgroundColor: activeTab === 'assistant' ? 'rgba(255, 255, 255, 0.25)' : '#e0f2fe',
+                  color: activeTab === 'assistant' ? '#ffffff' : '#0369a1',
+                }}
+              >
+                Home
+              </span>
+            </button>
 
-        {/* 1. Patient Overview Card (6 key health domains) */}
-        <PatientOverviewCard overview={data.overview} />
+            {/* Tab 2: About Patient (Longitudinal Records) */}
+            <button
+              onClick={() => setActiveTab('records')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '10px 18px',
+                borderRadius: '8px',
+                border: 'none',
+                backgroundColor: activeTab === 'records' ? '#0284c7' : 'transparent',
+                color: activeTab === 'records' ? '#ffffff' : '#475569',
+                fontWeight: 700,
+                fontSize: '13px',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease-in-out',
+                boxShadow: activeTab === 'records' ? '0 2px 4px rgba(2, 132, 199, 0.25)' : 'none',
+              }}
+            >
+              <ClipboardList size={16} />
+              <span>About Patient &amp; Longitudinal Records</span>
+              <span
+                style={{
+                  fontSize: '10px',
+                  padding: '2px 6px',
+                  borderRadius: '10px',
+                  backgroundColor: activeTab === 'records' ? 'rgba(255, 255, 255, 0.25)' : '#f1f5f9',
+                  color: activeTab === 'records' ? '#ffffff' : '#475569',
+                }}
+              >
+                6 Domains
+              </span>
+            </button>
 
-        {/* 2. Most Important Section: Recent Changes Panel */}
-        <RecentChangesPanel
-          recentChanges={data.recent_changes}
-          onOpenWhy={(change) => setSelectedWhyChange(change)}
-          onSelectEvidence={handleOpenEvidence}
-        />
+            {/* Tab 3: Clinical Entry (Diagnosis & Prescriptions) */}
+            <button
+              onClick={() => setActiveTab('entry')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '10px 18px',
+                borderRadius: '8px',
+                border: 'none',
+                backgroundColor: activeTab === 'entry' ? '#0284c7' : 'transparent',
+                color: activeTab === 'entry' ? '#ffffff' : '#475569',
+                fontWeight: 700,
+                fontSize: '13px',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease-in-out',
+                boxShadow: activeTab === 'entry' ? '0 2px 4px rgba(2, 132, 199, 0.25)' : 'none',
+              }}
+            >
+              <PenSquare size={16} />
+              <span>Enter Diagnosis &amp; Prescriptions</span>
+              <span
+                style={{
+                  fontSize: '10px',
+                  padding: '2px 6px',
+                  borderRadius: '10px',
+                  backgroundColor: activeTab === 'entry' ? 'rgba(255, 255, 255, 0.25)' : '#f0fdf4',
+                  color: activeTab === 'entry' ? '#ffffff' : '#166534',
+                }}
+              >
+                Markdown Export
+              </span>
+            </button>
+          </div>
 
-        {/* 2-Column Clinical & Caregiver Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', gap: '24px', marginBottom: '24px' }}>
-          {/* Clinical Context */}
-          <ClinicalContextPanel
-            diagnoses={data.clinical_diagnoses}
-            medications={data.medications}
-            labs={data.labs}
-            onSelectEvidence={handleOpenEvidence}
-          />
-
-          {/* Caregiver Observations */}
-          <CaregiverObservationsPanel
-            observations={data.caregiver_observations}
-            onSelectEvidence={handleOpenEvidence}
-          />
+          <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontWeight: 600 }}>Active Patient:</span>
+            <span style={{ fontWeight: 700, color: '#0f172a' }}>{data.patient.name}</span>
+            <span style={{ fontFamily: 'monospace', backgroundColor: '#e2e8f0', padding: '1px 6px', borderRadius: '4px', fontSize: '11px' }}>
+              {data.patient.patient_code}
+            </span>
+          </div>
         </div>
 
-        {/* Phase 7: Doctor-Only Clinical Reasoning Assistant */}
-        <ClinicalReasoningPanel
-          patientId={data.patient.patient_code}
-          onSelectEvidence={handleOpenEvidence}
-        />
+        {/* ============================================================ */}
+        {/* TAB CONTENTS                                                 */}
+        {/* ============================================================ */}
+        {activeTab === 'assistant' && (
+          <ClinicalAssistantTab
+            data={data}
+            user={user}
+            onSelectEvidence={handleOpenEvidence}
+            onSwitchToPatientRecords={() => setActiveTab('records')}
+          />
+        )}
 
-        {/* 3. Longitudinal Memory Panel */}
-        <LongitudinalMemoryPanel
-          memory={data.longitudinal_memory}
-          patientId={data.patient.patient_code}
-          onSelectEvidence={handleOpenEvidence}
-        />
+        {activeTab === 'records' && (
+          <PatientRecordsTab
+            data={data}
+            onOpenWhy={(change) => setSelectedWhyChange(change)}
+            onSelectEvidence={handleOpenEvidence}
+          />
+        )}
 
-        {/* 4. Longitudinal Patient Timeline */}
-        <PatientTimeline
-          timeline={data.timeline}
-          onSelectEvidence={handleOpenEvidence}
-        />
-
-        {/* 5. Discrepancy & Conflict Analysis Panel */}
-        {data.conflicts && data.conflicts.length > 0 && (
-          <div
-            style={{
-              backgroundColor: '#ffffff',
-              borderRadius: '12px',
-              border: '1px solid #fed7aa',
-              padding: '20px',
-              marginBottom: '24px',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-              <AlertTriangle size={18} style={{ color: '#ea580c' }} />
-              <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#9a3412', margin: 0 }}>
-                Contextual Discrepancies &amp; Conflict Analysis
-              </h2>
-            </div>
-            <p style={{ fontSize: '12px', color: '#64748b', margin: '0 0 14px 0' }}>
-              Recorded differences between clinical exam and home observations (Preserved contextually without premature AI resolution)
-            </p>
-            {data.conflicts.map((c) => (
-              <ConflictCard key={c.id} conflict={c} onSelectEvidence={handleOpenEvidence} />
-            ))}
-          </div>
+        {activeTab === 'entry' && (
+          <DoctorClinicalEntryTab
+            data={data}
+            onEntrySaved={refetch}
+            onSelectEvidence={handleOpenEvidence}
+          />
         )}
 
         {/* Footer Note */}
         <footer
           style={{
             textAlign: 'center',
-            padding: '24px 0',
+            padding: '28px 0 16px 0',
             borderTop: '1px solid #e2e8f0',
             color: '#94a3b8',
             fontSize: '12px',
+            marginTop: '32px',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '4px' }}>
             <ShieldCheck size={14} style={{ color: '#0284c7' }} />
-            <span>EvoCare Clinical Intelligence Station · Read-Only Invariant Enforced · Phase 9</span>
+            <span>EvoCare Clinical Intelligence Station • Doctor Portal • Multi-Tab Clinical Workflow</span>
           </div>
-          <div>Patient {data.patient.patient_code} ({data.patient.name}) · Synthetic Demo Dataset</div>
+          <div>Patient {data.patient.patient_code} ({data.patient.name}) • Synthetic Demo Dataset</div>
         </footer>
       </main>
 
