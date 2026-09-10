@@ -275,9 +275,9 @@ describe('Doctor Dashboard Frontend Unit Test Suite (21 Tests)', () => {
     expect(screen.getByText('P001')).toBeInTheDocument();
   });
 
-  it('2. synthetic patient label renders clearly', () => {
+  it('2. header renders clinical intelligence title', () => {
     render(<Header {...mockHeaderProps} />);
-    expect(screen.getByText('SYNTHETIC DEMO')).toBeInTheDocument();
+    expect(screen.getByText('Clinical Intelligence')).toBeInTheDocument();
   });
 
   it('3. clinical records render diagnoses', () => {

@@ -427,7 +427,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
               <ShieldCheck size={14} style={{ color: '#0284c7' }} />
               <span>EvoCare Clinical Intelligence Station • Doctor Portal • Multi-Tab Clinical Workflow</span>
             </div>
-            <div>Patient {data.patient.patient_code} ({data.patient.name}) • Synthetic Demo Dataset</div>
+            <div>Patient {data.patient.patient_code} ({data.patient.name}) • Longitudinal Health Profile</div>
           </footer>
         </main>
       )}

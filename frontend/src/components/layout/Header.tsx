@@ -343,37 +343,6 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>Switch Patient (2FA)</span>
               </button>
             )}
-            <div
-              style={{
-                padding: '3px 8px',
-                backgroundColor: '#fef3c7',
-                color: '#92400e',
-                border: '1px solid #fde68a',
-                borderRadius: '5px',
-                fontSize: '10px',
-                fontWeight: 700,
-                letterSpacing: '0.04em',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              SYNTHETIC DEMO
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '3px',
-                padding: '3px 7px',
-                backgroundColor: '#f1f5f9',
-                color: '#475569',
-                borderRadius: '5px',
-                fontSize: '10px',
-                fontWeight: 600,
-              }}
-            >
-              <Lock size={10} />
-              READ-ONLY
-            </div>
           </div>
         </div>
 
