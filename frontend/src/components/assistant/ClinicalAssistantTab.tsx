@@ -26,6 +26,7 @@ interface ChatMessage {
   sender: 'user' | 'assistant';
   timestamp: string;
   text?: string;
+  isInitialSummary?: boolean;
   reasoningData?: ClinicalReasoningResponse;
   error?: string;
 }
@@ -48,7 +49,8 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
       id: 'welcome-msg',
       sender: 'assistant',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      text: `Hello ${user.full_name.split('(')[0].trim()}. I am your EvoCare Clinical Reasoning Assistant. I have loaded ${data.patient.name}'s longitudinal health memory across 9 domains, 47 caregiver observations, and clinic records. What clinical considerations would you like to explore?`
+      isInitialSummary: true,
+      text: `Hello ${user.full_name.split('(')[0].trim()}. I am your EvoCare Clinical Reasoning Assistant. I have loaded ${data.patient.name}'s longitudinal health memory across 9 domains, 47 caregiver observations, and clinic records.`
     }
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -119,157 +121,20 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      {/* ============================================================ */}
-      {/* 1. PATIENT ESSENTIAL INFORMATION & MEDICAL SUMMARY BANNER   */}
-      {/* ============================================================ */}
-      <div
-        style={{
-          backgroundColor: '#ffffff',
-          borderRadius: '14px',
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
-          overflow: 'hidden',
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: '#0284c7',
-            color: '#ffffff',
-            padding: '12px 20px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '12px',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <HeartPulse size={20} />
-            <span style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.01em' }}>
-              Essential Patient Summary &amp; Longitudinal Baseline
-            </span>
-          </div>
-          <button
-            onClick={onSwitchToPatientRecords}
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.18)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              color: '#ffffff',
-              padding: '5px 12px',
-              borderRadius: '6px',
-              fontSize: '12px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-            }}
-          >
-            <span>View Full Patient Records Tab</span>
-            <ChevronRight size={14} />
-          </button>
-        </div>
-
-        <div
-          style={{
-            padding: '16px 20px',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '16px',
-            backgroundColor: '#f8fafc',
-          }}
-        >
-          {/* Card 1: Key Conditions */}
-          <div
-            style={{
-              backgroundColor: '#ffffff',
-              padding: '12px 14px',
-              borderRadius: '8px',
-              border: '1px solid #e2e8f0',
-            }}
-          >
-            <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px' }}>
-              Confirmed Chronic Conditions
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-              <span style={{ fontSize: '12px', fontWeight: 600, color: '#0f172a', backgroundColor: '#f1f5f9', padding: '2px 8px', borderRadius: '4px' }}>
-                Type 2 Diabetes (E11.9)
-              </span>
-              <span style={{ fontSize: '12px', fontWeight: 600, color: '#0f172a', backgroundColor: '#f1f5f9', padding: '2px 8px', borderRadius: '4px' }}>
-                Hypertension (I10)
-              </span>
-              <span style={{ fontSize: '12px', fontWeight: 600, color: '#0f172a', backgroundColor: '#f1f5f9', padding: '2px 8px', borderRadius: '4px' }}>
-                Bilateral Knee Osteoarthritis
-              </span>
-            </div>
-          </div>
-
-          {/* Card 2: Active Home Trajectory Alerts */}
-          <div
-            style={{
-              backgroundColor: '#ffffff',
-              padding: '12px 14px',
-              borderRadius: '8px',
-              border: '1px solid #fed7aa',
-            }}
-          >
-            <div style={{ fontSize: '11px', fontWeight: 700, color: '#ea580c', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <AlertTriangle size={12} />
-              Recent Trajectory Warnings
-            </div>
-            <div style={{ fontSize: '12px', color: '#7c2d12', lineHeight: 1.4 }}>
-              • <strong>Mobility:</strong> Intermittent outdoor arm support needed<br />
-              • <strong>Dizziness:</strong> Positional morning lightheadedness<br />
-              • <strong>Falls:</strong> Near-fall on Sep 06 (Zero ground impact)
-            </div>
-          </div>
-
-          {/* Card 3: Active Medications */}
-          <div
-            style={{
-              backgroundColor: '#ffffff',
-              padding: '12px 14px',
-              borderRadius: '8px',
-              border: '1px solid #e2e8f0',
-            }}
-          >
-            <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Pill size={12} />
-              Current Active Regimen ({data.medications.length})
-            </div>
-            <div style={{ fontSize: '12px', color: '#334155', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-              {data.medications.slice(0, 3).map((m, i) => (
-                <span key={i} style={{ backgroundColor: '#f0fdf4', color: '#166534', padding: '2px 6px', borderRadius: '4px', border: '1px solid #bbf7d0', fontSize: '11px', fontWeight: 600 }}>
-                  {m.name} {m.dose} ({m.frequency})
-                </span>
-              ))}
-              {data.medications.length > 3 && (
-                <span style={{ fontSize: '11px', color: '#64748b', alignSelf: 'center' }}>
-                  +{data.medications.length - 3} more
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ============================================================ */}
-      {/* 2. CHATGPT-STYLE CONVERSATIONAL CLINICAL REASONING AREA      */}
-      {/* ============================================================ */}
-      <div
-        style={{
-          backgroundColor: '#ffffff',
-          borderRadius: '16px',
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)',
-          display: 'flex',
-          flexDirection: 'column',
-          height: '680px',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Chat Header */}
+    <div
+      style={{
+        backgroundColor: '#ffffff',
+        borderRadius: '16px',
+        border: '1px solid #e2e8f0',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)',
+        display: 'flex',
+        flexDirection: 'column',
+        height: 'calc(100vh - 190px)',
+        minHeight: '680px',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Chat Header */}
         <div
           style={{
             padding: '14px 20px',
@@ -378,8 +243,128 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                     lineHeight: 1.5,
                   }}
                 >
-                  {/* Simple text message */}
-                  {msg.text && <div>{msg.text}</div>}
+                  {/* Message Body: Initial Patient Summary or Standard Message */}
+                  {msg.isInitialSummary ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                      <div style={{ fontSize: '14px', lineHeight: 1.5, color: '#0f172a' }}>
+                        {msg.text}
+                      </div>
+
+                      {/* Embedded Essential Patient Summary Card directly in chat */}
+                      <div
+                        style={{
+                          backgroundColor: '#f8fafc',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: '12px',
+                          padding: '16px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '12px',
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            flexWrap: 'wrap',
+                            gap: '8px',
+                            borderBottom: '1px solid #e2e8f0',
+                            paddingBottom: '10px',
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <HeartPulse size={18} style={{ color: '#0284c7' }} />
+                            <span style={{ fontSize: '13px', fontWeight: 700, color: '#0369a1' }}>
+                              Essential Patient Summary &amp; Longitudinal Baseline
+                            </span>
+                          </div>
+                          <button
+                            onClick={onSwitchToPatientRecords}
+                            style={{
+                              backgroundColor: '#ffffff',
+                              border: '1px solid #cbd5e1',
+                              color: '#0284c7',
+                              padding: '4px 10px',
+                              borderRadius: '6px',
+                              fontSize: '11px',
+                              fontWeight: 700,
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                            }}
+                          >
+                            <span>View Full Patient Records Tab</span>
+                            <ChevronRight size={13} />
+                          </button>
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+                          {/* Confirmed Chronic Conditions */}
+                          <div style={{ backgroundColor: '#ffffff', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                            <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px' }}>
+                              Confirmed Chronic Conditions
+                            </div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                              <span style={{ fontSize: '11px', fontWeight: 600, color: '#0f172a', backgroundColor: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>
+                                Type 2 Diabetes (E11.9)
+                              </span>
+                              <span style={{ fontSize: '11px', fontWeight: 600, color: '#0f172a', backgroundColor: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>
+                                Hypertension (I10)
+                              </span>
+                              <span style={{ fontSize: '11px', fontWeight: 600, color: '#0f172a', backgroundColor: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>
+                                Bilateral Knee Osteoarthritis
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Recent Trajectory Alerts */}
+                          <div style={{ backgroundColor: '#fff7ed', padding: '10px 12px', borderRadius: '8px', border: '1px solid #fed7aa' }}>
+                            <div style={{ fontSize: '11px', fontWeight: 700, color: '#c2410c', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              <AlertTriangle size={12} />
+                              Recent Trajectory Warnings
+                            </div>
+                            <div style={{ fontSize: '11px', color: '#7c2d12', lineHeight: 1.4 }}>
+                              • <strong>Mobility:</strong> Intermittent outdoor arm support needed<br />
+                              • <strong>Dizziness:</strong> Positional morning lightheadedness<br />
+                              • <strong>Falls:</strong> Near-fall on Sep 06 (Zero ground impact)
+                            </div>
+                          </div>
+
+                          {/* Active Regimen */}
+                          <div style={{ backgroundColor: '#ffffff', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                            <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              <Pill size={12} />
+                              Active Regimen ({data.medications.length})
+                            </div>
+                            <div style={{ fontSize: '11px', color: '#334155', display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                              {data.medications.slice(0, 3).map((m, i) => (
+                                <span key={i} style={{ backgroundColor: '#f0fdf4', color: '#166534', padding: '2px 6px', borderRadius: '4px', border: '1px solid #bbf7d0', fontSize: '10px', fontWeight: 600 }}>
+                                  {m.name} {m.dose} ({m.frequency})
+                                </span>
+                              ))}
+                              {data.medications.length > 3 && (
+                                <span style={{ fontSize: '10px', color: '#64748b', alignSelf: 'center' }}>
+                                  +{data.medications.length - 3} more
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{ fontSize: '12px', color: '#0369a1', fontWeight: 600, paddingTop: '4px' }}>
+                          💬 What clinical considerations, trajectory questions, or drug safety interactions would you like to explore?
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Simple text message */}
+                      {msg.text && <div>{msg.text}</div>}
+                    </>
+                  )}
 
                   {/* Error state */}
                   {msg.error && (
@@ -682,8 +667,7 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
             EvoCare AI interprets and constrains evidence • Human clinician remains the definitive decision-maker
           </div>
         </div>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-    </div>
-  );
-};
+    );
+  };
