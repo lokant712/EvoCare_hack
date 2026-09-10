@@ -11,6 +11,7 @@ interface HeaderProps {
   onSelectPatient: (code: string) => void;
   onLogout: () => void;
   onOpen2FA?: () => void;
+  onLockSession?: () => void;
   sessionRemainingSeconds?: number | null;
 }
 
@@ -29,6 +30,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectPatient,
   onLogout,
   onOpen2FA,
+  onLockSession,
   sessionRemainingSeconds,
 }) => {
   const roleColor = ROLE_COLORS[user.role] || '#64748b';
@@ -38,17 +40,115 @@ export const Header: React.FC<HeaderProps> = ({
       style={{
         backgroundColor: '#ffffff',
         borderBottom: '1px solid #e2e8f0',
-        padding: '12px 24px',
+        padding: 0,
         position: 'sticky',
         top: 0,
         zIndex: 40,
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
       }}
     >
+      {/* Prominent Doctor Active Session Notice Bar at the Very Top */}
+      {user.role === 'DOCTOR' && sessionRemainingSeconds !== undefined && sessionRemainingSeconds !== null && (
+        <div
+          id="evocare-top-session-bar"
+          style={{
+            backgroundColor: sessionRemainingSeconds < 120 ? '#7f1d1d' : '#0c4a6e',
+            color: '#ffffff',
+            padding: '7px 24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            fontSize: '12px',
+            fontWeight: 500,
+            borderBottom: '1px solid',
+            borderColor: sessionRemainingSeconds < 120 ? '#991b1b' : '#0369a1',
+            transition: 'background-color 0.3s ease',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                backgroundColor: sessionRemainingSeconds < 120 ? '#ef4444' : '#0284c7',
+                padding: '2px 9px',
+                borderRadius: '4px',
+                fontWeight: 700,
+                fontFamily: "'IBM Plex Mono', monospace",
+                fontSize: '13px',
+                letterSpacing: '0.04em',
+                boxShadow: sessionRemainingSeconds < 120 ? '0 0 8px rgba(239, 68, 68, 0.6)' : 'none',
+              }}
+            >
+              <Clock size={13} />
+              <span>
+                {Math.floor(sessionRemainingSeconds / 60).toString().padStart(2, '0')}:
+                {(sessionRemainingSeconds % 60).toString().padStart(2, '0')}
+              </span>
+            </div>
+            <span>
+              <strong>Doctor Active Session ({patient.name} &bull; {patient.patient_code})</strong>
+              {sessionRemainingSeconds < 120
+                ? ' — ⚠️ Warning: Session expiring soon! Patient record will auto-lock to prevent unauthorized access.'
+                : ' — Auto-locks after 10 mins of access to prevent chart misuse.'}
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {onOpen2FA && (
+              <button
+                type="button"
+                onClick={onOpen2FA}
+                style={{
+                  padding: '3px 10px',
+                  borderRadius: '4px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.18)',
+                  border: '1px solid rgba(255, 255, 255, 0.35)',
+                  color: '#ffffff',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                <KeyRound size={11} />
+                Switch Patient (2FA)
+              </button>
+            )}
+            {onLockSession && (
+              <button
+                type="button"
+                onClick={onLockSession}
+                style={{
+                  padding: '3px 10px',
+                  borderRadius: '4px',
+                  backgroundColor: '#ef4444',
+                  border: 'none',
+                  color: '#ffffff',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                <Lock size={11} />
+                Lock Record
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       <div
         style={{
           maxWidth: '1440px',
           margin: '0 auto',
+          padding: '12px 24px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',

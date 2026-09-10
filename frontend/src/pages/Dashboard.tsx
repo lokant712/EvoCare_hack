@@ -233,6 +233,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
         }}
         onLogout={onLogout}
         onOpen2FA={() => setShow2FAModal(true)}
+        onLockSession={() => {
+          setVerifiedPatientCodes(new Set());
+          setSessionRemainingSeconds(null);
+        }}
       />
 
       {/* 2-Step Verification Modal if doctor clicks Unlock Patient */}
