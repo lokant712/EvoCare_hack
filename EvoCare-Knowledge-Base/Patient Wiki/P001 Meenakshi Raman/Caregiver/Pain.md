@@ -30,6 +30,21 @@ Exertional joint discomfort reports related to bilateral knee osteoarthritis.
 | **2026-09-10** | CG001 | *"She had knee pain."* | Location: Bilateral knees | [[Raw Evidence/Caregiver/EV-CG-261|EV-CG-261]] |
 | **2026-09-10** | CG001 | *"Her knees hurt."* | Location: Bilateral knees; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-283|EV-CG-283]] |
 | **2026-09-10** | CG001 | *"She had knee pain."* | Location: Bilateral knees | [[Raw Evidence/Caregiver/EV-CG-286|EV-CG-286]] |
+| **2026-09-10** | CG001 | *"Her knees hurt."* | Location: Bilateral knees; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-335|EV-CG-335]] |
+| **2026-09-10** | CG001 | *"She had knee pain."* | Location: Bilateral knees | [[Raw Evidence/Caregiver/EV-CG-338|EV-CG-338]] |
+| **2026-09-10** | CG001 | *"She had knee pain after walking in the garden."* | Location: UNKNOWN; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-346|EV-CG-346]] |
+| **2026-09-10** | CG001 | *"Her knees hurt."* | Location: Bilateral knees; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-360|EV-CG-360]] |
+| **2026-09-10** | CG001 | *"She had knee pain."* | Location: Bilateral knees | [[Raw Evidence/Caregiver/EV-CG-363|EV-CG-363]] |
+| **2026-09-10** | CG001 | *"She had knee pain after walking in the garden."* | Location: UNKNOWN; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-371|EV-CG-371]] |
+| **2026-09-10** | CG001 | *"Her knees hurt."* | Location: Bilateral knees; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-385|EV-CG-385]] |
+| **2026-09-10** | CG001 | *"She had knee pain."* | Location: Bilateral knees | [[Raw Evidence/Caregiver/EV-CG-388|EV-CG-388]] |
+| **2026-09-10** | CG001 | *"She had knee pain after walking in the garden."* | Location: UNKNOWN; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-396|EV-CG-396]] |
+| **2026-09-10** | CG001 | *"Her knees hurt."* | Location: Bilateral knees; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-410|EV-CG-410]] |
+| **2026-09-10** | CG001 | *"She had knee pain."* | Location: Bilateral knees | [[Raw Evidence/Caregiver/EV-CG-413|EV-CG-413]] |
+| **2026-09-10** | CG001 | *"She had knee pain after walking in the garden."* | Location: UNKNOWN; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-421|EV-CG-421]] |
+| **2026-09-10** | CG001 | *"Her knees hurt."* | Location: Bilateral knees; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-435|EV-CG-435]] |
+| **2026-09-10** | CG001 | *"She had knee pain."* | Location: Bilateral knees | [[Raw Evidence/Caregiver/EV-CG-438|EV-CG-438]] |
+| **2026-09-10** | CG001 | *"She had knee pain after walking in the garden."* | Location: UNKNOWN; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-446|EV-CG-446]] |
 
 ---
 

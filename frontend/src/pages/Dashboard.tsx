@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePatient } from '../hooks/usePatient';
 import { Header } from '../components/layout/Header';
+import { ChatGptSidebar } from '../components/layout/ChatGptSidebar';
 import { PatientRecordsTab } from '../components/patient/PatientRecordsTab';
 import { ClinicalAssistantTab } from '../components/assistant/ClinicalAssistantTab';
 import { DoctorClinicalEntryTab } from '../components/clinical/DoctorClinicalEntryTab';
@@ -14,8 +15,16 @@ import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { ErrorMessage } from '../components/common/ErrorMessage';
 import { ThemeToggle } from '../components/common/ThemeToggle';
 import { RecentChangeItem, EvidenceDetailItem } from '../types';
-import { ShieldCheck, MessageSquare, ClipboardList, PenSquare } from 'lucide-react';
+import {
+  ShieldCheck,
+  MessageSquare,
+  ClipboardList,
+  PenSquare,
+  Menu,
+  UserCheck
+} from 'lucide-react';
 import { authService, AuthUser, AuthorizedPatient } from '../services/auth';
+import { chatStorageService, ChatSession, ChatMessage } from '../services/chatStorage';
 
 interface DashboardProps {
   user: AuthUser;
@@ -26,6 +35,7 @@ type TabType = 'assistant' | 'records' | 'entry';
 
 export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   const [activeTab, setActiveTab] = useState<TabType>('assistant');
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [authorizedPatients, setAuthorizedPatients] = useState<AuthorizedPatient[]>([]);
   const [selectedPatientCode, setSelectedPatientCode] = useState<string>('P001');
   const [verifiedPatientCodes, setVerifiedPatientCodes] = useState<Set<string>>(() => {
@@ -38,9 +48,23 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   const [sessionRemainingSeconds, setSessionRemainingSeconds] = useState<number | null>(null);
   const [show2FAModal, setShow2FAModal] = useState<boolean>(false);
 
+  // Chat sessions state
+  const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+
   const { data, loading, error, refetch } = usePatient(selectedPatientCode);
   const [selectedWhyChange, setSelectedWhyChange] = useState<RecentChangeItem | null>(null);
   const [selectedEvidence, setSelectedEvidence] = useState<EvidenceDetailItem | null>(null);
+
+  // Load chat sessions on patient change & always start with a fresh new chat on login
+  useEffect(() => {
+    // Create a fresh consultation session for this doctor login session
+    const newSession = chatStorageService.createNewSession(selectedPatientCode, 'New Consultation Inquiry');
+    const allSessions = chatStorageService.getSessions(selectedPatientCode);
+    setChatSessions(allSessions);
+    setActiveSessionId(newSession.id);
+    setActiveTab('assistant');
+  }, [selectedPatientCode]);
 
   // 10-Minute session timeout effect for doctors
   useEffect(() => {
@@ -76,10 +100,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   }, []);
 
   const handlePatientUnlocked = (code: string) => {
-    // Strictly one patient active per doctor at a time
     setVerifiedPatientCodes(new Set([code]));
     setSelectedPatientCode(code);
-    // Start 10-minute session countdown (600 seconds)
     if (user.role === 'DOCTOR') {
       setSessionRemainingSeconds(600);
     }
@@ -107,6 +129,55 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     }
   };
 
+  // Chat session operations
+  const handleNewChat = () => {
+    const newSession = chatStorageService.createNewSession(selectedPatientCode, 'New Consultation Inquiry');
+    const updated = chatStorageService.getSessions(selectedPatientCode);
+    setChatSessions(updated);
+    setActiveSessionId(newSession.id);
+    setActiveTab('assistant');
+  };
+
+  const handleDeleteSession = (sessionId: string) => {
+    chatStorageService.deleteSession(sessionId);
+    const updated = chatStorageService.getSessions(selectedPatientCode);
+    setChatSessions(updated);
+    if (activeSessionId === sessionId) {
+      if (updated.length > 0) {
+        setActiveSessionId(updated[0].id);
+      } else {
+        handleNewChat();
+      }
+    }
+  };
+
+  const handleRenameSession = (sessionId: string, newTitle: string) => {
+    chatStorageService.renameSession(sessionId, newTitle);
+    const updated = chatStorageService.getSessions(selectedPatientCode);
+    setChatSessions(updated);
+  };
+
+  const handleUpdateSessionMessages = (sessionId: string, messages: ChatMessage[]) => {
+    const session = chatSessions.find((s) => s.id === sessionId);
+    if (session) {
+      const updatedSession: ChatSession = {
+        ...session,
+        messages,
+        updatedAt: 'Just now',
+      };
+      // If title is default and user sent first message, auto-name the session
+      if (session.title === 'New Consultation Inquiry' && messages.length > 0) {
+        const firstUser = messages.find((m) => m.sender === 'user');
+        if (firstUser && firstUser.text) {
+          updatedSession.title = firstUser.text.slice(0, 36) + (firstUser.text.length > 36 ? '…' : '');
+        }
+      }
+      chatStorageService.saveSession(updatedSession);
+      const allUpdated = chatStorageService.getSessions(selectedPatientCode);
+      setChatSessions(allUpdated);
+    }
+  };
+
   if (loading) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)' }}>
@@ -115,11 +186,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     );
   }
 
-  // Admin Login Mode: Full User Management Console
+  // Admin Login Mode
   if (user.role === 'ADMIN') {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)', fontFamily: 'var(--font-sans)' }}>
-        {/* Admin Header — intentionally always-dark chrome, independent of page theme */}
         <div style={{ backgroundColor: '#1c1a14', borderBottom: '1px solid #3d3a2f', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#d9a24a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -143,7 +213,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     );
   }
 
-  // Doctor Role: If current patient record has not been 2FA verified in this session, show the 2-step gate
+  // Doctor Role: 2FA Gate
   if (user.role === 'DOCTOR' && !verifiedPatientCodes.has(selectedPatientCode)) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
@@ -183,7 +253,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     );
   }
 
-  // Patient Login Mode: Exclusively Chatbot Interface for Informational Use Only
+  // Patient Login Mode
   if (user.role === 'PATIENT') {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
@@ -202,7 +272,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     );
   }
 
-  // Caregiver Login Mode: Exclusively Caregiver Observation & Clarification Notes Portal
+  // Caregiver Login Mode
   if (user.role === 'CAREGIVER') {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
@@ -221,25 +291,278 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     );
   }
 
+  // Find active chat session
+  const activeSession =
+    chatSessions.find((s) => s.id === activeSessionId) ||
+    chatSessions[0] || {
+      id: 'session-default',
+      patientCode: selectedPatientCode,
+      title: 'Active Consultation',
+      createdAt: 'Just now',
+      updatedAt: 'Just now',
+      messages: [],
+    };
+
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
-      {/* Top Fixed Header */}
-      <Header
-        patient={data.patient}
+    <div
+      style={{
+        display: 'flex',
+        height: '100vh',
+        width: '100vw',
+        backgroundColor: 'var(--color-bg)',
+        color: 'var(--color-text-main)',
+        overflow: 'hidden',
+      }}
+    >
+      {/* ChatGPT-Style Left Sidebar */}
+      <ChatGptSidebar
+        isOpen={sidebarOpen}
+        onToggle={() => setSidebarOpen(!sidebarOpen)}
+        activeTab={activeTab}
+        onSelectTab={(tab) => setActiveTab(tab)}
+        sessions={chatSessions}
+        activeSessionId={activeSessionId}
+        onSelectSession={(id) => setActiveSessionId(id)}
+        onNewChat={handleNewChat}
+        onDeleteSession={handleDeleteSession}
+        onRenameSession={handleRenameSession}
         user={user}
-        authorizedPatients={authorizedPatients}
-        selectedPatientCode={selectedPatientCode}
-        sessionRemainingSeconds={sessionRemainingSeconds}
-        onSelectPatient={(code) => {
-          setSelectedPatientCode(code);
-        }}
         onLogout={onLogout}
-        onOpen2FA={() => setShow2FAModal(true)}
-        onLockSession={() => {
-          setVerifiedPatientCodes(new Set());
-          setSessionRemainingSeconds(null);
-        }}
+        sessionRemainingSeconds={sessionRemainingSeconds}
+        patientName={data.patient.name}
+        patientCode={data.patient.patient_code}
+        onOpenSecurityModal={() => setShow2FAModal(true)}
       />
+
+      {/* Main Canvas Area */}
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          minWidth: 0,
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Top Minimal ChatGPT-Style Header Bar */}
+        <header
+          style={{
+            height: '52px',
+            backgroundColor: 'var(--color-surface)',
+            borderBottom: '1px solid var(--color-border)',
+            padding: '0 16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexShrink: 0,
+            zIndex: 20,
+          }}
+        >
+          {/* Left: Sidebar Toggle + Mode Switcher Pill */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {!sidebarOpen && (
+              <button
+                onClick={() => setSidebarOpen(true)}
+                title="Open Sidebar"
+                style={{
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '8px',
+                  backgroundColor: 'var(--color-surface-alt)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text-main)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+                <Menu size={16} />
+              </button>
+            )}
+
+            {/* Top Navigation Mode Pills (ChatGPT style) */}
+            <div
+              style={{
+                display: 'flex',
+                backgroundColor: 'var(--color-surface-alt)',
+                padding: '3px',
+                borderRadius: '10px',
+                border: '1px solid var(--color-border)',
+              }}
+            >
+              <button
+                onClick={() => setActiveTab('assistant')}
+                style={{
+                  padding: '5px 12px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  backgroundColor: activeTab === 'assistant' ? 'var(--color-surface-raised)' : 'transparent',
+                  color: activeTab === 'assistant' ? 'var(--color-text-main)' : 'var(--color-text-muted)',
+                  fontWeight: activeTab === 'assistant' ? 700 : 500,
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  boxShadow: activeTab === 'assistant' ? 'var(--shadow-sm)' : 'none',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <MessageSquare size={13} style={{ color: activeTab === 'assistant' ? 'var(--color-accent)' : 'inherit' }} />
+                <span>Chat</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('records')}
+                style={{
+                  padding: '5px 12px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  backgroundColor: activeTab === 'records' ? 'var(--color-surface-raised)' : 'transparent',
+                  color: activeTab === 'records' ? 'var(--color-text-main)' : 'var(--color-text-muted)',
+                  fontWeight: activeTab === 'records' ? 700 : 500,
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  boxShadow: activeTab === 'records' ? 'var(--shadow-sm)' : 'none',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <ClipboardList size={13} style={{ color: activeTab === 'records' ? 'var(--color-accent)' : 'inherit' }} />
+                <span>Health Records</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('entry')}
+                style={{
+                  padding: '5px 12px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  backgroundColor: activeTab === 'entry' ? 'var(--color-surface-raised)' : 'transparent',
+                  color: activeTab === 'entry' ? 'var(--color-text-main)' : 'var(--color-text-muted)',
+                  fontWeight: activeTab === 'entry' ? 700 : 500,
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  boxShadow: activeTab === 'entry' ? 'var(--shadow-sm)' : 'none',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <PenSquare size={13} style={{ color: activeTab === 'entry' ? 'var(--color-accent)' : 'inherit' }} />
+                <span>Diagnosis Entry</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Center: Patient Selector Dropdown */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '4px 10px',
+                borderRadius: '10px',
+                backgroundColor: 'var(--color-surface-alt)',
+                border: '1px solid var(--color-border)',
+              }}
+            >
+              <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 600 }}>
+                Patient:
+              </span>
+              <select
+                value={selectedPatientCode}
+                onChange={(e) => setSelectedPatientCode(e.target.value)}
+                style={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  color: 'var(--color-text-main)',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  outline: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                {authorizedPatients.map((p) => (
+                  <option key={p.patient_code} value={p.patient_code} style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text-main)' }}>
+                    {p.name} ({p.patient_code})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Right: Theme Toggle & Security Status */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <ThemeToggle size="sm" />
+            <button
+              onClick={() => setShow2FAModal(true)}
+              title="Doctor 2FA Security Consent Verified"
+              style={{
+                padding: '4px 10px',
+                borderRadius: '8px',
+                backgroundColor: 'var(--color-success-soft)',
+                border: '1px solid var(--color-success-border)',
+                color: 'var(--color-success)',
+                fontSize: '11px',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              <UserCheck size={13} />
+              <span>2FA Verified</span>
+            </button>
+          </div>
+        </header>
+
+        {/* Dynamic Tab Body */}
+        <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          {activeTab === 'assistant' && (
+            <ClinicalAssistantTab
+              data={data}
+              user={user}
+              onSelectEvidence={handleOpenEvidence}
+              onSwitchToPatientRecords={() => setActiveTab('records')}
+              activeSession={activeSession}
+              onUpdateSessionMessages={handleUpdateSessionMessages}
+            />
+          )}
+
+          {activeTab === 'records' && (
+            <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px' }}>
+              <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+                <PatientRecordsTab
+                  data={data}
+                  onOpenWhy={(change) => setSelectedWhyChange(change)}
+                  onSelectEvidence={handleOpenEvidence}
+                />
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'entry' && (
+            <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px' }}>
+              <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+                <DoctorClinicalEntryTab
+                  data={data}
+                  onEntrySaved={refetch}
+                  onSelectEvidence={handleOpenEvidence}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* 2-Step Verification Modal if doctor clicks Unlock Patient */}
       {show2FAModal && (
@@ -251,190 +574,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
         />
       )}
 
-      {/* Full-Width Tab Navigation Subheader */}
-      <div
-        style={{
-          backgroundColor: 'var(--color-surface)',
-          borderBottom: '1px solid var(--color-border)',
-          padding: '8px 24px',
-          boxShadow: '0 1px 2px rgba(0, 0, 0, 0.03)',
-          zIndex: 30,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1440px',
-            margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '12px',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {/* Tab 1: AI Assistant (Full Screen) */}
-            <button
-              onClick={() => setActiveTab('assistant')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '10px 18px',
-                borderRadius: '8px',
-                border: 'none',
-                backgroundColor: activeTab === 'assistant' ? 'var(--color-accent)' : 'transparent',
-                color: activeTab === 'assistant' ? '#ffffff' : 'var(--color-text-secondary)',
-                fontWeight: 700,
-                fontSize: '13px',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease-in-out',
-                boxShadow: activeTab === 'assistant' ? '0 2px 4px rgba(13, 110, 100, 0.25)' : 'none',
-              }}
-            >
-              <MessageSquare size={16} />
-              <span>Clinical AI Assistant</span>
-              <span
-                style={{
-                  fontSize: '10px',
-                  padding: '2px 6px',
-                  borderRadius: '10px',
-                  backgroundColor: activeTab === 'assistant' ? 'rgba(255, 255, 255, 0.25)' : 'var(--color-accent-soft)',
-                  color: activeTab === 'assistant' ? '#ffffff' : 'var(--color-accent-dark)',
-                }}
-              >
-                Chat
-              </span>
-            </button>
-
-            {/* Tab 2: About Patient (Longitudinal Records) */}
-            <button
-              onClick={() => setActiveTab('records')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '10px 18px',
-                borderRadius: '8px',
-                border: 'none',
-                backgroundColor: activeTab === 'records' ? 'var(--color-accent)' : 'transparent',
-                color: activeTab === 'records' ? '#ffffff' : 'var(--color-text-secondary)',
-                fontWeight: 700,
-                fontSize: '13px',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease-in-out',
-                boxShadow: activeTab === 'records' ? '0 2px 4px rgba(13, 110, 100, 0.25)' : 'none',
-              }}
-            >
-              <ClipboardList size={16} />
-              <span>About Patient &amp; Longitudinal Records</span>
-              <span
-                style={{
-                  fontSize: '10px',
-                  padding: '2px 6px',
-                  borderRadius: '10px',
-                  backgroundColor: activeTab === 'records' ? 'rgba(255, 255, 255, 0.25)' : 'var(--color-surface-alt)',
-                  color: activeTab === 'records' ? '#ffffff' : 'var(--color-text-secondary)',
-                }}
-              >
-                6 Domains
-              </span>
-            </button>
-
-            {/* Tab 3: Clinical Entry (Diagnosis & Prescriptions) */}
-            <button
-              onClick={() => setActiveTab('entry')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '10px 18px',
-                borderRadius: '8px',
-                border: 'none',
-                backgroundColor: activeTab === 'entry' ? 'var(--color-accent)' : 'transparent',
-                color: activeTab === 'entry' ? '#ffffff' : 'var(--color-text-secondary)',
-                fontWeight: 700,
-                fontSize: '13px',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease-in-out',
-                boxShadow: activeTab === 'entry' ? '0 2px 4px rgba(13, 110, 100, 0.25)' : 'none',
-              }}
-            >
-              <PenSquare size={16} />
-              <span>Enter Diagnosis &amp; Prescriptions</span>
-              <span
-                style={{
-                  fontSize: '10px',
-                  padding: '2px 6px',
-                  borderRadius: '10px',
-                  backgroundColor: activeTab === 'entry' ? 'rgba(255, 255, 255, 0.25)' : 'var(--color-success-soft)',
-                  color: activeTab === 'entry' ? '#ffffff' : 'var(--color-success-dark)',
-                }}
-              >
-                Markdown Export
-              </span>
-            </button>
-          </div>
-
-          <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontWeight: 600 }}>Active Patient:</span>
-            <span style={{ fontWeight: 700, color: 'var(--color-text-main)' }}>{data.patient.name}</span>
-            <span style={{ fontFamily: 'monospace', backgroundColor: 'var(--color-border)', padding: '1px 6px', borderRadius: '4px', fontSize: '11px' }}>
-              {data.patient.patient_code}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content: Full Screen for Assistant, Centered Container for Records & Entry */}
-      {activeTab === 'assistant' ? (
-        <main style={{ flex: 1, display: 'flex', flexDirection: 'column', height: 'calc(100vh - 118px)', overflow: 'hidden' }}>
-          <ClinicalAssistantTab
-            data={data}
-            user={user}
-            onSelectEvidence={handleOpenEvidence}
-            onSwitchToPatientRecords={() => setActiveTab('records')}
-          />
-        </main>
-      ) : (
-        <main style={{ maxWidth: '1440px', margin: '0 auto', padding: '20px 24px 40px 24px', width: '100%', boxSizing: 'border-box' }}>
-          {activeTab === 'records' && (
-            <PatientRecordsTab
-              data={data}
-              onOpenWhy={(change) => setSelectedWhyChange(change)}
-              onSelectEvidence={handleOpenEvidence}
-            />
-          )}
-
-          {activeTab === 'entry' && (
-            <DoctorClinicalEntryTab
-              data={data}
-              onEntrySaved={refetch}
-              onSelectEvidence={handleOpenEvidence}
-            />
-          )}
-
-          {/* Footer Note */}
-          <footer
-            style={{
-              textAlign: 'center',
-              padding: '28px 0 16px 0',
-              borderTop: '1px solid var(--color-border)',
-              color: 'var(--color-text-faint)',
-              fontSize: '12px',
-              marginTop: '32px',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '4px' }}>
-              <ShieldCheck size={14} style={{ color: 'var(--color-accent)' }} />
-              <span>EvoCare Clinical Intelligence Station • Doctor Portal • Multi-Tab Clinical Workflow</span>
-            </div>
-            <div>Patient {data.patient.patient_code} ({data.patient.name}) • Longitudinal Health Profile</div>
-          </footer>
-        </main>
-      )}
-
-      {/* Modals & Drawers */}
+      {/* Modals & Evidence Drawers */}
       <WhyModal
         change={selectedWhyChange}
         provenanceMap={data.provenance_map}

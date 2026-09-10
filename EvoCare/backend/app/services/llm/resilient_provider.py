@@ -160,6 +160,48 @@ class ResilientLLMProvider(LLMProvider):
         if not wiki_notes and isinstance(patient_context, dict):
             wiki_notes = patient_context.get("wiki_markdown_context", "")
 
+        # Check for out-of-scope / chit-chat guardrail
+        q_clean = question.strip("?!., ").lower()
+        non_medical_exact = [
+            "how are you", "how are u", "who are you", "what are you", "what is your name",
+            "hello", "hi", "hey", "good morning", "good evening", "good afternoon",
+            "tell me a joke", "write python code", "write code", "what is the capital of france",
+            "what is the weather", "who is the prime minister", "who is the president",
+            "what can you do", "help me with math", "thank you", "thanks", "bye", "goodbye"
+        ]
+        
+        is_greeting_or_chit_chat = (
+            q_clean in non_medical_exact or
+            any(q_clean.startswith(phrase) and len(q_clean.split()) <= 4 for phrase in ["how are you", "who are you", "hello", "hi there", "what is your name", "tell me a joke", "write code"])
+        )
+
+        patient_health_keywords = [
+            "medicine", "medication", "pill", "tablet", "dose", "when", "metformin", "amlodipine",
+            "atorvastatin", "paracetamol", "betahistine", "condition", "diagnos", "disease", "illness",
+            "problem", "health", "sugar", "glucose", "diabetes", "bp", "blood pressure", "hypertension",
+            "knee", "joint", "osteoarthritis", "pain", "dizzy", "dizziness", "balance", "fall", "near-fall",
+            "walk", "walking", "stand", "sleep", "appetite", "eating", "food", "diet", "nutrition",
+            "caregiver", "priya", "caretaker", "doctor", "dr.", "dr", "ramesh", "varma", "chandran",
+            "consult", "checkup", "appointment", "record", "lab", "test", "age", "how old", "who am i",
+            "my name", "where do i live", "location", "address", "routine", "daily", "vitals", "pulse",
+            "meenakshi", "rajesh", "p001", "p002", "p003", "p004", "p005"
+        ]
+        has_health_terms = any(w in q_clean for w in patient_health_keywords)
+
+        if is_greeting_or_chit_chat or (not has_health_terms and len(q_clean.split()) <= 4):
+            guardrail_reply = (
+                f"Hello {patient_name.split()[0]}! I am your **EvoCare Personal Health Companion**.\n\n"
+                f"I can only assist with inquiries regarding your personal medical records, daily medication schedules, symptoms, doctor consultation notes, and caregiver logs for **{patient_name}** ({patient_code}).\n\n"
+                "Here are some examples of questions you can ask me:\n"
+                "• *\"When should I take my medicines?\"*\n"
+                "• *\"What are my active medical conditions?\"*\n"
+                "• *\"Why do I feel dizzy when getting out of bed?\"*\n"
+                "• *\"What did Dr. Ramesh Varma recommend during my last visit?\"*\n\n"
+                "Please ask a question related to your health records or care plan."
+            )
+            self._reasoning_cache[cache_key] = (now, {"text": guardrail_reply})
+            return guardrail_reply
+
         prompt = f"""
 You are the personal EvoCare Health Companion for {patient_name}.
 {patient_name} has asked: "{question}"
@@ -183,14 +225,16 @@ Recent Observations & Caregiver Notes:
 Patient Wiki & Medical History:
 {wiki_notes[:1200]}
 
-Instructions:
-1. Directly, accurately, and empathetically answer {patient_name}'s question using the demographics, medications, and clinical records provided above.
-2. If they ask about their age, name, conditions, medications, doctor, symptoms, or caregiver observations, state the exact facts from their record clearly.
-3. Speak warmly in plain, encouraging English. Use bullet points where appropriate.
-4. Reminder: This is for information only; remind {patient_name} to consult Dr. Ramesh Varma for any clinical changes.
+Safety & Guardrail Instructions:
+1. You are strictly the EvoCare Personal Health Companion for {patient_name}. Only answer questions regarding their personal medical records, medications, symptoms, and care plan.
+2. If the user asks an out-of-scope question (e.g. general coding, non-medical trivia, unrelated topics), politely state that as their EvoCare Health Companion you are restricted to their personal health records, and prompt them with relevant health questions.
+3. If the requested information, test, procedure, or context is UNAVAILABLE or NOT documented in the patient context above, you MUST explicitly state: "I don't know based on the available records. This information is not documented in your medical file." and advise {patient_name} to consult their doctor.
+4. If they ask about their age, name, conditions, medications, doctor, symptoms, or caregiver observations, state the exact facts from their record clearly and empathetically.
+5. Speak warmly in plain, encouraging English. Use bullet points where appropriate.
+6. Reminder: This is for information only; remind {patient_name} to consult their treating physician (Dr. Ramesh Varma) for any clinical decisions.
 """
 
-        system_prompt = f"You are a friendly, compassionate healthcare companion for {patient_name}. You explain their personal health records and demographics in simple, reassuring words."
+        system_prompt = f"You are a friendly, compassionate healthcare companion for {patient_name}. You explain their personal health records and demographics in simple, reassuring words. If information or context is unavailable in their records, you must clearly state that you do not know based on the available records."
 
         # Tier 1: Gemini Flash
         if self.gemini.is_configured() and not self.gemini.is_rate_limited():
@@ -351,9 +395,12 @@ Instructions:
             )
 
         return (
-            f"Hello {first_name}. Your EvoCare health record is active and up to date:\n\n"
-            "• **Confirmed Conditions**: Type 2 Diabetes Mellitus, Essential Hypertension, and Bilateral Knee Osteoarthritis.\n"
-            "• **Active Regimen**: 4 daily medications managed with your family's pillbox support.\n"
-            "• **Caregiver Logs**: Your daily walking, appetite, and sleep are regularly tracked.\n\n"
-            "Feel free to ask about your medication times, recent doctor recommendations, or walking tips!"
+            f"Hello {first_name}. I don't know based on the available records. "
+            f"That specific information or topic is not documented in your current medical file for {patient_name} ({patient_code}).\n\n"
+            "Your available records contain documented entries for:\n"
+            "• **Confirmed Chronic Conditions**: Type 2 Diabetes Mellitus, Essential Hypertension, and Bilateral Knee Osteoarthritis.\n"
+            "• **Active Prescriptions**: 4 daily medications managed with your family's pillbox support.\n"
+            "• **Doctor Encounters**: Follow-up consultations with Dr. Ramesh Varma, MD.\n"
+            "• **Caregiver Home Logs**: Daily walking, appetite, and sleep tracking.\n\n"
+            "For topics outside these records, please consult your treating physician or care team directly."
         )

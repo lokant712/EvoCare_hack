@@ -479,7 +479,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
       </div>
 
       {/* ============================================================ */}
-      {/* 2. STRUCTURED PRESCRIPTIONS TABLE                            */}
+      {/* 2. STRUCTURED PRESCRIPTIONS TABLE (Rx)                       */}
       {/* ============================================================ */}
       <div
         style={{
@@ -492,11 +492,26 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
           <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-text-main)', margin: 0 }}>
-              2. Structured Medications &amp; Prescriptions Table
-            </h3>
-            <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
-              Add or adjust pharmacotherapy orders and therapy regimens
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-text-main)', margin: 0 }}>
+                2. Prescription Orders (Rx) &amp; Medications
+              </h3>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  padding: '2px 8px',
+                  borderRadius: '6px',
+                  backgroundColor: 'var(--color-accent-soft)',
+                  color: 'var(--color-accent-dark)',
+                  fontFamily: "'IBM Plex Mono', monospace",
+                }}
+              >
+                Rx: Medical Prescription
+              </span>
+            </div>
+            <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '2px', display: 'block' }}>
+              Add or adjust physician medication orders, dosages, frequencies, and instructions
             </span>
           </div>
 
@@ -518,7 +533,7 @@ export const DoctorClinicalEntryTab: React.FC<DoctorClinicalEntryTabProps> = ({
               }}
             >
               <Plus size={14} />
-              <span>Add Prescription Row</span>
+              <span>Add Rx Prescription Row</span>
             </button>
           </div>
         </div>

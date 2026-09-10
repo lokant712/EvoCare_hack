@@ -129,6 +129,84 @@ Serial clinical assessments conducted by Dr. S. Chandran, MD at Apollo Clinics, 
 
 ---
 
+
+### Assessment (2026-09-10): Geriatric Follow-up & Balance Assessment
+- **Type**: Outpatient Clinical Encounter
+- **Attending Physician**: Dr. Ramesh Varma, MD (Attending Physician) (`doctor.demo`)
+- **Consultation Note**: [[Doctor Records/Consultation_P001_20260910_231100.md|Consultation_P001_20260910_231100.md]]
+- **Findings**: Patient reported dizziness upon standing in the morning. Blood pressure orthostatics advised.
+- **Diagnoses**: Orthostatic Hypotension [CONFIRMED]
+- **Prescriptions**: Meclizine 25 mg
+- **Evidence**: [[Raw Evidence/Doctor/EV-DR-P001-008|EV-DR-P001-008]], [[Raw Evidence/Doctor/EV-MED-P001-008|EV-MED-P001-008]]
+
+
+---
+
+
+### Assessment (2026-09-10): Geriatric Follow-up & Balance Assessment
+- **Type**: Outpatient Clinical Encounter
+- **Attending Physician**: Dr. Ramesh Varma, MD (Attending Physician) (`doctor.demo`)
+- **Consultation Note**: [[Doctor Records/Consultation_P001_20260910_233859.md|Consultation_P001_20260910_233859.md]]
+- **Findings**: Patient reported dizziness upon standing in the morning. Blood pressure orthostatics advised.
+- **Diagnoses**: Orthostatic Hypotension [CONFIRMED]
+- **Prescriptions**: Meclizine 25 mg
+- **Evidence**: [[Raw Evidence/Doctor/EV-DR-P001-009|EV-DR-P001-009]], [[Raw Evidence/Doctor/EV-MED-P001-009|EV-MED-P001-009]]
+
+
+---
+
+
+### Assessment (2026-09-10): Geriatric Follow-up & Balance Assessment
+- **Type**: Outpatient Clinical Encounter
+- **Attending Physician**: Dr. Ramesh Varma, MD (Attending Physician) (`doctor.demo`)
+- **Consultation Note**: [[Doctor Records/Consultation_P001_20260910_234301.md|Consultation_P001_20260910_234301.md]]
+- **Findings**: Patient reported dizziness upon standing in the morning. Blood pressure orthostatics advised.
+- **Diagnoses**: Orthostatic Hypotension [CONFIRMED]
+- **Prescriptions**: Meclizine 25 mg
+- **Evidence**: [[Raw Evidence/Doctor/EV-DR-P001-010|EV-DR-P001-010]], [[Raw Evidence/Doctor/EV-MED-P001-010|EV-MED-P001-010]]
+
+
+---
+
+
+### Assessment (2026-09-10): Geriatric Follow-up & Balance Assessment
+- **Type**: Outpatient Clinical Encounter
+- **Attending Physician**: Dr. Ramesh Varma, MD (Attending Physician) (`doctor.demo`)
+- **Consultation Note**: [[Doctor Records/Consultation_P001_20260910_234308.md|Consultation_P001_20260910_234308.md]]
+- **Findings**: Patient reported dizziness upon standing in the morning. Blood pressure orthostatics advised.
+- **Diagnoses**: Orthostatic Hypotension [CONFIRMED]
+- **Prescriptions**: Meclizine 25 mg
+- **Evidence**: [[Raw Evidence/Doctor/EV-DR-P001-011|EV-DR-P001-011]], [[Raw Evidence/Doctor/EV-MED-P001-011|EV-MED-P001-011]]
+
+
+---
+
+
+### Assessment (2026-09-10): Geriatric Follow-up & Balance Assessment
+- **Type**: Outpatient Clinical Encounter
+- **Attending Physician**: Dr. Ramesh Varma, MD (Attending Physician) (`doctor.demo`)
+- **Consultation Note**: [[Doctor Records/Consultation_P001_20260910_234837.md|Consultation_P001_20260910_234837.md]]
+- **Findings**: Patient reported dizziness upon standing in the morning. Blood pressure orthostatics advised.
+- **Diagnoses**: Orthostatic Hypotension [CONFIRMED]
+- **Prescriptions**: Meclizine 25 mg
+- **Evidence**: [[Raw Evidence/Doctor/EV-DR-P001-012|EV-DR-P001-012]], [[Raw Evidence/Doctor/EV-MED-P001-012|EV-MED-P001-012]]
+
+
+---
+
+
+### Assessment (2026-09-10): Geriatric Follow-up & Balance Assessment
+- **Type**: Outpatient Clinical Encounter
+- **Attending Physician**: Dr. Ramesh Varma, MD (Attending Physician) (`doctor.demo`)
+- **Consultation Note**: [[Doctor Records/Consultation_P001_20260910_235058.md|Consultation_P001_20260910_235058.md]]
+- **Findings**: Patient reported dizziness upon standing in the morning. Blood pressure orthostatics advised.
+- **Diagnoses**: Orthostatic Hypotension [CONFIRMED]
+- **Prescriptions**: Meclizine 25 mg
+- **Evidence**: [[Raw Evidence/Doctor/EV-DR-P001-013|EV-DR-P001-013]], [[Raw Evidence/Doctor/EV-MED-P001-013|EV-MED-P001-013]]
+
+
+---
+
 ## Baseline
 Consistently documents independent mobility, baseline orientation, and stable chronic disease status.
 
@@ -171,3 +249,15 @@ Clinical encounters capture periodic stable snapshots. The physician assessments
 - [[Raw Evidence/Doctor/EV-MED-P001-005|EV-MED-P001-005]]
 - [[Raw Evidence/Doctor/EV-DR-P001-006|EV-DR-P001-006]]
 - [[Raw Evidence/Doctor/EV-MED-P001-006|EV-MED-P001-006]]
+- [[Raw Evidence/Doctor/EV-DR-P001-008|EV-DR-P001-008]]
+- [[Raw Evidence/Doctor/EV-MED-P001-008|EV-MED-P001-008]]
+- [[Raw Evidence/Doctor/EV-DR-P001-009|EV-DR-P001-009]]
+- [[Raw Evidence/Doctor/EV-MED-P001-009|EV-MED-P001-009]]
+- [[Raw Evidence/Doctor/EV-DR-P001-010|EV-DR-P001-010]]
+- [[Raw Evidence/Doctor/EV-MED-P001-010|EV-MED-P001-010]]
+- [[Raw Evidence/Doctor/EV-DR-P001-011|EV-DR-P001-011]]
+- [[Raw Evidence/Doctor/EV-MED-P001-011|EV-MED-P001-011]]
+- [[Raw Evidence/Doctor/EV-DR-P001-012|EV-DR-P001-012]]
+- [[Raw Evidence/Doctor/EV-MED-P001-012|EV-MED-P001-012]]
+- [[Raw Evidence/Doctor/EV-DR-P001-013|EV-DR-P001-013]]
+- [[Raw Evidence/Doctor/EV-MED-P001-013|EV-MED-P001-013]]

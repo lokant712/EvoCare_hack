@@ -234,8 +234,8 @@ a:focus-visible,
 
 /* Custom scrollbars, tinted to the accent */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -249,4 +249,97 @@ a:focus-visible,
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-faint);
+}
+
+/* ChatGPT Style Animations */
+@keyframes marqueeStraight {
+  0% { transform: translateX(0%); }
+  50% { transform: translateX(-35%); }
+  100% { transform: translateX(0%); }
+}
+
+.animate-marquee-straight {
+  display: flex;
+  width: max-content;
+  animation: marqueeStraight 22s ease-in-out infinite;
+}
+
+.animate-marquee-straight:hover {
+  animation-play-state: paused;
+}
+
+@keyframes greetingGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-greeting-shimmer {
+  background: linear-gradient(90deg, var(--color-text-main) 0%, var(--color-accent) 50%, var(--color-plum) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: greetingGradient 6s ease infinite;
+}
+
+@keyframes micPulseEffect {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+}
+
+.animate-mic-pulse {
+  animation: micPulseEffect 1.5s infinite;
+}
+
+/* Floating Input Pill Shadow */
+.chatgpt-pill-shadow {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--color-border);
+}
+
+.chatgpt-pill-shadow:focus-within {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), 0 0 0 2px var(--color-accent);
+}
+
+/* Glowing & Lighting Shimmering Text Effect for Processing State */
+@keyframes textLightingShimmer {
+  0% {
+    background-position: -200% 0;
+    text-shadow: 0 0 4px rgba(47, 166, 150, 0.3);
+    opacity: 0.85;
+  }
+  50% {
+    background-position: 200% 0;
+    text-shadow: 0 0 16px rgba(47, 166, 150, 0.9), 0 0 28px rgba(108, 201, 187, 0.7);
+    opacity: 1;
+  }
+  100% {
+    background-position: -200% 0;
+    text-shadow: 0 0 4px rgba(47, 166, 150, 0.3);
+    opacity: 0.85;
+  }
+}
+
+.animate-text-lighting {
+  background: linear-gradient(90deg, #2fa696 0%, #6cc9bb 25%, #ffffff 50%, #6cc9bb 75%, #2fa696 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textLightingShimmer 2.2s ease-in-out infinite;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+@keyframes pulseBorderGlow {
+  0%, 100% {
+    border-color: rgba(47, 166, 150, 0.2);
+    box-shadow: 0 0 10px rgba(47, 166, 150, 0.1);
+  }
+  50% {
+    border-color: rgba(47, 166, 150, 0.65);
+    box-shadow: 0 0 25px rgba(47, 166, 150, 0.35);
+  }
+}
+
+.animate-glow-box {
+  animation: pulseBorderGlow 2s ease-in-out infinite;
 }

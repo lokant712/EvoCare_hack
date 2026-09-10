@@ -218,13 +218,74 @@ class MockLLMProvider(LLMProvider):
 
     def generate_clinical_reasoning(self, question: str, patient_context: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Deterministic mock reasoning generator supporting all 4 standard clinical demo scenarios
-        and custom test inputs.
+        Deterministic mock reasoning generator supporting standard clinical demo scenarios,
+        with strict clinical guardrails against out-of-scope non-medical queries.
         """
         if self.fixed_reasoning_response is not None:
             return self.fixed_reasoning_response
 
-        q = question.lower()
+        q = question.lower().strip()
+        patient_name = patient_context.get("name", "the patient")
+        patient_code = patient_context.get("patient_code", "P001")
+
+        # Clinical Guardrail: Detect non-medical, chit-chat, or out-of-scope queries
+        non_medical_exact = [
+            "how are you", "how are u", "who are you", "what are you", "what is your name",
+            "hello", "hi", "hey", "good morning", "good evening", "good afternoon",
+            "tell me a joke", "write python code", "write code", "what is the capital of france",
+            "what is the weather", "who is the prime minister", "who is the president",
+            "what can you do", "help me with math", "thank you", "thanks", "bye", "goodbye"
+        ]
+        
+        cleaned_q = q.strip("?!., ").lower()
+        is_greeting_or_chit_chat = (
+            cleaned_q in non_medical_exact or
+            any(cleaned_q.startswith(phrase) and len(cleaned_q.split()) <= 4 for phrase in ["how are you", "who are you", "hello", "hi there", "what is your name"])
+        )
+
+        medical_keywords = [
+            "patient", "dizzy", "dizziness", "fall", "near-fall", "stumble", "walk", "mobility", "gait",
+            "sleep", "nocturia", "pain", "knee", "joint", "osteoarthritis", "blood pressure",
+            "bp", "hypertension", "diabetes", "metformin", "amlodipine", "atorvastatin", "paracetamol",
+            "telmisartan", "medication", "drug", "pill", "prescription", "caregiver", "priya",
+            "doctor", "dr.", "dr", "consult", "assessment", "record", "lab", "egfr", "creatinine",
+            "hba1c", "cholesterol", "lipid", "diet", "nutrition", "appetite", "weight", "cognition",
+            "confusion", "memory", "symptom", "diagnosis", "vital", "pulse", "clinic", "history",
+            "condition", "treatment", "therapy", "finding", "review", "evaluate", "adherence",
+            "meenakshi", "rajesh", "p001", "p002", "sugar", "glucose", "heart", "exercise",
+            "dementia", "alzheimer", "illness", "sick", "disease", "health", "vitals", "reason"
+        ]
+        has_medical_terms = any(w in q for w in medical_keywords)
+
+        if is_greeting_or_chit_chat or (not has_medical_terms and len(q.split()) <= 4):
+            return {
+                "considerations": [
+                    {
+                        "title": "Clinical Guardrail Active: Out-of-Scope Query",
+                        "category": "Assistant Scope & Safety Guardrail",
+                        "description": f"I am the EvoCare Clinical AI Assistant. I can only assist with clinical inquiries, diagnoses, medication adherence, and health records for patient {patient_name} ({patient_code}). Please ask a question related to the patient's longitudinal medical records or caregiver observations.",
+                        "status": "INSUFFICIENT_EVIDENCE",
+                        "supporting_evidence": [],
+                        "contradicting_evidence": [],
+                        "missing_information": [
+                            f"Please provide a specific clinical question regarding {patient_name}'s health memory or care plan."
+                        ],
+                        "evidence_strength": "INSUFFICIENT",
+                        "reasoning": "Query detected as non-clinical / chit-chat. Guardrail applied to restrict conversation strictly to patient care.",
+                        "uncertainty": "Guardrail triggered.",
+                        "references": []
+                    }
+                ],
+                "missing_information": [
+                    f"Please submit a clinical query regarding patient {patient_code}'s medical records, medications, symptoms, or caregiver logs."
+                ],
+                "red_flags": [],
+                "relevant_changes": [],
+                "limitations": [
+                    "Assistant scope is restricted strictly to authorized patient health records and clinical reasoning."
+                ],
+                "disclaimer": "Clinical Decision Support Assistant is restricted to patient health memory retrieval."
+            }
 
         # Scenario: Previous Doctor Consultations / Clinic Reviews
         if any(w in q for w in ["doctor", "consult", "consulted", "consultation", "physician", "specialist", "clinic visit", "who examined", "who treated", "encounters"]):

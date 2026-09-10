@@ -75,3 +75,21 @@ def test_patient_companion_audit_logged(client):
     new_count = db.query(AuditLog).filter(AuditLog.action == "PATIENT_COMPANION_QUERY").count()
     db.close()
     assert new_count > initial_count
+
+
+def test_patient_companion_guardrail_triggered(client):
+    db = SessionLocal()
+    patient_user = db.query(User).filter(User.username == "patient.demo").first()
+    token = create_access_token(data={"sub": str(patient_user.id), "username": patient_user.username, "role": "PATIENT"})
+    db.close()
+
+    c = TestClient(client.app)
+    c.headers.update({"Authorization": f"Bearer {token}"})
+
+    # Out of scope / chit-chat question
+    res = c.post("/api/patients/P001/companion", json={"question": "how are you?"})
+    assert res.status_code == 200
+    data = res.json()
+    assert "EvoCare Personal Health Companion" in data["answer"]
+    assert "medical records" in data["answer"].lower() or "health records" in data["answer"].lower()
+
