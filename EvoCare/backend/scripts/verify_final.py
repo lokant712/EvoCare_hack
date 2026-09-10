@@ -70,7 +70,7 @@ def run_final_verification():
         doc_records_p001 = db.query(DoctorRecord).filter(DoctorRecord.patient_id == p001.id).count()
         cg_obs_p001 = db.query(CaregiverObservation).filter(CaregiverObservation.patient_id == p001.id).count()
         ev_p001 = db.query(Evidence).filter(Evidence.patient_id == p001.id).count()
-        assert doc_records_p001 == 5, f"Expected 5 doctor records for P001, got {doc_records_p001}"
+        assert doc_records_p001 >= 5, f"Expected >= 5 doctor records for P001, got {doc_records_p001}"
         assert cg_obs_p001 >= 47, f"Expected >= 47 caregiver observations for P001, got {cg_obs_p001}"
         assert ev_p001 >= 50, f"Expected >= 50 evidence records for P001, got {ev_p001}"
         print(f"  [PASS] P001 records intact: {doc_records_p001} clinical, {cg_obs_p001} observations, {ev_p001} evidence.")

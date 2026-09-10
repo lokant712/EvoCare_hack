@@ -129,15 +129,19 @@ class DoctorEntryService:
         # Commit all database entities
         db.commit()
 
-        # 3. Generate Structured Markdown (.md) File
+        # 3. Generate Structured Markdown (.md) File with Bidirectional Obsidian Links
+        patient_wiki_subpath = f"Patient Wiki/{patient.patient_code} {patient.name}"
         md_lines = [
             f"# Doctor Clinical Consultation & Treatment Note",
             f"",
-            f"- **Patient**: {patient.name} (`{patient.patient_code}`)",
+            f"> **EvoCare Clinical Intelligence Vault Record**",
+            f"",
+            f"- **Patient**: [[{patient_wiki_subpath}/Patient Overview|{patient.name} ({patient.patient_code})]]",
             f"- **Age / Sex**: {patient.age} years • {patient.sex}",
             f"- **Attending Physician**: {doctor.full_name} (`{doctor.username}`)",
             f"- **Encounter Date**: {now_str}",
             f"- **Encounter Title**: {data.consultation_title or 'Clinical Evaluation'}",
+            f"- **Longitudinal Context**: [[{patient_wiki_subpath}/Clinical/Doctor Assessments|Doctor Assessments]] • [[{patient_wiki_subpath}/Clinical/Diagnoses|Diagnoses]] • [[{patient_wiki_subpath}/Clinical/Medications|Medications]]",
             f"",
             f"---",
             f"",
@@ -153,7 +157,7 @@ class DoctorEntryService:
             for diag, ev_code in diagnosis_rows:
                 icd = diag.icd_code if diag.icd_code else "Unspecified"
                 notes = (diag.notes or "—").replace("\n", " ")
-                md_lines.append(f"| **{diag.condition}** | `{icd}` | {diag.status} | {notes} | `{ev_code}` |")
+                md_lines.append(f"| **{diag.condition}** | `{icd}` | {diag.status} | {notes} | [[Raw Evidence/Doctor/{ev_code}|{ev_code}]] |")
         else:
             md_lines.append("| *No new diagnoses entered in this encounter* | — | — | — | — |")
 
@@ -168,7 +172,7 @@ class DoctorEntryService:
             for med, ev_code in prescription_rows:
                 ind = (med.indication or "—").replace("\n", " ")
                 instr = (med.instructions or "As directed").replace("\n", " ")
-                md_lines.append(f"| **{med.medication_name}** | {med.dose} | {med.frequency} | {ind} | {instr} | `{ev_code}` |")
+                md_lines.append(f"| **{med.medication_name}** | {med.dose} | {med.frequency} | {ind} | {instr} | [[Raw Evidence/Doctor/{ev_code}|{ev_code}]] |")
         else:
             md_lines.append("| *No new medications prescribed in this encounter* | — | — | — | — | — |")
 
@@ -186,26 +190,137 @@ class DoctorEntryService:
 
         markdown_content = "\n".join(md_lines)
 
-        # 4. Save to Knowledge Base Directories
+        # 4. Save and Link to Knowledge Base Roots
         file_name = f"Consultation_{patient.patient_code}_{date_slug}_{ts_slug}.md"
         saved_file_path = None
 
         from app.core.config import settings
-        kb_root = Path(settings.KNOWLEDGE_BASE_DIR)
-        candidate_dirs = [
-            kb_root / "Doctor Records"
-        ]
+        primary_kb = Path(settings.KNOWLEDGE_BASE_DIR).resolve()
+        kb_roots: List[Path] = []
+        if primary_kb.exists():
+            kb_roots.append(primary_kb)
+        vault_root = (primary_kb.parent.parent / "EvoCare-Knowledge-Base").resolve()
+        if vault_root.exists() and vault_root not in kb_roots:
+            kb_roots.append(vault_root)
 
-        for target_dir in candidate_dirs:
+        for kb_root in kb_roots:
             try:
+                # 4a. Save Consultation Note in Doctor Records
+                target_dir = kb_root / "Doctor Records"
                 target_dir.mkdir(parents=True, exist_ok=True)
                 full_path = target_dir / file_name
                 with open(full_path, "w", encoding="utf-8") as f:
                     f.write(markdown_content)
-                saved_file_path = str(full_path)
+                if saved_file_path is None:
+                    saved_file_path = str(full_path)
                 logger.info(f"Saved doctor consultation markdown note at {full_path}")
+
+                # 4b. Create Raw Evidence files
+                ev_dir = kb_root / "Raw Evidence" / "Doctor"
+                ev_dir.mkdir(parents=True, exist_ok=True)
+                for diag, ev_code in diagnosis_rows:
+                    ev_path = ev_dir / f"{ev_code}.md"
+                    ev_text = (
+                        f"# Evidence {ev_code}\n\n"
+                        f"Patient ID: {patient.patient_code}\n"
+                        f"Source Type: DOCTOR\n"
+                        f"Source ID: {doctor.username}\n"
+                        f"Observed At: {now.strftime('%Y-%m-%d')}\n"
+                        f"Recorded At: {now.strftime('%Y-%m-%d')}\n"
+                        f"Encounter Record: [[Doctor Records/{file_name}|{file_name}]]\n\n"
+                        f"Original Statement:\n"
+                        f"\"Clinical Diagnosis: {diag.condition} ({diag.icd_code or 'ICD: Unspecified'}). Status: {diag.status}. Notes: {diag.notes or 'None'}\"\n"
+                    )
+                    ev_path.write_text(ev_text, encoding="utf-8")
+
+                for med, ev_code in prescription_rows:
+                    ev_path = ev_dir / f"{ev_code}.md"
+                    ev_text = (
+                        f"# Evidence {ev_code}\n\n"
+                        f"Patient ID: {patient.patient_code}\n"
+                        f"Source Type: DOCTOR\n"
+                        f"Source ID: {doctor.username}\n"
+                        f"Observed At: {now.strftime('%Y-%m-%d')}\n"
+                        f"Recorded At: {now.strftime('%Y-%m-%d')}\n"
+                        f"Encounter Record: [[Doctor Records/{file_name}|{file_name}]]\n\n"
+                        f"Original Statement:\n"
+                        f"\"Doctor Prescription: {med.medication_name} {med.dose}, {med.frequency}. Indication: {med.indication or 'General management'}. Instructions: {med.instructions or 'As directed'}\"\n"
+                    )
+                    ev_path.write_text(ev_text, encoding="utf-8")
+
+                # 4c. Link into Patient Wiki Clinical Records
+                wiki_patient_dir = None
+                wiki_root = kb_root / "Patient Wiki"
+                if wiki_root.exists():
+                    for item in wiki_root.iterdir():
+                        if item.is_dir() and patient.patient_code in item.name:
+                            wiki_patient_dir = item
+                            break
+
+                if wiki_patient_dir:
+                    # Append to Clinical/Doctor Assessments.md
+                    dr_assess_path = wiki_patient_dir / "Clinical" / "Doctor Assessments.md"
+                    if dr_assess_path.exists():
+                        assess_content = dr_assess_path.read_text(encoding="utf-8")
+                        if file_name not in assess_content:
+                            diag_summary = ", ".join(f"{d.condition} [{d.status}]" for d, _ in diagnosis_rows) if diagnosis_rows else "None recorded"
+                            med_summary = ", ".join(f"{p.medication_name} {p.dose}" for p, _ in prescription_rows) if prescription_rows else "None prescribed"
+                            ev_summary = ", ".join(f"[[Raw Evidence/Doctor/{code}|{code}]]" for code in evidence_codes_generated)
+                            
+                            new_entry = (
+                                f"\n\n### Assessment ({now.strftime('%Y-%m-%d')}): {data.consultation_title or 'Clinical Evaluation'}\n"
+                                f"- **Type**: Outpatient Clinical Encounter\n"
+                                f"- **Attending Physician**: {doctor.full_name} (`{doctor.username}`)\n"
+                                f"- **Consultation Note**: [[Doctor Records/{file_name}|{file_name}]]\n"
+                                f"- **Findings**: {data.clinical_notes or 'Routine clinical evaluation recorded.'}\n"
+                                f"- **Diagnoses**: {diag_summary}\n"
+                                f"- **Prescriptions**: {med_summary}\n"
+                                f"- **Evidence**: {ev_summary}\n"
+                            )
+                            # Append before the next major section or at end
+                            if "\n## Baseline" in assess_content:
+                                assess_content = assess_content.replace("\n## Baseline", new_entry + "\n\n---\n\n## Baseline", 1)
+                            else:
+                                assess_content += new_entry
+
+                            # Also add evidence links to ## Evidence section if present
+                            if "## Evidence" in assess_content:
+                                ev_lines_to_add = []
+                                for code in evidence_codes_generated:
+                                    link_str = f"- [[Raw Evidence/Doctor/{code}|{code}]]"
+                                    if link_str not in assess_content:
+                                        ev_lines_to_add.append(link_str)
+                                if ev_lines_to_add:
+                                    assess_content += "\n" + "\n".join(ev_lines_to_add)
+
+                            dr_assess_path.write_text(assess_content, encoding="utf-8")
+
+                    # Append to Clinical/Diagnoses.md if diagnoses entered
+                    if diagnosis_rows:
+                        diag_path = wiki_patient_dir / "Clinical" / "Diagnoses.md"
+                        if diag_path.exists():
+                            diag_content = diag_path.read_text(encoding="utf-8")
+                            if file_name not in diag_content:
+                                d_summary = ", ".join(f"**{d.condition}** ({d.icd_code or 'ICD: Unspecified'})" for d, _ in diagnosis_rows)
+                                diag_entry = f"\n- **{now.strftime('%Y-%m-%d')} Encounter**: {doctor.full_name} recorded {len(diagnosis_rows)} diagnosis(es): {d_summary}. Ref: [[Doctor Records/{file_name}|{file_name}]]"
+                                if "## Clinical Information (Doctor)" in diag_content:
+                                    diag_content = diag_content.replace("## Clinical Information (Doctor)", "## Clinical Information (Doctor)" + diag_entry, 1)
+                                diag_path.write_text(diag_content, encoding="utf-8")
+
+                    # Append to Clinical/Medications.md if prescriptions entered
+                    if prescription_rows:
+                        med_path = wiki_patient_dir / "Clinical" / "Medications.md"
+                        if med_path.exists():
+                            med_content = med_path.read_text(encoding="utf-8")
+                            if file_name not in med_content:
+                                m_summary = ", ".join(f"**{p.medication_name}** {p.dose} ({p.frequency})" for p, _ in prescription_rows)
+                                med_entry = f"\n- **{now.strftime('%Y-%m-%d')} Encounter**: {doctor.full_name} prescribed: {m_summary}. Ref: [[Doctor Records/{file_name}|{file_name}]]"
+                                if "## Clinical Information (Doctor)" in med_content:
+                                    med_content = med_content.replace("## Clinical Information (Doctor)", "## Clinical Information (Doctor)" + med_entry, 1)
+                                med_path.write_text(med_content, encoding="utf-8")
+
             except Exception as e:
-                logger.warning(f"Could not write markdown note to {target_dir}: {e}")
+                logger.warning(f"Could not synchronize clinical entries to {kb_root}: {e}")
 
         # 5. Log Audit Event
         AuditService.log_audit_event(

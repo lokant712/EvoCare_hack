@@ -78,6 +78,18 @@ Caregiver records illustrate a progression: Independent → Unsteady → Furnitu
 
 
 ## Longitudinal Memory
+- **Version 18** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-173|EV-CG-173]])*
+- **Version 17** (2026-09-10): Mobility has shown recent variability, with increased support required during earlier outdoor observations followed by later improvement in indoor walking without support. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-172|EV-CG-172]])*
+- **Version 16** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-171|EV-CG-171]])*
+- **Version 15** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-148|EV-CG-148]])*
+- **Version 14** (2026-09-10): Mobility has shown recent variability, with increased support required during earlier outdoor observations followed by later improvement in indoor walking without support. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-147|EV-CG-147]])*
+- **Version 13** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-146|EV-CG-146]])*
+- **Version 12** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-123|EV-CG-123]])*
+- **Version 11** (2026-09-10): Mobility has shown recent variability, with increased support required during earlier outdoor observations followed by later improvement in indoor walking without support. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-122|EV-CG-122]])*
+- **Version 10** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-121|EV-CG-121]])*
+- **Version 9** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-098|EV-CG-098]])*
+- **Version 8** (2026-09-10): Mobility has shown recent variability, with increased support required during earlier outdoor observations followed by later improvement in indoor walking without support. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-097|EV-CG-097]])*
+- **Version 7** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-096|EV-CG-096]])*
 - **Version 6** (2026-09-10): Mobility has shown recent variability, with increased support required during earlier outdoor observations followed by later improvement in indoor walking without support. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-040|EV-CG-040]])*
 - **Version 5** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-073|EV-CG-073]])*
 - **Version 4** (2026-09-10): Mobility has shown recent variability, with increased support required during earlier outdoor observations followed by later improvement in indoor walking without support. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-072|EV-CG-072]])*
@@ -189,8 +201,8 @@ Caregiver records illustrate a progression: Independent → Unsteady → Furnitu
 ---
 
 ## Memory Version History
-- **Current Memory Version**: 6
-- **Previous Version**: 5
-- **Last Synchronized**: 2026-09-10 13:11:03 UTC
+- **Current Memory Version**: 18
+- **Previous Version**: 17
+- **Last Synchronized**: 2026-09-10 13:45:31 UTC
 - **Update Type**: TEMPORAL_UPDATE
-- **Change Summary**: Applied proposal PROP-EA94F5FC: Mobility has shown recent variability, with increased support required during earlier outdoor observations followed by later improvement in indoor walking without support.
+- **Change Summary**: Applied proposal PROP-8B6BF2FE: Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement.

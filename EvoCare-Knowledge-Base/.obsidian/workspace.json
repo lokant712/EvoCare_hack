@@ -95,6 +95,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Raw Evidence/Caregiver/EV-CG-047.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,6 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Raw Evidence/Caregiver/EV-CG-047.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -155,6 +157,7 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "Raw Evidence/Caregiver/EV-CG-047.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -183,6 +186,12 @@
   },
   "active": "7d6f22e4e5624f99",
   "lastOpenFiles": [
+    "Doctor Records/Consultation_P001_20260910_134618.md",
+    "Raw Evidence/Doctor/EV-MED-P001-001.md",
+    "Raw Evidence/Doctor/EV-DR-P001-001.md",
+    "Doctor Records/Consultation_P001_20260910_134528.md",
+    "Doctor Records",
+    "Raw Evidence/Caregiver/EV-CG-047.md",
     "Patient Wiki/P001 Meenakshi Raman/Clinical/Doctor Assessments.md",
     "Patient Wiki/P001 Meenakshi Raman/Derived/Mobility Trends.md",
     "Patient Wiki/P001 Meenakshi Raman/Caregiver/Falls.md",

@@ -22,6 +22,8 @@ This 4-drug therapeutic regimen has remained unchanged since at least December 2
 ---
 
 ## Clinical Information (Doctor)
+- **2026-09-10 Encounter**: Dr. Ramesh Varma, MD (Attending Physician) prescribed: **Betahistine** 16 mg (Twice daily). Ref: [[Doctor Records/Consultation_P001_20260910_134618.md|Consultation_P001_20260910_134618.md]]
+- **2026-09-10 Encounter**: Dr. Ramesh Varma, MD (Attending Physician) prescribed: **Meclizine** 25 mg (Once daily as needed). Ref: [[Doctor Records/Consultation_P001_20260910_134528.md|Consultation_P001_20260910_134528.md]]
 - Re-evaluated and confirmed unchanged by Dr. S. Chandran at each bimonthly review.
 - Doctor notes family assists with weekly pill organization.
 *Evidence Reference: [[Raw Evidence/Doctor/EV-DR-001|EV-DR-001]], [[Raw Evidence/Doctor/EV-DR-002|EV-DR-002]], [[Raw Evidence/Doctor/EV-DR-005|EV-DR-005]]*
