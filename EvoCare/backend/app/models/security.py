@@ -31,6 +31,7 @@ class User(Base):
     full_name = Column(String(255), nullable=False)
     role = Column(SQLEnum(UserRole), nullable=False, index=True)
     is_active = Column(Boolean, default=True, nullable=False)
+    is_verified = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime, default=utc_now, nullable=False)
     updated_at = Column(DateTime, default=utc_now, onupdate=utc_now, nullable=False)
     last_login_at = Column(DateTime, nullable=True)

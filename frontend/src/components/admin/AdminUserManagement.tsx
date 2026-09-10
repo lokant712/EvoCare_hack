@@ -19,6 +19,7 @@ interface UserRecord {
   email: string;
   role: string;
   is_active: boolean;
+  is_verified: boolean;
   created_at: string | null;
   last_login_at: string | null;
   authorized_patients: string[];
@@ -63,6 +64,13 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
   const [togglingId, setTogglingId] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  // OTP verification modal state
+  const [otpModal, setOtpModal] = useState<{ userId: number; username: string; email: string; otp?: string } | null>(null);
+  const [otpInput, setOtpInput] = useState('');
+  const [otpError, setOtpError] = useState<string | null>(null);
+  const [otpVerifying, setOtpVerifying] = useState(false);
+  const [pendingOtp, setPendingOtp] = useState<{ otp: string; message: string } | null>(null); // shown after create
+
   const fetchUsers = useCallback(async () => {
     setLoading(true); setError(null);
     try {
@@ -100,13 +108,50 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
       });
       const d = await r.json();
       if (!r.ok) throw new Error(d.detail || 'Failed to create user');
-      setFormSuccess(`✅ User "${d.username}" (${d.role}) created successfully!`);
       setForm(emptyForm);
-      setTimeout(() => { setShowAddForm(false); setFormSuccess(null); fetchUsers(); }, 1800);
+      setShowAddForm(false);
+      fetchUsers();
+      // Show OTP panel immediately after creation
+      if (d.verification_otp) {
+        setPendingOtp({ otp: d.verification_otp, message: d.otp_message });
+        setOtpModal({ userId: d.id, username: d.username, email: d.email });
+      }
     } catch (e: any) {
       setFormError(e.message);
     } finally { setSubmitting(false); }
   };
+
+  const handleVerifyOtp = async () => {
+    if (!otpModal) return;
+    setOtpVerifying(true); setOtpError(null);
+    try {
+      const r = await fetch(`${API_BASE}/admin/users/${otpModal.userId}/verify`, {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify({ otp: otpInput })
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || 'Verification failed');
+      setUsers(prev => prev.map(x => x.id === otpModal.userId ? { ...x, is_verified: true } : x));
+      setOtpModal(null); setPendingOtp(null); setOtpInput('');
+      fetchUsers();
+    } catch (e: any) {
+      setOtpError(e.message);
+    } finally { setOtpVerifying(false); }
+  };
+
+  const handleResendOtp = async (u: UserRecord) => {
+    try {
+      const r = await fetch(`${API_BASE}/admin/users/${u.id}/resend-otp`, {
+        method: 'POST', headers: authHeaders()
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || 'Resend failed');
+      setPendingOtp({ otp: d.verification_otp, message: d.otp_message });
+      setOtpInput('');
+      setOtpError(null);
+      setOtpModal({ userId: u.id, username: u.username, email: u.email });
+    } catch (e: any) { setError(e.message); }
+  };
+
 
   const filtered = users.filter(u => {
     const matchRole = filterRole === 'ALL' || u.role === filterRole;
@@ -289,7 +334,7 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
               <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                {['Name & Username', 'Email', 'Role', 'Patient Access', 'Last Login', 'Status', 'Action'].map(h => (
+                {['Name & Username', 'Email', 'Role', 'Patient Access', 'Last Login', 'Status', 'Actions'].map(h => (
                   <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontWeight: 600, color: '#475569', whiteSpace: 'nowrap' }}>{h}</th>
                 ))}
               </tr>
@@ -320,28 +365,40 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
                     </td>
                     <td style={{ padding: '12px 14px', color: '#94a3b8', fontSize: '11px' }}>{u.last_login_at || '—'}</td>
                     <td style={{ padding: '12px 14px' }}>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '3px 9px', borderRadius: '10px', fontSize: '11px', fontWeight: 700,
-                        backgroundColor: u.is_active ? '#f0fdf4' : '#fef2f2',
-                        color: u.is_active ? '#16a34a' : '#dc2626' }}>
-                        {u.is_active ? <><UserCheck size={12} /> Active</> : <><UserX size={12} /> Disabled</>}
-                      </span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '3px 9px', borderRadius: '10px', fontSize: '11px', fontWeight: 700,
+                          backgroundColor: u.is_active ? '#f0fdf4' : '#fef2f2',
+                          color: u.is_active ? '#16a34a' : '#dc2626' }}>
+                          {u.is_active ? <><UserCheck size={12} /> Active</> : <><UserX size={12} /> Disabled</>}
+                        </span>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '2px 7px', borderRadius: '10px', fontSize: '10px', fontWeight: 700,
+                          backgroundColor: u.is_verified ? '#eff6ff' : '#fef9c3',
+                          color: u.is_verified ? '#1d4ed8' : '#92400e' }}>
+                          {u.is_verified ? '✔ Verified' : '⏳ Unverified'}
+                        </span>
+                      </div>
                     </td>
                     <td style={{ padding: '12px 14px' }}>
-                      {isSelf ? (
-                        <span style={{ fontSize: '11px', color: '#94a3b8' }}>You</span>
-                      ) : (
-                        <button
-                          onClick={() => handleToggle(u)}
-                          disabled={togglingId === u.id}
-                          style={{
-                            padding: '6px 12px', borderRadius: '6px', border: 'none', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
-                            backgroundColor: u.is_active ? '#fef2f2' : '#f0fdf4',
-                            color: u.is_active ? '#dc2626' : '#16a34a',
-                          }}
-                        >
-                          {togglingId === u.id ? '…' : u.is_active ? 'Disable' : 'Enable'}
-                        </button>
-                      )}
+                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        {isSelf ? (
+                          <span style={{ fontSize: '11px', color: '#94a3b8' }}>You</span>
+                        ) : (
+                          <>
+                            <button onClick={() => handleToggle(u)} disabled={togglingId === u.id}
+                              style={{ padding: '5px 10px', borderRadius: '6px', border: 'none', fontSize: '11px', fontWeight: 700, cursor: 'pointer',
+                                backgroundColor: u.is_active ? '#fef2f2' : '#f0fdf4',
+                                color: u.is_active ? '#dc2626' : '#16a34a' }}>
+                              {togglingId === u.id ? '…' : u.is_active ? 'Disable' : 'Enable'}
+                            </button>
+                            {!u.is_verified && (
+                              <button onClick={() => handleResendOtp(u)}
+                                style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid #fde68a', backgroundColor: '#fffbeb', fontSize: '11px', fontWeight: 700, color: '#92400e', cursor: 'pointer' }}>
+                                Verify OTP
+                              </button>
+                            )}
+                          </>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 );
@@ -350,6 +407,65 @@ export const AdminUserManagement: React.FC<Props> = ({ user }) => {
           </table>
         )}
       </div>
+
+      {/* OTP Verification Modal */}
+      {otpModal && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ backgroundColor: '#fff', borderRadius: '14px', padding: '28px', width: '420px', boxShadow: '0 8px 40px rgba(0,0,0,0.18)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#fffbeb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🔐</div>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: '15px', color: '#0f172a' }}>Verify Account</div>
+                  <div style={{ fontSize: '11px', color: '#64748b' }}>@{otpModal.username} · {otpModal.email}</div>
+                </div>
+              </div>
+              <button onClick={() => { setOtpModal(null); setPendingOtp(null); setOtpInput(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}><X size={20} /></button>
+            </div>
+
+            {pendingOtp && (
+              <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #86efac', borderRadius: '10px', padding: '14px 16px', marginBottom: '16px' }}>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: '#166534', marginBottom: '6px' }}>📧 {pendingOtp.message}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ fontFamily: 'monospace', fontSize: '28px', fontWeight: 800, color: '#15803d', letterSpacing: '8px', backgroundColor: '#dcfce7', padding: '8px 16px', borderRadius: '8px', flex: 1, textAlign: 'center' }}>
+                    {pendingOtp.otp}
+                  </div>
+                  <button onClick={() => navigator.clipboard.writeText(pendingOtp.otp)}
+                    style={{ padding: '8px 10px', borderRadius: '7px', border: '1px solid #86efac', backgroundColor: '#fff', cursor: 'pointer', fontSize: '11px', color: '#166534', fontWeight: 600 }}>
+                    Copy
+                  </button>
+                </div>
+                <div style={{ fontSize: '11px', color: '#15803d', marginTop: '6px', opacity: 0.8 }}>Share this OTP with the user. It expires when used.</div>
+              </div>
+            )}
+
+            <div style={{ marginBottom: '14px' }}>
+              <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>Enter OTP to verify account:</label>
+              <input type="text" maxLength={6} placeholder="6-digit OTP" value={otpInput}
+                onChange={e => setOtpInput(e.target.value.replace(/\D/g, ''))}
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '2px solid #e2e8f0', fontSize: '20px', fontFamily: 'monospace', fontWeight: 700, textAlign: 'center', letterSpacing: '6px', color: '#0f172a', outline: 'none', boxSizing: 'border-box' }}
+              />
+            </div>
+
+            {otpError && (
+              <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '7px', padding: '8px 12px', marginBottom: '12px', fontSize: '12px', color: '#991b1b', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                <AlertCircle size={13} /> {otpError}
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button onClick={() => { setOtpModal(null); setPendingOtp(null); setOtpInput(''); }}
+                style={{ flex: 1, padding: '10px', borderRadius: '7px', border: '1px solid #e2e8f0', backgroundColor: '#fff', fontSize: '13px', fontWeight: 600, color: '#475569', cursor: 'pointer' }}>
+                Close
+              </button>
+              <button onClick={handleVerifyOtp} disabled={otpInput.length !== 6 || otpVerifying}
+                style={{ flex: 2, padding: '10px', borderRadius: '7px', border: 'none', backgroundColor: otpInput.length === 6 ? '#059669' : '#cbd5e1', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: otpInput.length === 6 ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}>
+                <CheckCircle2 size={15} /> {otpVerifying ? 'Verifying…' : 'Confirm & Verify'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

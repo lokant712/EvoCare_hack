@@ -1,4 +1,6 @@
 import logging
+import random
+import string
 from typing import List, Optional, Dict, Any
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
@@ -10,6 +12,12 @@ from app.models.security import User, PatientAccess, SecurityEvent
 from app.models.audit import AuditLog
 from app.services.audit_service import AuditService
 
+# In-memory OTP store: { user_id: otp_string }
+# In production this would be Redis with TTL
+_otp_store: Dict[int, str] = {}
+
+def _generate_otp() -> str:
+    return ''.join(random.choices(string.digits, k=6))
 
 logger = logging.getLogger(__name__)
 
@@ -88,6 +96,7 @@ def get_user_management_list(
             "full_name": u.full_name,
             "role": u.role.value if hasattr(u.role, 'value') else str(u.role),
             "is_active": u.is_active,
+            "is_verified": getattr(u, 'is_verified', True),
             "created_at": u.created_at.strftime("%Y-%m-%d %H:%M") if u.created_at else None,
             "last_login_at": u.last_login_at.strftime("%Y-%m-%d %H:%M") if u.last_login_at else None,
             "authorized_patients": [g.patient_code for g in grants]
@@ -220,6 +229,7 @@ def create_user(
         full_name=full_name,
         role=role_enum,
         is_active=True,
+        is_verified=False,  # requires email verification by admin
     )
     db.add(new_user)
     db.flush()
@@ -243,6 +253,10 @@ def create_user(
     db.commit()
     db.refresh(new_user)
 
+    # Generate OTP for email verification
+    otp = _generate_otp()
+    _otp_store[new_user.id] = otp
+
     AuditService.log_audit_event(
         db=db, action="USER_CREATED", user_id=current_admin.id,
         username=current_admin.username, role="ADMIN",
@@ -255,7 +269,10 @@ def create_user(
         "id": new_user.id, "username": new_user.username,
         "full_name": new_user.full_name, "email": new_user.email,
         "role": new_user.role.value, "is_active": new_user.is_active,
-        "patient_code": patient_code
+        "is_verified": new_user.is_verified,
+        "patient_code": patient_code,
+        "verification_otp": otp,  # In prod: this would be emailed; here shown to admin
+        "otp_message": f"Share this OTP with {new_user.full_name} ({new_user.email}) to verify their account."
     }
 
 
@@ -291,3 +308,75 @@ def toggle_user_active(
         "is_active": target.is_active,
         "message": f"Account {'enabled' if target.is_active else 'disabled'} successfully."
     }
+
+
+@router.post("/users/{user_id}/verify")
+def verify_user(
+    user_id: int,
+    payload: Dict[str, Any],
+    current_admin: User = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """
+    Verify a user account using OTP (ADMIN only).
+    Admin enters the OTP they shared with the user; if it matches, the user is marked verified.
+    """
+    target = db.query(User).filter(User.id == user_id).first()
+    if not target:
+        raise HTTPException(status_code=404, detail=f"User {user_id} not found.")
+
+    entered_otp = str(payload.get("otp", "")).strip()
+    stored_otp = _otp_store.get(user_id)
+
+    if not stored_otp:
+        raise HTTPException(status_code=400, detail="No pending OTP for this user. Use resend-otp to generate a new one.")
+
+    if entered_otp != stored_otp:
+        raise HTTPException(status_code=400, detail="Incorrect OTP. Please try again or resend.")
+
+    target.is_verified = True
+    db.commit()
+    db.refresh(target)
+
+    # Consume OTP after successful verification
+    _otp_store.pop(user_id, None)
+
+    AuditService.log_audit_event(
+        db=db, action="USER_VERIFIED", user_id=current_admin.id,
+        username=current_admin.username, role="ADMIN",
+        patient_id="N/A", resource_type="USER",
+        resource_id=str(user_id), result="SUCCESS",
+        details={"verified_username": target.username}
+    )
+
+    return {
+        "id": target.id, "username": target.username,
+        "is_verified": target.is_verified,
+        "message": f"Account '{target.username}' successfully verified."
+    }
+
+
+@router.post("/users/{user_id}/resend-otp")
+def resend_otp(
+    user_id: int,
+    current_admin: User = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """Generate and return a fresh OTP for a user (ADMIN only)."""
+    target = db.query(User).filter(User.id == user_id).first()
+    if not target:
+        raise HTTPException(status_code=404, detail=f"User {user_id} not found.")
+    if getattr(target, 'is_verified', False):
+        raise HTTPException(status_code=400, detail="User is already verified.")
+
+    otp = _generate_otp()
+    _otp_store[user_id] = otp
+
+    return {
+        "id": user_id,
+        "username": target.username,
+        "email": target.email,
+        "verification_otp": otp,
+        "otp_message": f"New OTP generated. Share with {target.full_name} ({target.email})."
+    }
+
