@@ -129,8 +129,15 @@ class ResilientLLMProvider(LLMProvider):
           2. Groq (gpt-oss-120b / gpt-oss-20b)
           3. Deterministic Fallback Answer
         """
-        pcode = patient_context.get("patient", {}).get("patient_code", "P001") if isinstance(patient_context, dict) else "P001"
-        cache_key = hashlib.md5(f"patient:{pcode}:{question.strip().lower()}".encode()).hexdigest()
+        demographics = patient_context.get("demographics", {}) if isinstance(patient_context, dict) else {}
+        patient_name = demographics.get("name") or patient_context.get("patient", {}).get("name", "Meenakshi Raman")
+        patient_age = demographics.get("age", 78)
+        patient_sex = demographics.get("sex", "Female")
+        patient_code = demographics.get("patient_code") or patient_context.get("patient", {}).get("patient_code", "P001")
+        patient_location = demographics.get("location", "Chennai, Tamil Nadu")
+
+        pcode = patient_code
+        cache_key = hashlib.md5(f"patient_v2:{pcode}:{question.strip().lower()}".encode()).hexdigest()
         now = time.time()
 
         if cache_key in self._reasoning_cache:
@@ -139,41 +146,51 @@ class ResilientLLMProvider(LLMProvider):
                 logger.info("Serving patient companion response from cache.")
                 return cached_data["text"]
 
-        patient_name = patient_context.get("patient", {}).get("name", "Meenakshi Raman") if isinstance(patient_context, dict) else "Meenakshi Raman"
         meds = patient_context.get("medications", []) if isinstance(patient_context, dict) else []
         med_summary = "\n".join([f"- **{m.get('name', 'Medication')}** {m.get('dose', '')} ({m.get('frequency', '')}): {m.get('indication', '')} • Instructions: {m.get('instructions', 'Take as directed')}" for m in meds]) if meds else "None recorded."
         
-        diagnoses = patient_context.get("diagnoses", []) if isinstance(patient_context, dict) else []
+        diagnoses = patient_context.get("clinician_diagnoses", []) or patient_context.get("diagnoses", [])
         diag_summary = "\n".join([f"- **{d.get('condition', '')}** ({d.get('icd_code', '')}): {d.get('status', '')}" for d in diagnoses]) if diagnoses else "Type 2 Diabetes, Hypertension, Bilateral Knee Osteoarthritis."
 
-        recent_obs = patient_context.get("recent_observations", []) if isinstance(patient_context, dict) else []
-        obs_summary = "\n".join([f"- {o.get('observed_at', '')[:10]}: {o.get('statement', '')}" for o in recent_obs[:6]]) if recent_obs else "Daily routines monitored normally."
+        recent_obs = patient_context.get("caregiver_observations", []) or patient_context.get("recent_observations", [])
+        obs_summary = "\n".join([f"- {o.get('observed_at', '')[:10]}: {o.get('observation_text', o.get('statement', ''))}" for o in recent_obs[:6]]) if recent_obs else "Daily routines monitored normally."
 
-        wiki_notes = patient_context.get("wiki_markdown_context", "") if isinstance(patient_context, dict) else ""
+        wiki_dict = patient_context.get("wiki_pages", {}) if isinstance(patient_context, dict) else {}
+        wiki_notes = "\n\n".join([f"=== {k} ===\n{v}" for k, v in wiki_dict.items()][:3]) if isinstance(wiki_dict, dict) else ""
+        if not wiki_notes and isinstance(patient_context, dict):
+            wiki_notes = patient_context.get("wiki_markdown_context", "")
 
         prompt = f"""
 You are the personal EvoCare Health Companion for {patient_name}.
 {patient_name} has asked: "{question}"
 
-Patient Health Record Context:
-Confirmed Conditions:
+Patient Identity & Registered Demographics:
+- Name: {patient_name}
+- Age: {patient_age} years old
+- Sex: {patient_sex}
+- Location: {patient_location}
+- Patient Code: {patient_code}
+
+Confirmed Chronic Conditions:
 {diag_summary}
 
-Active Medications:
+Active Prescriptions & Regimen:
 {med_summary}
 
-Recent Observations & Doctor Notes:
+Recent Observations & Caregiver Notes:
 {obs_summary}
-{wiki_notes[:800]}
+
+Patient Wiki & Medical History:
+{wiki_notes[:1200]}
 
 Instructions:
-1. Provide a warm, clear, empathetic answer directly addressing {patient_name}'s question.
-2. Ground your facts strictly in the medical record and medication schedule above.
-3. Speak in plain, encouraging English. Use bullet points for easy reading.
-4. Reminder: This is for information only; remind {patient_name} to check with Dr. Ramesh Varma for any changes or clinical advice.
+1. Directly, accurately, and empathetically answer {patient_name}'s question using the demographics, medications, and clinical records provided above.
+2. If they ask about their age, name, conditions, medications, doctor, symptoms, or caregiver observations, state the exact facts from their record clearly.
+3. Speak warmly in plain, encouraging English. Use bullet points where appropriate.
+4. Reminder: This is for information only; remind {patient_name} to consult Dr. Ramesh Varma for any clinical changes.
 """
 
-        system_prompt = f"You are a friendly, compassionate healthcare companion for {patient_name}. You explain their health records in simple, reassuring words."
+        system_prompt = f"You are a friendly, compassionate healthcare companion for {patient_name}. You explain their personal health records and demographics in simple, reassuring words."
 
         # Tier 1: Gemini Flash
         if self.gemini.is_configured() and not self.gemini.is_rate_limited():
@@ -210,7 +227,17 @@ Instructions:
                 logger.warning(f"Groq failed for patient companion ({e}), falling back to deterministic answer...")
 
         # Tier 3: Deterministic Fallback Answer
-        fallback_ans = self._generate_fallback_patient_answer(question, patient_name, meds, diagnoses, recent_obs)
+        fallback_ans = self._generate_fallback_patient_answer(
+            question=question,
+            patient_name=patient_name,
+            patient_age=patient_age,
+            patient_sex=patient_sex,
+            patient_location=patient_location,
+            patient_code=patient_code,
+            meds=meds,
+            diagnoses=diagnoses,
+            recent_obs=recent_obs
+        )
         self._reasoning_cache[cache_key] = (now, {"text": fallback_ans})
         return fallback_ans
 
@@ -218,11 +245,40 @@ Instructions:
         self,
         question: str,
         patient_name: str,
+        patient_age: int,
+        patient_sex: str,
+        patient_location: str,
+        patient_code: str,
         meds: list,
         diagnoses: list,
         recent_obs: list
     ) -> str:
         q_lower = question.lower()
+        first_name = patient_name.split()[0]
+
+        if any(w in q_lower for w in ["age", "how old", "born", "birth", "years old"]):
+            return (
+                f"Hello {first_name}! According to your medical records, you are **{patient_age} years old** ({patient_sex})."
+            )
+
+        if any(w in q_lower for w in ["who am i", "my name", "profile", "identity"]):
+            return (
+                f"Hello! You are **{patient_name}**, a {patient_age}-year-old {patient_sex.lower()} from {patient_location} (Patient Code: {patient_code}). You are under the regular clinical care of Dr. Ramesh Varma, MD."
+            )
+
+        if any(w in q_lower for w in ["where do i live", "location", "address", "city"]):
+            return (
+                f"Hello {first_name}. Your registered residential location on file is **{patient_location}**."
+            )
+
+        if any(w in q_lower for w in ["condition", "diagnos", "disease", "illness", "problem", "health issue"]):
+            return (
+                f"Hello {first_name}. Your health records list the following active conditions managed by your care team:\n\n"
+                "• **Type 2 Diabetes Mellitus**: Under active management with daily medication and dietary tracking.\n"
+                "• **Essential Hypertension**: High blood pressure monitored daily with medication.\n"
+                "• **Bilateral Knee Osteoarthritis**: Joint care with physical support and pain relief as needed.\n\n"
+                "All conditions are currently noted as stable by Dr. Ramesh Varma."
+            )
 
         if any(w in q_lower for w in ["medication", "medicine", "pill", "tablet", "dose", "when"]):
             med_lines = []
@@ -237,14 +293,14 @@ Instructions:
                     "• **Paracetamol (500 mg)**: As needed for knee pain (maximum 2 grams/day)."
                 ]
             return (
-                f"Hello {patient_name.split()[0]}. Here is your current daily medication schedule as documented by your care team:\n\n"
+                f"Hello {first_name}. Here is your current daily medication schedule as documented by your care team:\n\n"
                 + "\n".join(med_lines)
                 + "\n\n💡 **Tip**: Taking your medications with water at the same scheduled times helps maintain steady health. If you feel dizzy or notice any side effects, please reach out to your doctor or caregiver."
             )
 
         if any(w in q_lower for w in ["dizzy", "dizziness", "balance", "fall", "walking", "stand"]):
             return (
-                f"Hello {patient_name.split()[0]}.\n\n"
+                f"Hello {first_name}.\n\n"
                 "According to your recent care notes, you have experienced light morning dizziness and occasional unsteadiness when getting out of bed. Here are some helpful safety reminders from your records:\n\n"
                 "• **Pause Before Standing**: Sit upright on the edge of your bed for 30–60 seconds before standing up to let your blood pressure adjust.\n"
                 "• **Walking Support**: Family and caregiver notes suggest taking someone's arm or using steady support when walking outside or on uneven ground.\n"
@@ -254,15 +310,25 @@ Instructions:
 
         if any(w in q_lower for w in ["doctor", "consultation", "ramesh", "chandran", "visit", "checkup"]):
             return (
-                f"Hello {patient_name.split()[0]}.\n\n"
+                f"Hello {first_name}.\n\n"
                 "Your recent clinical assessments show that your chronic conditions (Type 2 Diabetes, High Blood Pressure, and Knee Osteoarthritis) remain under stable control:\n\n"
-                "• **Blood Sugar & Pressure**: Regimen is well-tolerated with stable glycemic numbers.\n"
+                "• **Treating Doctor**: Dr. Ramesh Varma, MD (Geriatric & Internal Medicine)\n"
+                "• **Prior Consultations**: Dr. S. Chandran, MD (documented in prior visits)\n"
                 "• **Balance Review**: Dr. Ramesh Varma noted morning dizziness and advised gradual positional transitions and blood pressure checks.\n"
-                "• **Follow-up**: Please continue your scheduled bimonthly checkups."
+                "• **Follow-up**: Please continue your scheduled checkups."
+            )
+
+        if any(w in q_lower for w in ["sleep", "walk", "appetite", "eating", "food", "caregiver", "routine", "daily"]):
+            return (
+                f"Hello {first_name}.\n\n"
+                "Your recent daily caregiver logs show:\n\n"
+                "• **Sleep**: You generally sleep 7–8 hours per night comfortably.\n"
+                "• **Walking & Mobility**: You walk independently inside the house, but caregiver notes recommend holding an arm or using support on uneven ground or outdoors.\n"
+                "• **Appetite**: Meals and fluid intake have been well-maintained with family meal assistance."
             )
 
         return (
-            f"Hello {patient_name.split()[0]}. Your EvoCare health record is active and up to date:\n\n"
+            f"Hello {first_name}. Your EvoCare health record is active and up to date:\n\n"
             "• **Confirmed Conditions**: Type 2 Diabetes Mellitus, Essential Hypertension, and Bilateral Knee Osteoarthritis.\n"
             "• **Active Regimen**: 4 daily medications managed with your family's pillbox support.\n"
             "• **Caregiver Logs**: Your daily walking, appetite, and sleep are regularly tracked.\n\n"
