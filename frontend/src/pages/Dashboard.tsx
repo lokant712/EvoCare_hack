@@ -7,6 +7,7 @@ import { DoctorClinicalEntryTab } from '../components/clinical/DoctorClinicalEnt
 import { PatientCompanionTab } from '../components/patient/PatientCompanionTab';
 import { CaregiverNotesTab } from '../components/caregiver/CaregiverNotesTab';
 import { AdminUserManagement } from '../components/admin/AdminUserManagement';
+import { DoctorPatientAccessGate } from '../components/doctor/DoctorPatientAccessGate';
 import { WhyModal } from '../components/evidence/WhyModal';
 import { EvidenceDrawer } from '../components/evidence/EvidenceDrawer';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
@@ -26,20 +27,41 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   const [activeTab, setActiveTab] = useState<TabType>('assistant');
   const [authorizedPatients, setAuthorizedPatients] = useState<AuthorizedPatient[]>([]);
   const [selectedPatientCode, setSelectedPatientCode] = useState<string>('P001');
+  const [verifiedPatientCodes, setVerifiedPatientCodes] = useState<Set<string>>(() => {
+    // Other roles don't require doctor-patient 2FA gate
+    if (user.role !== 'DOCTOR') {
+      return new Set(['P001', 'P002']);
+    }
+    return new Set<string>();
+  });
+  const [show2FAModal, setShow2FAModal] = useState<boolean>(false);
 
   const { data, loading, error, refetch } = usePatient(selectedPatientCode);
   const [selectedWhyChange, setSelectedWhyChange] = useState<RecentChangeItem | null>(null);
   const [selectedEvidence, setSelectedEvidence] = useState<EvidenceDetailItem | null>(null);
 
+  const reloadAuthorizedPatients = async () => {
+    const patients = await authService.getAuthorizedPatients();
+    setAuthorizedPatients(patients);
+    return patients;
+  };
+
   // Fetch authorized patient list from backend
   useEffect(() => {
-    authService.getAuthorizedPatients().then((patients) => {
-      setAuthorizedPatients(patients);
-      if (patients.length > 0) {
+    reloadAuthorizedPatients().then((patients) => {
+      if (patients.length > 0 && !selectedPatientCode) {
         setSelectedPatientCode(patients[0].patient_code);
       }
     });
   }, []);
+
+  const handlePatientUnlocked = (code: string) => {
+    setVerifiedPatientCodes((prev) => new Set([...prev, code]));
+    setSelectedPatientCode(code);
+    setShow2FAModal(false);
+    reloadAuthorizedPatients();
+    refetch();
+  };
 
   const handleOpenEvidence = (code: string) => {
     if (data?.provenance_map && data.provenance_map[code]) {
@@ -95,6 +117,38 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     );
   }
 
+  // Doctor Role: If current patient record has not been 2FA verified in this session, show the 2-step gate
+  if (user.role === 'DOCTOR' && !verifiedPatientCodes.has(selectedPatientCode)) {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', color: '#0f172a' }}>
+        <Header
+          patient={{
+            id: 1,
+            patient_code: selectedPatientCode,
+            name: 'Patient Record Locked',
+            age: 0,
+            sex: '—',
+            location: '2-Step Consent Required',
+            dataset_type: 'SYNTHETIC',
+            primary_language: 'English',
+          }}
+          user={user}
+          authorizedPatients={authorizedPatients}
+          selectedPatientCode={selectedPatientCode}
+          onSelectPatient={(code) => setSelectedPatientCode(code)}
+          onLogout={onLogout}
+          onOpen2FA={() => setShow2FAModal(true)}
+        />
+        <main>
+          <DoctorPatientAccessGate
+            initialPatientCode={selectedPatientCode}
+            onPatientUnlocked={handlePatientUnlocked}
+          />
+        </main>
+      </div>
+    );
+  }
+
   if (error || !data) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', padding: '40px 20px' }}>
@@ -102,7 +156,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       </div>
     );
   }
-
 
   // Patient Login Mode: Exclusively Chatbot Interface for Informational Use Only
   if (user.role === 'PATIENT') {
@@ -150,9 +203,22 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
         user={user}
         authorizedPatients={authorizedPatients}
         selectedPatientCode={selectedPatientCode}
-        onSelectPatient={setSelectedPatientCode}
+        onSelectPatient={(code) => {
+          setSelectedPatientCode(code);
+        }}
         onLogout={onLogout}
+        onOpen2FA={() => setShow2FAModal(true)}
       />
+
+      {/* 2-Step Verification Modal if doctor clicks Unlock Patient */}
+      {show2FAModal && (
+        <DoctorPatientAccessGate
+          isModal={true}
+          initialPatientCode={selectedPatientCode}
+          onPatientUnlocked={handlePatientUnlocked}
+          onCancel={() => setShow2FAModal(false)}
+        />
+      )}
 
       {/* Full-Width Tab Navigation Subheader */}
       <div

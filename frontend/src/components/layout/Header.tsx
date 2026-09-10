@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, User, MapPin, Calendar, Lock, LogOut, ChevronDown, Shield } from 'lucide-react';
+import { Activity, User, MapPin, Calendar, Lock, LogOut, ChevronDown, Shield, KeyRound } from 'lucide-react';
 import { PatientDemographics } from '../../types';
 import { AuthUser, AuthorizedPatient } from '../../services/auth';
 
@@ -10,6 +10,7 @@ interface HeaderProps {
   selectedPatientCode: string;
   onSelectPatient: (code: string) => void;
   onLogout: () => void;
+  onOpen2FA?: () => void;
 }
 
 const ROLE_COLORS: Record<string, string> = {
@@ -26,6 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
   selectedPatientCode,
   onSelectPatient,
   onLogout,
+  onOpen2FA,
 }) => {
   const roleColor = ROLE_COLORS[user.role] || '#64748b';
 
@@ -184,8 +186,32 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           )}
 
-          {/* Badges */}
+          {/* Badges & 2FA Button */}
           <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+            {user.role === 'DOCTOR' && onOpen2FA && (
+              <button
+                id="evocare-open-2fa-btn"
+                type="button"
+                onClick={onOpen2FA}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '4px 10px',
+                  borderRadius: '5px',
+                  border: '1px solid #bae6fd',
+                  backgroundColor: '#f0f9ff',
+                  color: '#0369a1',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <KeyRound size={12} />
+                <span>+ Unlock Patient (2FA)</span>
+              </button>
+            )}
             <div
               style={{
                 padding: '3px 8px',
