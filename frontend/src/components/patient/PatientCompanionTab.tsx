@@ -4,11 +4,8 @@ import {
   Sparkles,
   Bot,
   User,
-  Pill,
-  HeartPulse,
   Info,
   ShieldCheck,
-  Stethoscope,
   HelpCircle,
   RotateCcw
 } from 'lucide-react';
@@ -57,7 +54,6 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
   const [messages, setMessages] = useState<CompanionMessage[]>([initialWelcomeMsg]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showSummaryCard, setShowSummaryCard] = useState(true);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -197,26 +193,6 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button
-            onClick={() => setShowSummaryCard(!showSummaryCard)}
-            style={{
-              padding: '6px 12px',
-              borderRadius: '6px',
-              border: '1px solid #cbd5e1',
-              backgroundColor: showSummaryCard ? '#f1f5f9' : '#ffffff',
-              color: '#475569',
-              fontSize: '12px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-            }}
-          >
-            <Info size={14} />
-            <span>{showSummaryCard ? 'Hide Health Card' : 'Show Health Card'}</span>
-          </button>
-
-          <button
             onClick={handleResetChat}
             title="Start new conversation"
             style={{
@@ -251,78 +227,6 @@ Ask me anything about your prescriptions, appointments, or recorded advice.`,
           boxSizing: 'border-box',
         }}
       >
-        {/* Optional Collapsible Patient Health Summary Card */}
-        {showSummaryCard && (
-          <div
-            style={{
-              backgroundColor: '#ffffff',
-              borderRadius: '12px',
-              border: '1px solid #e2e8f0',
-              padding: '16px 20px',
-              marginBottom: '24px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Stethoscope size={18} style={{ color: '#0284c7' }} />
-                <span style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a' }}>
-                  Your Health Baseline at a Glance
-                </span>
-              </div>
-              <span style={{ fontSize: '11px', color: '#94a3b8' }}>Verified Clinician Records</span>
-            </div>
-
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                gap: '12px',
-              }}
-            >
-              {/* Prescriptions */}
-              <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '10px 14px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                  <Pill size={14} style={{ color: '#16a34a' }} />
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#166534' }}>Current Medications</span>
-                </div>
-                <div style={{ fontSize: '11px', color: '#14532d', lineHeight: '1.4' }}>
-                  • <b>Metformin 500mg</b> — Twice daily with meals<br />
-                  • <b>Amlodipine 5mg</b> — Morning for blood pressure<br />
-                  • <b>Atorvastatin 10mg</b> — Nightly for cholesterol<br />
-                  • <b>Glimepiride 1mg</b> — Morning with breakfast
-                </div>
-              </div>
-
-              {/* Conditions */}
-              <div style={{ backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '8px', padding: '10px 14px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                  <HeartPulse size={14} style={{ color: '#2563eb' }} />
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#1e40af' }}>Ongoing Conditions</span>
-                </div>
-                <div style={{ fontSize: '11px', color: '#1e3a8a', lineHeight: '1.4' }}>
-                  • Type 2 Diabetes (Under active management)<br />
-                  • Essential Hypertension (Monitored)<br />
-                  • Bilateral Knee Osteoarthritis (Knee care)
-                </div>
-              </div>
-
-              {/* Attending Physician */}
-              <div style={{ backgroundColor: '#fffbeb', border: '1px solid #fef3c7', borderRadius: '8px', padding: '10px 14px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                  <ShieldCheck size={14} style={{ color: '#d97706' }} />
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#92400e' }}>Doctor &amp; Clinic</span>
-                </div>
-                <div style={{ fontSize: '11px', color: '#78350f', lineHeight: '1.4' }}>
-                  • <b>Dr. Ramesh Varma, MD</b> (Treating Physician)<br />
-                  • Previous notes: Dr. S. Chandran, MD<br />
-                  • Status: Next review in 3 months
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Message Stream */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
           {messages.map((msg) => {
