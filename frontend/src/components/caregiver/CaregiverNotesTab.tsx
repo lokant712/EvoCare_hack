@@ -80,14 +80,20 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
       );
 
       setSessionId(res.session_id);
-      setDetectedCategory(res.detected_category);
-      setRequiresClarification(res.requires_clarification);
+      // Backend returns 'category' not 'detected_category'
+      setDetectedCategory((res as any).category || (res as any).detected_category || null);
+      // requires_clarification lives in observation sub-object
+      const requiresClar = (res as any).observation?.requires_clarification
+        ?? ((res as any).missing_fields?.length > 0)
+        ?? false;
+      setRequiresClarification(requiresClar);
 
       if (res.questions && res.questions.length > 0) {
-        const qStates: ClarificationQuestionState[] = res.questions.map((q) => ({
+        const qStates: ClarificationQuestionState[] = res.questions.map((q: any) => ({
           id: q.id,
           fieldName: q.field_name,
-          questionText: q.question_text,
+          // Backend returns 'question' not 'question_text'
+          questionText: q.question_text || q.question || '',
           options: q.options || [],
           selectedAnswer: '',
           isCustom: false,
