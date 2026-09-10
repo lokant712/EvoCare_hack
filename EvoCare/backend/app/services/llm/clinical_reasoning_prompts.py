@@ -79,11 +79,21 @@ def build_clinical_reasoning_prompt(question: str, context: Dict[str, Any]) -> s
     evidence_catalog = context.get("evidence_catalog", {})
 
     # Token optimization for free-tier TPM ceilings (e.g. Groq 8000 TPM limit)
-    recent_caregiver_obs = caregiver_obs[-15:] if len(caregiver_obs) > 15 else caregiver_obs
+    recent_caregiver_obs = caregiver_obs[-10:] if len(caregiver_obs) > 10 else caregiver_obs
     compact_catalog = {
         k: f"[{v.get('source_type', '')}] ({str(v.get('observed_at', ''))[:10]}): {v.get('original_statement', '')}"
-        for k, v in list(evidence_catalog.items())[-35:]
+        for k, v in list(evidence_catalog.items())[-20:]
     }
+
+    # Format interconnected Wiki Markdown pages (top 3 relevant pages, up to 1,000 chars each)
+    wiki_pages = context.get("wiki_pages", {})
+    wiki_section = ""
+    if wiki_pages:
+        wiki_snippets = []
+        for fname, content in list(wiki_pages.items())[:3]:
+            trimmed = content[:1000] if len(content) > 1000 else content
+            wiki_snippets.append(f"--- WIKI FILE: [[{fname}]] ---\n{trimmed.strip()}")
+        wiki_section = "\n\n9. INTERCONNECTED PATIENT WIKI (Authentic Markdown & [[Wiki-Links]]):\n" + "\n\n".join(wiki_snippets)
 
     prompt = f"""DOCTOR'S QUESTION:
 "{question}"
@@ -116,9 +126,12 @@ Claims: {json.dumps(claims, separators=(',', ':'))}
 
 8. AVAILABLE IMMUTABLE EVIDENCE CATALOG (Use ONLY these evidence IDs):
 {json.dumps(compact_catalog, indent=1)}
+{wiki_section}
 
 INSTRUCTIONS:
 Synthesize the available evidence to answer the doctor's question in the requested JSON structure.
+Ground your response directly in the interconnected Patient Wiki documents and evidence catalog above.
+If the doctor asks for medical history, baseline profile, or longitudinal summary, synthesize the authentic medical history directly from the wiki files (e.g. [[Clinical/Medical History]], [[Patient Overview]]), linking confirmed diagnoses, medications, baseline capacity, and trajectory facts.
 Adhere strictly to all safety rules. Do not diagnose or prescribe. Ensure all referenced evidence IDs exist in the catalog above.
 """
     return prompt

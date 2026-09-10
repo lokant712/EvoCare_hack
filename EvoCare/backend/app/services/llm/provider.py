@@ -272,6 +272,69 @@ class MockLLMProvider(LLMProvider):
                 ]
             }
 
+        # Scenario 5: Patient Medical History / Longitudinal Overview
+        if any(w in q for w in ["history", "medical history", "overview", "background", "profile", "summary"]):
+            return {
+                "considerations": [
+                    {
+                        "title": "Documented Medical History & Chronic Disease Profile",
+                        "category": "Medical History",
+                        "description": "78-year-old female with long-term managed Type 2 Diabetes Mellitus (~2014, Metformin 500mg BID), Essential Hypertension (~2016, Amlodipine 5mg OD), Hyperlipidemia (Atorvastatin 10mg ON), and Bilateral Knee Osteoarthritis (Kellgren-Lawrence Grade II, PRN Paracetamol). Documented independent functional baseline in activities of daily living.",
+                        "status": "POSSIBLE_CONSIDERATION",
+                        "supporting_evidence": [
+                            {
+                                "evidence_id": "EV-DR-001",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-06-12",
+                                "original_statement": "Diagnosed Type 2 Diabetes, Hypertension, Hyperlipidemia, bilateral knee OA. Routine clinical follow-up."
+                            },
+                            {
+                                "evidence_id": "EV-DR-005",
+                                "source_type": "CLINICIAN-CONFIRMED",
+                                "observed_at": "2026-09-02",
+                                "original_statement": "Follow-up visit: BP 132/82, HbA1c 7.4%. Patient ambulatory, oriented x3."
+                            },
+                            {
+                                "evidence_id": "EV-MR-001",
+                                "source_type": "MEDICAL_RECORD",
+                                "observed_at": "2026-01-10",
+                                "original_statement": "Longitudinal summary: 77-year-old female with T2DM, HTN, DLP, OA knees. Stable control."
+                            },
+                            {
+                                "evidence_id": "EV-PAT-001",
+                                "source_type": "PATIENT-REPORTED",
+                                "observed_at": "2026-01-15",
+                                "original_statement": "Historical accidental slip at home in January 2026 without fracture or hospitalization."
+                            }
+                        ],
+                        "contradicting_evidence": [
+                            "No contradictory medical records identified. Medical history is consistent across all clinical encounters."
+                        ],
+                        "missing_information": [
+                            "Exact radiographic progression date for knee osteoarthritis",
+                            "Recent comprehensive metabolic panel beyond HbA1c"
+                        ],
+                        "evidence_strength": "STRONG",
+                        "reasoning": "Derived directly from clinician-confirmed medical assessments (EV-DR-001, EV-DR-005) and longitudinal wiki records ([[Clinical/Medical History]], [[Patient Overview]]).",
+                        "uncertainty": "Chronic conditions are confirmed and stable. Historical slip resolved with no sequelae.",
+                        "references": ["EV-DR-001", "EV-DR-005", "EV-MR-001", "EV-PAT-001"]
+                    }
+                ],
+                "missing_information": [
+                    "Recent comprehensive metabolic panel (electrolytes, renal function)",
+                    "Current orthostatic vital sign recordings"
+                ],
+                "red_flags": [
+                    "Acute chest discomfort, focal neurological changes, or sudden functional decompensation warrant urgent evaluation."
+                ],
+                "relevant_changes": [
+                    "Medical history remains stable; recent caregiver observations document domestic mobility unsteadiness and episodic dizziness in Sep 2026."
+                ],
+                "limitations": [
+                    "Historical medical records reflect periodic outpatient visits; continuous home trajectory relies on caregiver logging."
+                ]
+            }
+
         # Scenario 4: Mobility worsening question
         if "mobility" in q and ("worsen" in q or "change" in q or "decline" in q or "how has" in q):
             return {

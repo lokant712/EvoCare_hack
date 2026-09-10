@@ -1,6 +1,8 @@
+from pathlib import Path
 import logging
 from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
+from app.core.config import settings
 from app.models.patient import Patient
 from app.models.evidence import Evidence
 from app.models.caregiver_observation import CaregiverObservation
@@ -29,6 +31,79 @@ class ClinicalContextService:
             (Patient.patient_code == patient_id) | (Patient.id == (int(patient_id) if patient_id.isdigit() else -1))
         ).first()
         return patient
+
+    @classmethod
+    def get_patient_wiki_content(cls, patient_code: str, question: str) -> Dict[str, str]:
+        """
+        Reads directly from the interconnected Markdown Wiki files in knowledge-base/Patient Wiki.
+        Extracts authentic wiki pages including Patient Overview.md, Clinical/Medical History.md,
+        Diagnoses, Baseline, and domain logs.
+        """
+        kb_dir = Path(settings.KNOWLEDGE_BASE_DIR)
+        wiki_root = kb_dir / "Patient Wiki"
+        if not wiki_root.exists():
+            return {}
+
+        patient_dirs = [d for d in wiki_root.iterdir() if d.is_dir() and d.name.startswith(patient_code)]
+        if not patient_dirs:
+            return {}
+        p_dir = patient_dirs[0]
+
+        wiki_files: Dict[str, str] = {}
+        q_lower = question.lower()
+
+        # Priority 1: Overview and Medical History
+        overview_file = p_dir / "Patient Overview.md"
+        if overview_file.exists():
+            try:
+                wiki_files["Patient Overview.md"] = overview_file.read_text(encoding="utf-8")
+            except Exception as e:
+                logger.warning(f"Failed to read {overview_file}: {e}")
+
+        # Priority 2: Targeted domain files
+        targets = []
+        if any(w in q_lower for w in ["history", "medical history", "diagnos", "chronic", "background", "summary", "profile", "baseline"]):
+            targets.extend([
+                p_dir / "Clinical" / "Medical History.md",
+                p_dir / "Clinical" / "Diagnoses.md",
+                p_dir / "Derived" / "Baseline.md"
+            ])
+        if any(w in q_lower for w in ["dizzy", "dizziness", "balance"]):
+            targets.extend([
+                p_dir / "Caregiver" / "Dizziness.md",
+                p_dir / "Derived" / "Dizziness Trends.md"
+            ])
+        if any(w in q_lower for w in ["mobil", "fall", "walk", "gait"]):
+            targets.extend([
+                p_dir / "Caregiver" / "Mobility.md",
+                p_dir / "Caregiver" / "Falls.md",
+                p_dir / "Derived" / "Mobility Trends.md"
+            ])
+        if any(w in q_lower for w in ["medic", "drug", "pill", "prescrib"]):
+            targets.extend([
+                p_dir / "Clinical" / "Medications.md",
+                p_dir / "Caregiver" / "Medication Adherence.md"
+            ])
+        if any(w in q_lower for w in ["eat", "nutrition", "appetite", "meal"]):
+            targets.extend([
+                p_dir / "Caregiver" / "Nutrition.md",
+                p_dir / "Derived" / "Nutrition Trends.md"
+            ])
+        if any(w in q_lower for w in ["cognit", "confus", "memory", "dementia"]):
+            targets.extend([
+                p_dir / "Caregiver" / "Cognition.md",
+                p_dir / "Derived" / "Cognition Trends.md"
+            ])
+
+        for tf in targets:
+            rel_name = str(tf.relative_to(p_dir)).replace("\\", "/")
+            if tf.exists() and rel_name not in wiki_files:
+                try:
+                    wiki_files[rel_name] = tf.read_text(encoding="utf-8")
+                except Exception as e:
+                    logger.warning(f"Failed to read {tf}: {e}")
+
+        return wiki_files
 
     @classmethod
     def build_patient_context(
@@ -270,6 +345,8 @@ class ClinicalContextService:
             total_evidence_count=len(evidence_records)
         )
 
+        wiki_pages = cls.get_patient_wiki_content(patient.patient_code, question)
+
         return {
             "demographics": demographics,
             "clinician_diagnoses": clinician_diagnoses,
@@ -283,5 +360,6 @@ class ClinicalContextService:
             "known_unknowns": known_unknowns,
             "timeline_events": timeline_events,
             "evidence_catalog": evidence_dict,
-            "summary": summary
+            "summary": summary,
+            "wiki_pages": wiki_pages
         }
