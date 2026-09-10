@@ -30,6 +30,9 @@ Daily mood, social interaction, and emotional demeanor recorded by family member
 | **2026-09-10** | CG001 | *"She seemed agitated and restless during the evening."* | Caregiver observation (behavior) | [[Raw Evidence/Caregiver/EV-CG-253|EV-CG-253]] |
 | **2026-09-10** | CG001 | *"She is in a good mood."* | Caregiver observation (behavior) | [[Raw Evidence/Caregiver/EV-CG-264|EV-CG-264]] |
 | **2026-09-10** | CG001 | *"She was quiet in the room."* | Caregiver observation (behavior) | [[Raw Evidence/Caregiver/EV-CG-265|EV-CG-265]] |
+| **2026-09-10** | CG001 | *"She seemed agitated and restless during the evening."* | Caregiver observation (behavior) | [[Raw Evidence/Caregiver/EV-CG-278|EV-CG-278]] |
+| **2026-09-10** | CG001 | *"She is in a good mood."* | Caregiver observation (behavior) | [[Raw Evidence/Caregiver/EV-CG-289|EV-CG-289]] |
+| **2026-09-10** | CG001 | *"She was quiet in the room."* | Caregiver observation (behavior) | [[Raw Evidence/Caregiver/EV-CG-290|EV-CG-290]] |
 
 ---
 

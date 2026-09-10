@@ -46,6 +46,14 @@ The caregiver log captures functional ambulation, postural stability, assistive 
 | **2026-09-10** | CG002 | *"She needed someone's arm while walking outside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-272|EV-CG-272]] |
 | **2026-09-10** | CG001 | *"She walked normally inside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-273|EV-CG-273]] |
 | **2026-09-10** | CG002 | *"She needed support and was holding onto furniture today while walking."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-274|EV-CG-274]] |
+| **2026-09-10** | CG001 | *"She was holding the dining table."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-284|EV-CG-284]] |
+| **2026-09-10** | CG001 | *"She walked across the garden today with help."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-287|EV-CG-287]] |
+| **2026-09-10** | CG001 | *"She is weak and holding walls."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-291|EV-CG-291]] |
+| **2026-09-10** | CG001 | *"She had knee pain after walking in the garden."* | Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-294|EV-CG-294]] |
+| **2026-09-10** | CG001 | *"She is weak."* | Caregiver observation (other) | [[Raw Evidence/Caregiver/EV-CG-296|EV-CG-296]] |
+| **2026-09-10** | CG002 | *"She needed someone's arm while walking outside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-297|EV-CG-297]] |
+| **2026-09-10** | CG001 | *"She walked normally inside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-298|EV-CG-298]] |
+| **2026-09-10** | CG002 | *"She needed support and was holding onto furniture today while walking."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-299|EV-CG-299]] |
 
 ---
 

@@ -110,13 +110,15 @@ class ObservationPipelineService:
                 else:
                     missing_fields = ClarificationEngine.get_missing_fields(category, initial_extracted)
 
-                # Safety-net: if LLM says no clarification needed but deterministic engine
-                # finds essential fields missing, trust the deterministic check.
-                # This prevents vague sentences (e.g. "She was unsteady.", "She needed help.")
-                # from bypassing clarification when the LLM is too lenient.
-                deterministic_missing = ClarificationEngine.get_missing_fields(category, initial_extracted)
-                if not missing_fields and deterministic_missing:
-                    missing_fields = deterministic_missing
+                # Safety-net: run heuristic-only extraction (no LLM inferences) to detect
+                # fields genuinely missing from the caregiver's raw text.
+                # This prevents vague sentences like "She was unsteady and needed help." from
+                # bypassing clarification when the LLM fills associated_details by inference
+                # (violating Rule 2: ABSOLUTE UNKNOWN RULE).
+                heuristic_extracted = ClarificationEngine.extract_initial_fields(category, raw_text)
+                heuristic_missing = ClarificationEngine.get_missing_fields(category, heuristic_extracted)
+                if not missing_fields and heuristic_missing:
+                    missing_fields = heuristic_missing
 
             else:
                 # Safe Fallback to Deterministic Parser

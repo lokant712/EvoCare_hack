@@ -46,6 +46,14 @@ The caregiver log captures functional ambulation, postural stability, assistive 
 | **2026-09-10** | CG002 | *"She needed someone's arm while walking outside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-272|EV-CG-272]] |
 | **2026-09-10** | CG001 | *"She walked normally inside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-273|EV-CG-273]] |
 | **2026-09-10** | CG002 | *"She needed support and was holding onto furniture today while walking."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-274|EV-CG-274]] |
+| **2026-09-10** | CG001 | *"She was holding the dining table."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-284|EV-CG-284]] |
+| **2026-09-10** | CG001 | *"She walked across the garden today with help."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-287|EV-CG-287]] |
+| **2026-09-10** | CG001 | *"She is weak and holding walls."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-291|EV-CG-291]] |
+| **2026-09-10** | CG001 | *"She had knee pain after walking in the garden."* | Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-294|EV-CG-294]] |
+| **2026-09-10** | CG001 | *"She is weak."* | Caregiver observation (other) | [[Raw Evidence/Caregiver/EV-CG-296|EV-CG-296]] |
+| **2026-09-10** | CG002 | *"She needed someone's arm while walking outside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-297|EV-CG-297]] |
+| **2026-09-10** | CG001 | *"She walked normally inside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-298|EV-CG-298]] |
+| **2026-09-10** | CG002 | *"She needed support and was holding onto furniture today while walking."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-299|EV-CG-299]] |
 
 ---
 
@@ -94,6 +102,9 @@ Caregiver records illustrate a progression: Independent → Unsteady → Furnitu
 
 
 ## Longitudinal Memory
+- **Version 33** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-299|EV-CG-299]])*
+- **Version 32** (2026-09-10): Mobility has shown recent variability, with increased support required during earlier outdoor observations followed by later improvement in indoor walking without support. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-298|EV-CG-298]])*
+- **Version 31** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-297|EV-CG-297]])*
 - **Version 30** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-274|EV-CG-274]])*
 - **Version 29** (2026-09-10): Mobility has shown recent variability, with increased support required during earlier outdoor observations followed by later improvement in indoor walking without support. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-273|EV-CG-273]])*
 - **Version 28** (2026-09-10): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-272|EV-CG-272]])*
@@ -229,8 +240,8 @@ Caregiver records illustrate a progression: Independent → Unsteady → Furnitu
 ---
 
 ## Memory Version History
-- **Current Memory Version**: 30
-- **Previous Version**: 29
-- **Last Synchronized**: 2026-09-10 14:52:14 UTC
+- **Current Memory Version**: 33
+- **Previous Version**: 32
+- **Last Synchronized**: 2026-09-10 14:54:52 UTC
 - **Update Type**: TEMPORAL_UPDATE
-- **Change Summary**: Applied proposal PROP-BD7C8267: Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement.
+- **Change Summary**: Applied proposal PROP-1A4A82C8: Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement.
