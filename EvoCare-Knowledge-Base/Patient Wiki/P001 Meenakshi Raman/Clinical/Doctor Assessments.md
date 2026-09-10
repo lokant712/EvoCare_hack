@@ -103,6 +103,19 @@ Serial clinical assessments conducted by Dr. S. Chandran, MD at Apollo Clinics, 
 
 ---
 
+
+### Assessment (2026-09-10): Geriatric Follow-up & Balance Assessment
+- **Type**: Outpatient Clinical Encounter
+- **Attending Physician**: Dr. Ramesh Varma, MD (Attending Physician) (`doctor.demo`)
+- **Consultation Note**: [[Doctor Records/Consultation_P001_20260910_145211.md|Consultation_P001_20260910_145211.md]]
+- **Findings**: Patient reported dizziness upon standing in the morning. Blood pressure orthostatics advised.
+- **Diagnoses**: Orthostatic Hypotension [CONFIRMED]
+- **Prescriptions**: Meclizine 25 mg
+- **Evidence**: [[Raw Evidence/Doctor/EV-DR-P001-005|EV-DR-P001-005]], [[Raw Evidence/Doctor/EV-MED-P001-005|EV-MED-P001-005]]
+
+
+---
+
 ## Baseline
 Consistently documents independent mobility, baseline orientation, and stable chronic disease status.
 
@@ -141,3 +154,5 @@ Clinical encounters capture periodic stable snapshots. The physician assessments
 - [[Raw Evidence/Doctor/EV-MED-P001-003|EV-MED-P001-003]]
 - [[Raw Evidence/Doctor/EV-DR-P001-004|EV-DR-P001-004]]
 - [[Raw Evidence/Doctor/EV-MED-P001-004|EV-MED-P001-004]]
+- [[Raw Evidence/Doctor/EV-DR-P001-005|EV-DR-P001-005]]
+- [[Raw Evidence/Doctor/EV-MED-P001-005|EV-MED-P001-005]]

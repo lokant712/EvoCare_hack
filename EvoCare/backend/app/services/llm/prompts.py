@@ -19,11 +19,20 @@ CRITICAL RULES (NON-NEGOTIABLE):
 8. REDUNDANT CLARIFICATION PREVENTION:
    - Identify which essential fields are truly missing (e.g., severity, duration, onset).
    - If the caregiver already provided them (e.g. "severe dizziness for 10 minutes"), populate them and do NOT mark them in clarification_fields.
-9. OUTPUT FORMAT: Return ONLY a valid JSON object conforming strictly to the requested schema. No markdown wrapping, no explanatory text.
+9. MANDATORY CLARIFICATION TRIGGERS — you MUST mark clarification_fields and set requires_clarification=true if ANY of the following apply:
+   - mobility/unsteadiness observation is missing BOTH support_needed AND activity location
+   - dizziness is missing severity OR duration
+   - fall/near-fall is missing location OR assistance details
+   - nutrition is missing which meal AND how much was eaten
+   - cognition change is missing what exactly happened AND how long
+   - Any sentence that is 5 words or fewer describing a health event (e.g. "She fell.", "She was unsteady.", "She needed help.")
+   - General/vague observations using words like: "trouble", "uncomfortable", "unsteady", "needed help", "some difficulty", "not well", "seemed off" WITHOUT explicit location, duration, or severity.
+10. OUTPUT FORMAT: Return ONLY a valid JSON object conforming strictly to the requested schema. No markdown wrapping, no explanatory text.
 
 CATEGORIES ALLOWED:
 mobility, fall, near_fall, dizziness, nutrition, cognition, sleep, pain, behavior, medication_adherence, activity, other
 """
+
 
 EXTRACTION_USER_PROMPT_TEMPLATE = """Caregiver Input:
 "{raw_text}"
