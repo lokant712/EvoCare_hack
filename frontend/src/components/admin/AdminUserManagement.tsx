@@ -4,12 +4,12 @@ import {
   Search, RefreshCw, AlertCircle, CheckCircle2, X,
   Stethoscope, HeartHandshake, User, Shield
 } from 'lucide-react';
-import { AuthUser } from '../../services/auth';
+import { AuthUser, authService } from '../../services/auth';
 
 const API_BASE = '/api';
 const authHeaders = () => ({
   'Content-Type': 'application/json',
-  Authorization: `Bearer ${localStorage.getItem('evocare_token') || ''}`,
+  Authorization: `Bearer ${authService.getToken() || ''}`,
 });
 
 interface UserRecord {
