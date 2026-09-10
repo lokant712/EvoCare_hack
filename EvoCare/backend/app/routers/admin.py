@@ -182,3 +182,112 @@ def revoke_patient_access_grant(
 
     return {"status": "success", "message": f"Grant {grant_id} revoked."}
 
+
+@router.post("/users", status_code=201)
+def create_user(
+    payload: Dict[str, Any],
+    current_admin: User = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """Create a new system user (ADMIN only)."""
+    from app.core.security import get_password_hash
+    from app.models.security import UserRole
+
+    username = payload.get("username", "").strip()
+    password = payload.get("password", "").strip()
+    full_name = payload.get("full_name", "").strip()
+    email = payload.get("email", "").strip()
+    role_str = payload.get("role", "DOCTOR").upper()
+    patient_code = payload.get("patient_code", "").strip() or None
+
+    if not username or not password or not full_name or not email:
+        raise HTTPException(status_code=400, detail="username, password, full_name and email are required.")
+
+    if db.query(User).filter(User.username == username).first():
+        raise HTTPException(status_code=409, detail=f"Username '{username}' already exists.")
+    if db.query(User).filter(User.email == email).first():
+        raise HTTPException(status_code=409, detail=f"Email '{email}' already registered.")
+
+    try:
+        role_enum = UserRole(role_str)
+    except ValueError:
+        raise HTTPException(status_code=400, detail=f"Invalid role '{role_str}'. Must be DOCTOR, CAREGIVER, PATIENT, or ADMIN.")
+
+    new_user = User(
+        username=username,
+        email=email,
+        password_hash=get_password_hash(password),
+        full_name=full_name,
+        role=role_enum,
+        is_active=True,
+    )
+    db.add(new_user)
+    db.flush()
+
+    # Auto-grant patient access if patient_code provided
+    if patient_code:
+        access_role_map = {
+            "DOCTOR": "ATTENDING_PHYSICIAN",
+            "CAREGIVER": "PRIMARY_CAREGIVER",
+            "PATIENT": "PATIENT_SELF",
+        }
+        grant = PatientAccess(
+            user_id=new_user.id,
+            patient_code=patient_code,
+            access_role=access_role_map.get(role_str, "ATTENDING_PHYSICIAN"),
+            granted_by=current_admin.username,
+            is_active=True,
+        )
+        db.add(grant)
+
+    db.commit()
+    db.refresh(new_user)
+
+    AuditService.log_audit_event(
+        db=db, action="USER_CREATED", user_id=current_admin.id,
+        username=current_admin.username, role="ADMIN",
+        patient_id=patient_code or "N/A", resource_type="USER",
+        resource_id=str(new_user.id), result="SUCCESS",
+        details={"new_username": username, "role": role_str}
+    )
+
+    return {
+        "id": new_user.id, "username": new_user.username,
+        "full_name": new_user.full_name, "email": new_user.email,
+        "role": new_user.role.value, "is_active": new_user.is_active,
+        "patient_code": patient_code
+    }
+
+
+@router.patch("/users/{user_id}/toggle")
+def toggle_user_active(
+    user_id: int,
+    current_admin: User = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """Enable or disable a user account (ADMIN only). Cannot disable own account."""
+    if user_id == current_admin.id:
+        raise HTTPException(status_code=400, detail="Cannot disable your own account.")
+
+    target = db.query(User).filter(User.id == user_id).first()
+    if not target:
+        raise HTTPException(status_code=404, detail=f"User {user_id} not found.")
+
+    target.is_active = not target.is_active
+    db.commit()
+    db.refresh(target)
+
+    action = "USER_ENABLED" if target.is_active else "USER_DISABLED"
+    AuditService.log_audit_event(
+        db=db, action=action, user_id=current_admin.id,
+        username=current_admin.username, role="ADMIN",
+        patient_id="N/A", resource_type="USER",
+        resource_id=str(user_id), result="SUCCESS",
+        details={"target_username": target.username, "new_status": target.is_active}
+    )
+
+    return {
+        "id": target.id, "username": target.username,
+        "is_active": target.is_active,
+        "message": f"Account {'enabled' if target.is_active else 'disabled'} successfully."
+    }

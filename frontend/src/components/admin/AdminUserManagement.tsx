@@ -1,0 +1,355 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  Users, UserPlus, UserCheck, UserX,
+  Search, RefreshCw, AlertCircle, CheckCircle2, X,
+  Stethoscope, HeartHandshake, User, Shield
+} from 'lucide-react';
+import { AuthUser } from '../../services/auth';
+
+const API_BASE = '/api';
+const authHeaders = () => ({
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${localStorage.getItem('evocare_token') || ''}`,
+});
+
+interface UserRecord {
+  id: number;
+  username: string;
+  full_name: string;
+  email: string;
+  role: string;
+  is_active: boolean;
+  created_at: string | null;
+  last_login_at: string | null;
+  authorized_patients: string[];
+}
+
+const ROLE_META: Record<string, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
+  DOCTOR:    { label: 'Doctor',    color: '#1d4ed8', bg: '#eff6ff', icon: <Stethoscope size={13} /> },
+  CAREGIVER: { label: 'Caregiver', color: '#065f46', bg: '#f0fdf4', icon: <HeartHandshake size={13} /> },
+  PATIENT:   { label: 'Patient',   color: '#7e22ce', bg: '#fdf4ff', icon: <User size={13} /> },
+  ADMIN:     { label: 'Admin',     color: '#92400e', bg: '#fffbeb', icon: <Shield size={13} /> },
+};
+
+const ROLE_FILTER_TABS = [
+  { key: 'ALL',      label: 'All Users' },
+  { key: 'DOCTOR',   label: 'Doctors' },
+  { key: 'CAREGIVER',label: 'Caretakers' },
+  { key: 'PATIENT',  label: 'Patients' },
+  { key: 'ADMIN',    label: 'Admins' },
+];
+
+interface AddUserForm {
+  username: string; password: string; full_name: string;
+  email: string; role: string; patient_code: string;
+}
+
+const emptyForm: AddUserForm = {
+  username: '', password: '', full_name: '', email: '', role: 'DOCTOR', patient_code: ''
+};
+
+interface Props { user: AuthUser; }
+
+export const AdminUserManagement: React.FC<Props> = ({ user }) => {
+  const [users, setUsers] = useState<UserRecord[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [filterRole, setFilterRole] = useState('ALL');
+  const [search, setSearch] = useState('');
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [form, setForm] = useState<AddUserForm>(emptyForm);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [formSuccess, setFormSuccess] = useState<string | null>(null);
+  const [togglingId, setTogglingId] = useState<number | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const fetchUsers = useCallback(async () => {
+    setLoading(true); setError(null);
+    try {
+      const r = await fetch(`${API_BASE}/admin/users`, { headers: authHeaders() });
+      if (!r.ok) throw new Error(`Server error ${r.status}`);
+      setUsers(await r.json());
+    } catch (e: any) {
+      setError(e.message || 'Failed to load users');
+    } finally { setLoading(false); }
+  }, []);
+
+  useEffect(() => { fetchUsers(); }, [fetchUsers]);
+
+  const handleToggle = async (u: UserRecord) => {
+    if (u.id === Number((user as any).id)) return; // can't disable self
+    setTogglingId(u.id);
+    try {
+      const r = await fetch(`${API_BASE}/admin/users/${u.id}/toggle`, {
+        method: 'PATCH', headers: authHeaders()
+      });
+      if (!r.ok) throw new Error((await r.json()).detail || 'Toggle failed');
+      const updated = await r.json();
+      setUsers(prev => prev.map(x => x.id === u.id ? { ...x, is_active: updated.is_active } : x));
+    } catch (e: any) {
+      setError(e.message);
+    } finally { setTogglingId(null); }
+  };
+
+  const handleAddUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true); setFormError(null); setFormSuccess(null);
+    try {
+      const r = await fetch(`${API_BASE}/admin/users`, {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify(form)
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || 'Failed to create user');
+      setFormSuccess(`✅ User "${d.username}" (${d.role}) created successfully!`);
+      setForm(emptyForm);
+      setTimeout(() => { setShowAddForm(false); setFormSuccess(null); fetchUsers(); }, 1800);
+    } catch (e: any) {
+      setFormError(e.message);
+    } finally { setSubmitting(false); }
+  };
+
+  const filtered = users.filter(u => {
+    const matchRole = filterRole === 'ALL' || u.role === filterRole;
+    const q = search.toLowerCase();
+    const matchSearch = !q || u.username.toLowerCase().includes(q) ||
+      u.full_name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q);
+    return matchRole && matchSearch;
+  });
+
+  const counts = { ALL: users.length, ...Object.fromEntries(
+    ['DOCTOR','CAREGIVER','PATIENT','ADMIN'].map(r => [r, users.filter(u => u.role === r).length])
+  )};
+
+  // ─── Styles ──────────────────────────────────────────────────────────────
+  const card: React.CSSProperties = {
+    backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden'
+  };
+  const inputStyle: React.CSSProperties = {
+    width: '100%', padding: '9px 12px', borderRadius: '7px',
+    border: '1px solid #cbd5e1', fontSize: '13px', color: '#0f172a',
+    outline: 'none', boxSizing: 'border-box', backgroundColor: '#f8fafc'
+  };
+
+  return (
+    <div style={{ padding: '28px 24px', maxWidth: '1100px', margin: '0 auto', fontFamily: 'Inter, system-ui, sans-serif' }}>
+
+      {/* Header row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Users size={20} color="#d97706" />
+          </div>
+          <div>
+            <h2 style={{ margin: 0, fontSize: '17px', fontWeight: 700, color: '#0f172a' }}>User Management</h2>
+            <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#64748b' }}>Manage all system accounts — create, view, enable or disable</p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button onClick={fetchUsers} disabled={loading} style={{ padding: '8px 12px', borderRadius: '7px', border: '1px solid #e2e8f0', backgroundColor: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#475569', fontWeight: 600 }}>
+            <RefreshCw size={14} className={loading ? 'spin' : ''} /> Refresh
+          </button>
+          <button onClick={() => { setShowAddForm(true); setFormError(null); setFormSuccess(null); }}
+            style={{ padding: '8px 16px', borderRadius: '7px', border: 'none', backgroundColor: '#2563eb', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px', fontSize: '13px', fontWeight: 700, boxShadow: '0 2px 6px rgba(37,99,235,0.25)' }}>
+            <UserPlus size={15} /> Add User
+          </button>
+        </div>
+      </div>
+
+      {/* Stats row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '20px' }}>
+        {(['DOCTOR','CAREGIVER','PATIENT','ADMIN'] as const).map(role => {
+          const m = ROLE_META[role];
+          const active = users.filter(u => u.role === role && u.is_active).length;
+          const total = users.filter(u => u.role === role).length;
+          return (
+            <div key={role} style={{ ...card, padding: '14px 16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                <span style={{ padding: '5px', borderRadius: '7px', backgroundColor: m.bg, color: m.color, display: 'flex' }}>{m.icon}</span>
+                <span style={{ fontSize: '12px', fontWeight: 600, color: '#64748b' }}>{m.label}s</span>
+              </div>
+              <div style={{ fontSize: '22px', fontWeight: 800, color: m.color }}>{total}</div>
+              <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{active} active · {total - active} disabled</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Add User Modal */}
+      {showAddForm && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.45)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ ...card, width: '480px', maxHeight: '90vh', overflowY: 'auto', padding: '28px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <UserPlus size={20} color="#2563eb" />
+                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: '#0f172a' }}>Add New User</h3>
+              </div>
+              <button onClick={() => setShowAddForm(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}><X size={20} /></button>
+            </div>
+
+            {formError && (
+              <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '7px', padding: '10px 14px', marginBottom: '14px', display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '12px', color: '#991b1b' }}>
+                <AlertCircle size={14} style={{ flexShrink: 0, marginTop: '1px' }} /> {formError}
+              </div>
+            )}
+            {formSuccess && (
+              <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '7px', padding: '10px 14px', marginBottom: '14px', display: 'flex', gap: '8px', alignItems: 'center', fontSize: '12px', color: '#166534' }}>
+                <CheckCircle2 size={14} /> {formSuccess}
+              </div>
+            )}
+
+            <form onSubmit={handleAddUser}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                {[
+                  { label: 'Full Name *', key: 'full_name', type: 'text', placeholder: 'e.g. Dr. Arjun Mehta' },
+                  { label: 'Username *', key: 'username', type: 'text', placeholder: 'e.g. doctor.arjun' },
+                  { label: 'Email *', key: 'email', type: 'email', placeholder: 'e.g. arjun@hospital.com' },
+                  { label: 'Password *', key: 'password', type: 'password', placeholder: 'Min 8 characters' },
+                ].map(({ label, key, type, placeholder }) => (
+                  <div key={key}>
+                    <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '5px' }}>{label}</label>
+                    <input
+                      type={type} placeholder={placeholder} required
+                      value={(form as any)[key]}
+                      onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
+                      style={inputStyle}
+                    />
+                  </div>
+                ))}
+
+                <div>
+                  <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '5px' }}>Role *</label>
+                  <select value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value }))} style={{ ...inputStyle, cursor: 'pointer' }}>
+                    <option value="DOCTOR">Doctor</option>
+                    <option value="CAREGIVER">Caretaker</option>
+                    <option value="PATIENT">Patient</option>
+                    <option value="ADMIN">Admin</option>
+                  </select>
+                </div>
+
+                {(form.role === 'DOCTOR' || form.role === 'CAREGIVER' || form.role === 'PATIENT') && (
+                  <div>
+                    <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '5px' }}>Patient Access (optional)</label>
+                    <select value={form.patient_code} onChange={e => setForm(f => ({ ...f, patient_code: e.target.value }))} style={{ ...inputStyle, cursor: 'pointer' }}>
+                      <option value="">— No patient access yet —</option>
+                      <option value="P001">P001 — Meenakshi Raman</option>
+                      <option value="P002">P002 — Synthetic Patient 2</option>
+                    </select>
+                  </div>
+                )}
+
+                <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
+                  <button type="button" onClick={() => setShowAddForm(false)} style={{ flex: 1, padding: '10px', borderRadius: '7px', border: '1px solid #e2e8f0', backgroundColor: '#fff', fontSize: '13px', fontWeight: 600, color: '#475569', cursor: 'pointer' }}>
+                    Cancel
+                  </button>
+                  <button type="submit" disabled={submitting} style={{ flex: 2, padding: '10px', borderRadius: '7px', border: 'none', backgroundColor: submitting ? '#93c5fd' : '#2563eb', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: submitting ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}>
+                    <UserPlus size={15} /> {submitting ? 'Creating…' : 'Create Account'}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Filter + Search bar */}
+      <div style={{ ...card, padding: '14px 16px', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          {ROLE_FILTER_TABS.map(tab => {
+            const active = filterRole === tab.key;
+            return (
+              <button key={tab.key} onClick={() => setFilterRole(tab.key)} style={{ padding: '6px 13px', borderRadius: '20px', border: active ? 'none' : '1px solid #e2e8f0', backgroundColor: active ? '#2563eb' : '#fff', color: active ? '#fff' : '#475569', fontSize: '12px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s' }}>
+                {tab.label} <span style={{ opacity: 0.7 }}>({(counts as any)[tab.key] || 0})</span>
+              </button>
+            );
+          })}
+        </div>
+        <div style={{ position: 'relative', minWidth: '220px' }}>
+          <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+          <input placeholder="Search by name, username, email…" value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{ ...inputStyle, paddingLeft: '32px', borderRadius: '20px' }} />
+        </div>
+      </div>
+
+      {/* Error banner */}
+      {error && (
+        <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '10px 14px', marginBottom: '12px', display: 'flex', gap: '8px', fontSize: '13px', color: '#991b1b', alignItems: 'center' }}>
+          <AlertCircle size={15} /> {error}
+        </div>
+      )}
+
+      {/* User Table */}
+      <div style={card}>
+        {loading ? (
+          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>Loading users…</div>
+        ) : filtered.length === 0 ? (
+          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>No users found matching your filters.</div>
+        ) : (
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+            <thead>
+              <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                {['Name & Username', 'Email', 'Role', 'Patient Access', 'Last Login', 'Status', 'Action'].map(h => (
+                  <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontWeight: 600, color: '#475569', whiteSpace: 'nowrap' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((u, i) => {
+                const m = ROLE_META[u.role] || ROLE_META.ADMIN;
+                const isSelf = String(u.username) === String(user.username);
+                return (
+                  <tr key={u.id} style={{ borderBottom: i < filtered.length - 1 ? '1px solid #f1f5f9' : 'none', backgroundColor: !u.is_active ? '#fafafa' : '#fff', opacity: u.is_active ? 1 : 0.7 }}>
+                    <td style={{ padding: '12px 14px' }}>
+                      <div style={{ fontWeight: 600, color: '#0f172a' }}>{u.full_name}</div>
+                      <div style={{ fontSize: '11px', color: '#94a3b8', fontFamily: 'monospace', marginTop: '2px' }}>@{u.username}</div>
+                    </td>
+                    <td style={{ padding: '12px 14px', color: '#475569', fontSize: '12px' }}>{u.email}</td>
+                    <td style={{ padding: '12px 14px' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '3px 9px', borderRadius: '10px', backgroundColor: m.bg, color: m.color, fontSize: '11px', fontWeight: 700 }}>
+                        {m.icon} {m.label}
+                      </span>
+                    </td>
+                    <td style={{ padding: '12px 14px' }}>
+                      {u.authorized_patients.length > 0
+                        ? u.authorized_patients.map(p => (
+                          <span key={p} style={{ display: 'inline-block', marginRight: '4px', padding: '2px 7px', borderRadius: '8px', backgroundColor: '#eff6ff', color: '#1d4ed8', fontSize: '11px', fontWeight: 600 }}>{p}</span>
+                        ))
+                        : <span style={{ color: '#94a3b8', fontSize: '11px' }}>—</span>
+                      }
+                    </td>
+                    <td style={{ padding: '12px 14px', color: '#94a3b8', fontSize: '11px' }}>{u.last_login_at || '—'}</td>
+                    <td style={{ padding: '12px 14px' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '3px 9px', borderRadius: '10px', fontSize: '11px', fontWeight: 700,
+                        backgroundColor: u.is_active ? '#f0fdf4' : '#fef2f2',
+                        color: u.is_active ? '#16a34a' : '#dc2626' }}>
+                        {u.is_active ? <><UserCheck size={12} /> Active</> : <><UserX size={12} /> Disabled</>}
+                      </span>
+                    </td>
+                    <td style={{ padding: '12px 14px' }}>
+                      {isSelf ? (
+                        <span style={{ fontSize: '11px', color: '#94a3b8' }}>You</span>
+                      ) : (
+                        <button
+                          onClick={() => handleToggle(u)}
+                          disabled={togglingId === u.id}
+                          style={{
+                            padding: '6px 12px', borderRadius: '6px', border: 'none', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                            backgroundColor: u.is_active ? '#fef2f2' : '#f0fdf4',
+                            color: u.is_active ? '#dc2626' : '#16a34a',
+                          }}
+                        >
+                          {togglingId === u.id ? '…' : u.is_active ? 'Disable' : 'Enable'}
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
+};
