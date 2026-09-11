@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   FileText,
   Sparkles,
@@ -6,8 +6,6 @@ import {
   AlertCircle,
   HelpCircle,
   Clock,
-  Mic,
-  MicOff,
   HeartHandshake,
   LogOut,
   Check,
@@ -69,10 +67,6 @@ export const CaretakerMobileApp: React.FC<CaretakerMobileAppProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isWideView, setIsWideView] = useState(false);
 
-  // Speech Recognition state
-  const [isRecording, setIsRecording] = useState(false);
-  const recognitionRef = useRef<any>(null);
-
   // Session state from backend
   const [sessionId, setSessionId] = useState<number | null>(null);
   const [detectedCategory, setDetectedCategory] = useState<string | null>(null);
@@ -87,67 +81,6 @@ export const CaretakerMobileApp: React.FC<CaretakerMobileAppProps> = ({
     wikiFiles?: string[];
     structuredObservation?: any;
   } | null>(null);
-
-  // Initialize Speech Recognition
-  useEffect(() => {
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-
-      recognition.onresult = (event: any) => {
-        let transcript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
-        }
-        if (transcript) {
-          setNoteText((prev) => (prev ? `${prev} ${transcript}` : transcript));
-        }
-      };
-
-      recognition.onerror = () => {
-        setIsRecording(false);
-      };
-
-      recognition.onend = () => {
-        setIsRecording(false);
-      };
-
-      recognitionRef.current = recognition;
-    }
-  }, []);
-
-  const toggleRecording = () => {
-    if (!recognitionRef.current) {
-      // Fallback simulated dictation if browser mic is not granted
-      if (!isRecording) {
-        setIsRecording(true);
-        const sample = QUICK_OBSERVATIONS[Math.floor(Math.random() * QUICK_OBSERVATIONS.length)].text;
-        setTimeout(() => {
-          setNoteText((prev) => (prev ? `${prev} ${sample}` : sample));
-          setIsRecording(false);
-        }, 1500);
-      } else {
-        setIsRecording(false);
-      }
-      return;
-    }
-
-    if (isRecording) {
-      recognitionRef.current.stop();
-      setIsRecording(false);
-    } else {
-      try {
-        recognitionRef.current.start();
-        setIsRecording(true);
-      } catch (err) {
-        setIsRecording(false);
-      }
-    }
-  };
 
   const handleStartAnalysis = async () => {
     const trimmed = noteText.trim();
@@ -563,19 +496,19 @@ export const CaretakerMobileApp: React.FC<CaretakerMobileAppProps> = ({
                   </span>
                 </div>
 
-                {/* Textarea with voice mic trigger */}
-                <div style={{ position: 'relative' }}>
+                {/* Observation Textarea */}
+                <div>
                   <textarea
                     value={noteText}
                     onChange={(e) => setNoteText(e.target.value)}
-                    placeholder="Tap here to type or use the mic (e.g., 'She felt dizzy after getting out of bed', 'Almost slipped near door, no fall', 'Finished half meal')..."
+                    placeholder="Type today's home observation (e.g., 'She felt dizzy after getting out of bed', 'Almost slipped near door, no fall', 'Finished half meal')..."
                     rows={4}
                     disabled={loading || sessionId !== null}
                     style={{
                       width: '100%',
-                      padding: '12px 46px 12px 12px',
+                      padding: '12px 14px',
                       borderRadius: '12px',
-                      border: isRecording ? '2px solid var(--color-danger)' : '1px solid var(--color-border-strong)',
+                      border: '1px solid var(--color-border-strong)',
                       fontSize: '14px',
                       color: 'var(--color-text-main)',
                       backgroundColor: sessionId !== null ? 'var(--color-surface-alt)' : 'var(--color-bg)',
@@ -584,59 +517,9 @@ export const CaretakerMobileApp: React.FC<CaretakerMobileAppProps> = ({
                       boxSizing: 'border-box',
                       fontFamily: 'inherit',
                       lineHeight: 1.5,
-                      transition: 'border 0.2s ease',
                     }}
                   />
-
-                  {/* Voice Mic Button */}
-                  {sessionId === null && (
-                    <button
-                      type="button"
-                      onClick={toggleRecording}
-                      title={isRecording ? 'Stop Recording' : 'Voice-to-Text Dictation'}
-                      style={{
-                        position: 'absolute',
-                        right: '10px',
-                        top: '10px',
-                        width: '34px',
-                        height: '34px',
-                        borderRadius: '50%',
-                        backgroundColor: isRecording ? 'var(--color-danger)' : 'var(--color-surface-alt)',
-                        color: isRecording ? '#ffffff' : 'var(--color-text-main)',
-                        border: isRecording ? 'none' : '1px solid var(--color-border)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        boxShadow: isRecording ? '0 0 14px rgba(220, 38, 38, 0.6)' : 'none',
-                        transition: 'all 0.2s ease',
-                        animation: isRecording ? 'pulse 1.5s infinite' : 'none',
-                      }}
-                    >
-                      {isRecording ? <MicOff size={16} /> : <Mic size={16} />}
-                    </button>
-                  )}
                 </div>
-
-                {/* Recording indicator */}
-                {isRecording && (
-                  <div
-                    style={{
-                      padding: '6px 12px',
-                      borderRadius: '8px',
-                      backgroundColor: 'var(--color-danger-soft)',
-                      color: 'var(--color-danger)',
-                      fontSize: '11.5px',
-                      fontWeight: 600,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                    }}
-                  >
-                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-danger)' }} />
-                    Listening… Speak naturally about what you observed.
-                  </div>
-                )}
 
                 {/* Quick Preset One-Tap Observation Chips */}
                 {sessionId === null && (

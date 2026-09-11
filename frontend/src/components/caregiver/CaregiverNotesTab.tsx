@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   FileText,
   Sparkles,
@@ -11,8 +11,6 @@ import {
   Check,
   RotateCcw,
   BookOpen,
-  Mic,
-  MicOff,
   Smartphone
 } from 'lucide-react';
 import { DashboardResponse } from '../../types';
@@ -55,10 +53,6 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Speech Recognition state
-  const [isRecording, setIsRecording] = useState(false);
-  const recognitionRef = useRef<any>(null);
-
   // Session state from backend
   const [sessionId, setSessionId] = useState<number | null>(null);
   const [detectedCategory, setDetectedCategory] = useState<string | null>(null);
@@ -73,60 +67,6 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
     wikiFiles?: string[];
     structuredObservation?: any;
   } | null>(null);
-
-  // Initialize Speech Recognition
-  useEffect(() => {
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-
-      recognition.onresult = (event: any) => {
-        let transcript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
-        }
-        if (transcript) {
-          setNoteText((prev) => (prev ? `${prev} ${transcript}` : transcript));
-        }
-      };
-
-      recognition.onerror = () => setIsRecording(false);
-      recognition.onend = () => setIsRecording(false);
-      recognitionRef.current = recognition;
-    }
-  }, []);
-
-  const toggleRecording = () => {
-    if (!recognitionRef.current) {
-      if (!isRecording) {
-        setIsRecording(true);
-        const sample = SAMPLE_NOTES[Math.floor(Math.random() * SAMPLE_NOTES.length)];
-        setTimeout(() => {
-          setNoteText((prev) => (prev ? `${prev} ${sample}` : sample));
-          setIsRecording(false);
-        }, 1200);
-      } else {
-        setIsRecording(false);
-      }
-      return;
-    }
-
-    if (isRecording) {
-      recognitionRef.current.stop();
-      setIsRecording(false);
-    } else {
-      try {
-        recognitionRef.current.start();
-        setIsRecording(true);
-      } catch (err) {
-        setIsRecording(false);
-      }
-    }
-  };
 
   const handleStartAnalysis = async () => {
     const trimmed = noteText.trim();
@@ -381,7 +321,7 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
               <span style={{ fontSize: '11px', color: 'var(--color-text-faint)' }}>Plain natural language</span>
             </div>
 
-            <div style={{ position: 'relative' }}>
+            <div>
               <textarea
                 id="caregiver-note-input"
                 value={noteText}
@@ -391,9 +331,9 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                 disabled={loading || sessionId !== null}
                 style={{
                   width: '100%',
-                  padding: '12px 42px 12px 12px',
+                  padding: '12px',
                   borderRadius: '8px',
-                  border: isRecording ? '2px solid var(--color-danger)' : '1px solid var(--color-border-strong)',
+                  border: '1px solid var(--color-border-strong)',
                   fontSize: '14px',
                   color: 'var(--color-text-main)',
                   boxSizing: 'border-box',
@@ -402,59 +342,9 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
                   fontFamily: 'inherit',
                   lineHeight: '1.5',
                   backgroundColor: sessionId !== null ? 'var(--color-bg)' : 'var(--color-surface)',
-                  transition: 'border 0.2s ease',
                 }}
               />
-
-              {/* Voice Mic Button */}
-              {sessionId === null && (
-                <button
-                  type="button"
-                  onClick={toggleRecording}
-                  title={isRecording ? 'Stop Recording' : 'Voice-to-Text Speech Dictation'}
-                  style={{
-                    position: 'absolute',
-                    right: '10px',
-                    top: '10px',
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    backgroundColor: isRecording ? 'var(--color-danger)' : 'var(--color-surface-alt)',
-                    color: isRecording ? '#ffffff' : 'var(--color-text-muted)',
-                    border: '1px solid var(--color-border)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    boxShadow: isRecording ? '0 0 12px rgba(220, 38, 38, 0.5)' : 'none',
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  {isRecording ? <MicOff size={15} /> : <Mic size={15} />}
-                </button>
-              )}
             </div>
-
-            {/* Recording indicator */}
-            {isRecording && (
-              <div
-                style={{
-                  marginTop: '8px',
-                  padding: '6px 12px',
-                  borderRadius: '8px',
-                  backgroundColor: 'var(--color-danger-soft)',
-                  color: 'var(--color-danger)',
-                  fontSize: '11.5px',
-                  fontWeight: 600,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
-              >
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-danger)' }} />
-                Listening… Speak naturally into your microphone.
-              </div>
-            )}
 
             {/* Quick Helper Chips (only when not yet submitted) */}
             {sessionId === null && (
