@@ -266,6 +266,24 @@ class WikiSynchronizer:
                         target_path.write_text(content, encoding="utf-8")
                         updated_paths.append(str(target_path))
                         logger.info(f"Appended observation row to existing Wiki file: {target_path}")
+
+                        # Also ensure Raw Evidence markdown file exists on disk
+                        ev_dir = root / "Raw Evidence" / "Caregiver"
+                        ev_dir.mkdir(parents=True, exist_ok=True)
+                        ev_file = ev_dir / f"{evidence_code}.md"
+                        if not ev_file.exists() or ev_file.stat().st_size == 0:
+                            ev_content = f"""# Evidence {evidence_code}
+
+Patient ID: {patient_code}
+Source Type: CAREGIVER
+Source ID: {observer}
+Observed At: {observed_date_str}
+Recorded At: {observed_date_str}
+Original Statement:
+"{clean_stmt}"
+Status: IMMUTABLE
+"""
+                            ev_file.write_text(ev_content, encoding="utf-8")
                     except Exception as e:
                         logger.error(f"Failed to append to Wiki file {target_path}: {e}")
 
