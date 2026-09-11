@@ -139,6 +139,10 @@ if frontend_dist.exists():
         target = frontend_dist / full_path
         if target.is_file():
             return FileResponse(str(target))
-        return FileResponse(str(frontend_dist / "index.html"))
+        response = FileResponse(str(frontend_dist / "index.html"))
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+        return response
 
 
