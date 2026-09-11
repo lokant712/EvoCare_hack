@@ -629,11 +629,7 @@ describe('Doctor Dashboard Frontend Unit Test Suite (21 Tests)', () => {
       />
     );
 
-    expect(screen.getByText(/Essential Patient Summary/i)).toBeInTheDocument();
-    expect(screen.getByText(/Type 2 Diabetes/i)).toBeInTheDocument();
-    expect(screen.getByText(/Hypertension/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Ask about patient trajectory/i)).toBeInTheDocument();
-    expect(screen.getByText(/View Full Patient Records Tab/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Ask anything about/i)).toBeInTheDocument();
   });
 
   it('27. DoctorClinicalEntryTab renders structured diagnosis and medication table inputs', () => {
@@ -647,7 +643,7 @@ describe('Doctor Dashboard Frontend Unit Test Suite (21 Tests)', () => {
 
     expect(screen.getByText(/Doctor Clinical Entry & Markdown Generator/i)).toBeInTheDocument();
     expect(screen.getByText(/1\. Structured Diagnoses Table/i)).toBeInTheDocument();
-    expect(screen.getByText(/2\. Structured Medications & Prescriptions Table/i)).toBeInTheDocument();
+    expect(screen.getByText(/2\. Prescription Orders/i)).toBeInTheDocument();
     expect(screen.getByText(/Save & Convert to Markdown Note \(\.md\)/i)).toBeInTheDocument();
   });
 

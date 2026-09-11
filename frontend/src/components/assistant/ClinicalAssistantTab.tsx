@@ -4,8 +4,6 @@ import {
   Sparkles,
   Bot,
   AlertTriangle,
-  Mic,
-  MicOff,
   Copy,
   Check,
   RotateCcw,
@@ -47,13 +45,11 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
   const [internalMessages, setInternalMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isListening, setIsListening] = useState(false);
   const [copiedMsgId, setCopiedMsgId] = useState<string | null>(null);
   const [expandedReasoning, setExpandedReasoning] = useState<Record<string, boolean>>({});
 
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const recognitionRef = useRef<any>(null);
 
   const currentMessages = activeSession ? activeSession.messages : internalMessages;
 
@@ -76,69 +72,6 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
     return 'Dr. Chandran';
   };
 
-  // Web Speech API for genuine Voice-to-Text dictation
-  const handleToggleDictation = () => {
-    if (isListening) {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-      }
-      setIsListening(false);
-      return;
-    }
-
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
-    if (SpeechRecognition) {
-      try {
-        const recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = true;
-        recognition.lang = 'en-US';
-
-        recognition.onstart = () => {
-          setIsListening(true);
-        };
-
-        recognition.onresult = (event: any) => {
-          const transcript = Array.from(event.results)
-            .map((result: any) => result[0].transcript)
-            .join('');
-          setInputValue((prev) => (prev ? `${prev} ${transcript}` : transcript));
-        };
-
-        recognition.onerror = (event: any) => {
-          console.warn('Speech recognition error:', event.error);
-          setIsListening(false);
-        };
-
-        recognition.onend = () => {
-          setIsListening(false);
-        };
-
-        recognitionRef.current = recognition;
-        recognition.start();
-      } catch (err) {
-        console.warn('Speech recognition start failed, using fallback:', err);
-        fallbackDictationSimulation();
-      }
-    } else {
-      fallbackDictationSimulation();
-    }
-  };
-
-  // Fallback dictation simulation
-  const fallbackDictationSimulation = () => {
-    setIsListening(true);
-    setTimeout(() => {
-      setInputValue((prev) =>
-        prev
-          ? `${prev} Please review her morning dizziness and fall risk.`
-          : 'Why is she dizzy in the mornings after rising from bed?'
-      );
-      setIsListening(false);
-    }, 1800);
-  };
 
   const handleSend = async (queryText?: string) => {
     const textToSend = (queryText || inputValue).trim();
@@ -394,28 +327,6 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {/* Working Dictation Button */}
-                    <button
-                      onClick={handleToggleDictation}
-                      type="button"
-                      title={isListening ? 'Stop dictation' : 'Dictate question'}
-                      className={isListening ? 'animate-mic-pulse' : ''}
-                      style={{
-                        width: '34px',
-                        height: '34px',
-                        borderRadius: '50%',
-                        backgroundColor: isListening ? '#ef4444' : 'var(--color-surface-alt)',
-                        border: '1px solid var(--color-border)',
-                        color: isListening ? '#ffffff' : 'var(--color-text-muted)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease',
-                      }}
-                    >
-                      {isListening ? <MicOff size={16} /> : <Mic size={16} />}
-                    </button>
 
                     {/* Send Button */}
                     <button
@@ -911,26 +822,6 @@ export const ClinicalAssistantTab: React.FC<ClinicalAssistantTabProps> = ({
               }}
             />
 
-            <button
-              onClick={handleToggleDictation}
-              type="button"
-              title={isListening ? 'Stop dictation' : 'Dictate question'}
-              className={isListening ? 'animate-mic-pulse' : ''}
-              style={{
-                width: '34px',
-                height: '34px',
-                borderRadius: '50%',
-                backgroundColor: isListening ? '#ef4444' : 'var(--color-surface-alt)',
-                border: '1px solid var(--color-border)',
-                color: isListening ? '#ffffff' : 'var(--color-text-muted)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-              }}
-            >
-              {isListening ? <MicOff size={16} /> : <Mic size={16} />}
-            </button>
 
             <button
               onClick={() => handleSend()}

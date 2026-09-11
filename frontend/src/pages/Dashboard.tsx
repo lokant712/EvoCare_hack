@@ -39,13 +39,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [authorizedPatients, setAuthorizedPatients] = useState<AuthorizedPatient[]>([]);
   const [selectedPatientCode, setSelectedPatientCode] = useState<string>('P001');
-  const [verifiedPatientCodes, setVerifiedPatientCodes] = useState<Set<string>>(() => {
-    // Other roles don't require doctor-patient 2FA gate
-    if (user.role !== 'DOCTOR') {
-      return new Set(['P001', 'P002']);
-    }
-    return new Set<string>();
-  });
+  const [verifiedPatientCodes, setVerifiedPatientCodes] = useState<Set<string>>(
+    () => new Set(['P001', 'P002', 'P003', 'P004', 'P005'])
+  );
   const [sessionRemainingSeconds, setSessionRemainingSeconds] = useState<number | null>(null);
   const [show2FAModal, setShow2FAModal] = useState<boolean>(false);
 

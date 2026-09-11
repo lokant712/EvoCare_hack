@@ -282,14 +282,6 @@ a:focus-visible,
   animation: greetingGradient 6s ease infinite;
 }
 
-@keyframes micPulseEffect {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-  50% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-}
-
-.animate-mic-pulse {
-  animation: micPulseEffect 1.5s infinite;
-}
 
 /* Floating Input Pill Shadow */
 .chatgpt-pill-shadow {

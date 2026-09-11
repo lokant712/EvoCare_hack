@@ -63,6 +63,9 @@ Exertional joint discomfort reports related to bilateral knee osteoarthritis.
 | **2026-09-11** | CG001 | *"Her knees hurt."* | Location: Bilateral knees; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-083|EV-CG-083]] |
 | **2026-09-11** | CG001 | *"She had knee pain."* | Location: Bilateral knees | [[Raw Evidence/Caregiver/EV-CG-086|EV-CG-086]] |
 | **2026-09-11** | CG001 | *"She had knee pain after walking in the garden."* | Location: UNKNOWN; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-094|EV-CG-094]] |
+| **2026-09-11** | CG001 | *"Her knees hurt."* | Location: Bilateral knees; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-108|EV-CG-108]] |
+| **2026-09-11** | CG001 | *"She had knee pain."* | Location: Bilateral knees | [[Raw Evidence/Caregiver/EV-CG-111|EV-CG-111]] |
+| **2026-09-11** | CG001 | *"She had knee pain after walking in the garden."* | Location: UNKNOWN; Severity: Mild | [[Raw Evidence/Caregiver/EV-CG-119|EV-CG-119]] |
 
 ---
 
