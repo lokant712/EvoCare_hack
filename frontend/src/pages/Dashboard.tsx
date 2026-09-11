@@ -22,8 +22,9 @@ import {
   ClipboardList,
   PenSquare,
   Menu,
-  UserCheck
-} from 'lucide-react';
+  UserCheck,
+  Clock
+} from 'lucide-react';  
 import { authService, AuthUser, AuthorizedPatient } from '../services/auth';
 import { chatStorageService, ChatSession, ChatMessage } from '../services/chatStorage';
 
@@ -40,7 +41,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   const [authorizedPatients, setAuthorizedPatients] = useState<AuthorizedPatient[]>([]);
   const [selectedPatientCode, setSelectedPatientCode] = useState<string>('P001');
   const [verifiedPatientCodes, setVerifiedPatientCodes] = useState<Set<string>>(
-    () => new Set(['P001', 'P002', 'P003', 'P004', 'P005'])
+    () => new Set()
   );
   const [sessionRemainingSeconds, setSessionRemainingSeconds] = useState<number | null>(null);
   const [show2FAModal, setShow2FAModal] = useState<boolean>(false);
@@ -539,12 +540,47 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
             </div>
           </div>
 
-          {/* Right: Theme Toggle & Security Status */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <ThemeToggle size="sm" />
+          {/* Right: Session Timer, 2FA Status, Lock Chart & Theme Toggle */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Live Session Countdown Timer for Doctor */}
+            {user.role === 'DOCTOR' && sessionRemainingSeconds !== null && (
+              <div
+                id="evocare-top-session-bar"
+                title={`Active session for ${data?.patient?.name || selectedPatientCode}. Auto-locks after 10 mins of access.`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '4px 10px',
+                  borderRadius: '8px',
+                  backgroundColor: sessionRemainingSeconds < 120 ? 'var(--color-danger-soft)' : 'var(--color-accent-soft)',
+                  border: `1px solid ${sessionRemainingSeconds < 120 ? 'var(--color-danger-border)' : 'var(--color-accent-border)'}`,
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  color: sessionRemainingSeconds < 120 ? 'var(--color-danger)' : 'var(--color-accent)',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <Clock size={13} style={{ color: sessionRemainingSeconds < 120 ? 'var(--color-danger)' : 'var(--color-accent)' }} />
+                <span>Session:</span>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontWeight: 700,
+                    letterSpacing: '0.02em',
+                    color: sessionRemainingSeconds < 120 ? 'var(--color-danger)' : 'var(--color-accent-bright)',
+                  }}
+                >
+                  {Math.floor(sessionRemainingSeconds / 60).toString().padStart(2, '0')}:
+                  {(sessionRemainingSeconds % 60).toString().padStart(2, '0')}
+                </span>
+              </div>
+            )}
+
+            {/* 2FA Verified Badge */}
             <button
               onClick={() => setShow2FAModal(true)}
-              title="Doctor 2FA Security Consent Verified"
+              title="Doctor 2FA Security Consent Verified. Click to view or re-verify."
               style={{
                 padding: '4px 10px',
                 borderRadius: '8px',
@@ -562,6 +598,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
               <UserCheck size={13} />
               <span>2FA Verified</span>
             </button>
+
+            <ThemeToggle size="sm" />
           </div>
         </header>
 

@@ -11,8 +11,7 @@ import {
   Clock,
   Pin,
   Bot,
-  LogOut,
-  Lock
+  LogOut
 } from 'lucide-react';
 import { ChatSession } from '../../services/chatStorage';
 import { AuthUser } from '../../services/auth';
@@ -51,6 +50,7 @@ export const ChatGptSidebar: React.FC<ChatGptSidebarProps> = ({
   onLogout,
   sessionRemainingSeconds,
   patientCode,
+  onOpenSecurityModal,
 }) => {
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
@@ -261,6 +261,8 @@ export const ChatGptSidebar: React.FC<ChatGptSidebarProps> = ({
               EvoCare AI
             </span>
             <span
+              onClick={onOpenSecurityModal}
+              title="Click to view 2FA Security Consent Gate"
               style={{
                 fontSize: '9px',
                 fontWeight: 700,
@@ -269,6 +271,7 @@ export const ChatGptSidebar: React.FC<ChatGptSidebarProps> = ({
                 backgroundColor: 'var(--color-accent-soft)',
                 color: 'var(--color-accent)',
                 fontFamily: 'var(--font-mono)',
+                cursor: onOpenSecurityModal ? 'pointer' : 'default',
               }}
             >
               CLINICAL
@@ -651,8 +654,8 @@ export const ChatGptSidebar: React.FC<ChatGptSidebarProps> = ({
                 fontWeight: 600,
               }}
             >
-              <Lock size={12} />
-              Session Lock:
+              <Clock size={12} />
+              Session:
             </span>
             <span
               style={{
