@@ -6,8 +6,7 @@ env/
 ENV/
 
 # Build outputs
-dist/
-frontend/dist/
+/dist/
 build/
 *.egg-info/
 
