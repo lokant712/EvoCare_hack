@@ -97,6 +97,13 @@ The caregiver log captures functional ambulation, postural stability, assistive 
 | **2026-09-11** | CG002 | *"She needed someone's arm while walking outside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-474|EV-CG-474]] |
 | **2026-09-11** | CG001 | *"She walked normally inside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-475|EV-CG-475]] |
 | **2026-09-11** | CG002 | *"She needed support and was holding onto furniture today while walking."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-476|EV-CG-476]] |
+| **2026-09-11** | CG001 | *"She was holding the dining table."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-486|EV-CG-486]] |
+| **2026-09-11** | CG001 | *"She walked across the garden today with help."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-489|EV-CG-489]] |
+| **2026-09-11** | CG001 | *"She is weak and holding walls."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-493|EV-CG-493]] |
+| **2026-09-11** | CG001 | *"She is weak."* | Caregiver observation (other) | [[Raw Evidence/Caregiver/EV-CG-498|EV-CG-498]] |
+| **2026-09-11** | CG002 | *"She needed someone's arm while walking outside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-499|EV-CG-499]] |
+| **2026-09-11** | CG001 | *"She walked normally inside today."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-500|EV-CG-500]] |
+| **2026-09-11** | CG002 | *"She needed support and was holding onto furniture today while walking."* | Caregiver observation (mobility) | [[Raw Evidence/Caregiver/EV-CG-501|EV-CG-501]] |
 
 ---
 
@@ -145,6 +152,9 @@ Caregiver records illustrate a progression: Independent → Unsteady → Furnitu
 
 
 ## Longitudinal Memory
+- **Version 57** (2026-09-11): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-501|EV-CG-501]])*
+- **Version 56** (2026-09-11): Mobility has shown recent variability, with increased support required during earlier outdoor observations followed by later improvement in indoor walking without support. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-500|EV-CG-500]])*
+- **Version 55** (2026-09-11): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-499|EV-CG-499]])*
 - **Version 54** (2026-09-11): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-476|EV-CG-476]])*
 - **Version 53** (2026-09-11): Mobility has shown recent variability, with increased support required during earlier outdoor observations followed by later improvement in indoor walking without support. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-475|EV-CG-475]])*
 - **Version 52** (2026-09-11): Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement. *(Evidence: [[Raw Evidence/Caregiver/EV-CG-474|EV-CG-474]])*
@@ -301,8 +311,8 @@ Caregiver records illustrate a progression: Independent → Unsteady → Furnitu
 ---
 
 ## Memory Version History
-- **Current Memory Version**: 54
-- **Previous Version**: 53
-- **Last Synchronized**: 2026-09-11 00:14:59 UTC
+- **Current Memory Version**: 57
+- **Previous Version**: 56
+- **Last Synchronized**: 2026-09-11 00:32:03 UTC
 - **Update Type**: TEMPORAL_UPDATE
-- **Change Summary**: Applied proposal PROP-8AAD29F4: Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement.
+- **Change Summary**: Applied proposal PROP-91931443: Mobility has shown renewed decline, with increased support requirement noted after a transient period of indoor improvement.

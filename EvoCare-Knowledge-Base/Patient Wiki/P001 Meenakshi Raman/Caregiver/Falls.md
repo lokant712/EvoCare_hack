@@ -52,6 +52,7 @@ The patient experienced one completed fall 8 months ago and one near-fall on 202
 ---
 
 ## Evidence
+- [[Raw Evidence/Caregiver/EV-CG-482|EV-CG-482]]
 - [[Raw Evidence/Caregiver/EV-CG-457|EV-CG-457]]
 - [[Raw Evidence/Caregiver/EV-CG-432|EV-CG-432]]
 - [[Raw Evidence/Caregiver/EV-CG-407|EV-CG-407]]

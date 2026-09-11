@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   FileText,
   Sparkles,
@@ -10,7 +10,10 @@ import {
   ShieldCheck,
   Check,
   RotateCcw,
-  BookOpen
+  BookOpen,
+  Mic,
+  MicOff,
+  Smartphone
 } from 'lucide-react';
 import { DashboardResponse } from '../../types';
 import { apiService } from '../../services/api';
@@ -21,6 +24,7 @@ interface CaregiverNotesTabProps {
   data: DashboardResponse;
   user: AuthUser;
   onObservationSaved: () => void;
+  onSwitchToMobile?: () => void;
 }
 
 interface ClarificationQuestionState {
@@ -44,11 +48,16 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
   data,
   user,
   onObservationSaved,
+  onSwitchToMobile,
 }) => {
   const [noteText, setNoteText] = useState('');
-  const [caregiverId] = useState('CG001');
+  const [caregiverId] = useState(user.username || 'CG001');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Speech Recognition state
+  const [isRecording, setIsRecording] = useState(false);
+  const recognitionRef = useRef<any>(null);
 
   // Session state from backend
   const [sessionId, setSessionId] = useState<number | null>(null);
@@ -64,6 +73,60 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
     wikiFiles?: string[];
     structuredObservation?: any;
   } | null>(null);
+
+  // Initialize Speech Recognition
+  useEffect(() => {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event: any) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        if (transcript) {
+          setNoteText((prev) => (prev ? `${prev} ${transcript}` : transcript));
+        }
+      };
+
+      recognition.onerror = () => setIsRecording(false);
+      recognition.onend = () => setIsRecording(false);
+      recognitionRef.current = recognition;
+    }
+  }, []);
+
+  const toggleRecording = () => {
+    if (!recognitionRef.current) {
+      if (!isRecording) {
+        setIsRecording(true);
+        const sample = SAMPLE_NOTES[Math.floor(Math.random() * SAMPLE_NOTES.length)];
+        setTimeout(() => {
+          setNoteText((prev) => (prev ? `${prev} ${sample}` : sample));
+          setIsRecording(false);
+        }, 1200);
+      } else {
+        setIsRecording(false);
+      }
+      return;
+    }
+
+    if (isRecording) {
+      recognitionRef.current.stop();
+      setIsRecording(false);
+    } else {
+      try {
+        recognitionRef.current.start();
+        setIsRecording(true);
+      } catch (err) {
+        setIsRecording(false);
+      }
+    }
+  };
 
   const handleStartAnalysis = async () => {
     const trimmed = noteText.trim();
@@ -246,25 +309,50 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
             <span>Observer: <b>{user.full_name || 'Caregiver'} ({caregiverId})</b></span>
           </div>
 
-          <button
-            onClick={handleReset}
-            style={{
-              padding: '6px 12px',
-              borderRadius: '6px',
-              border: '1px solid var(--color-border-strong)',
-              backgroundColor: 'var(--color-surface)',
-              color: 'var(--color-text-secondary)',
-              fontSize: '12px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-            }}
-          >
-            <RotateCcw size={13} />
-            <span>New Note</span>
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {onSwitchToMobile && (
+              <button
+                onClick={onSwitchToMobile}
+                title="Switch to Mobile App View"
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  border: '1px solid var(--color-border-strong)',
+                  backgroundColor: 'var(--color-surface-alt)',
+                  color: 'var(--color-text-main)',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                <Smartphone size={13} style={{ color: 'var(--color-success)' }} />
+                <span>Mobile View</span>
+              </button>
+            )}
+
+            <button
+              onClick={handleReset}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '6px',
+                border: '1px solid var(--color-border-strong)',
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text-secondary)',
+                fontSize: '12px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+            >
+              <RotateCcw size={13} />
+              <span>New Note</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -272,7 +360,7 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
       <CaregiverRequestNotificationBanner onConnectionsChanged={onObservationSaved} />
 
       {/* Main Grid: Input Column & History Feed */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))', gap: '24px' }}>
         {/* Left Column: Note Entry & Clarification Flow */}
         <div>
           {/* Note Input Box */}
@@ -293,28 +381,80 @@ export const CaregiverNotesTab: React.FC<CaregiverNotesTabProps> = ({
               <span style={{ fontSize: '11px', color: 'var(--color-text-faint)' }}>Plain natural language</span>
             </div>
 
-            <textarea
-              id="caregiver-note-input"
-              value={noteText}
-              onChange={(e) => setNoteText(e.target.value)}
-              placeholder="Describe what you observed (e.g., 'She felt dizzy when getting out of bed this morning', 'She needed support walking outside', 'She only finished half her lunch')..."
-              rows={4}
-              disabled={loading || sessionId !== null}
-              style={{
-                width: '100%',
-                padding: '12px',
-                borderRadius: '8px',
-                border: '1px solid var(--color-border-strong)',
-                fontSize: '14px',
-                color: 'var(--color-text-main)',
-                boxSizing: 'border-box',
-                resize: 'vertical',
-                outline: 'none',
-                fontFamily: 'inherit',
-                lineHeight: '1.5',
-                backgroundColor: sessionId !== null ? 'var(--color-bg)' : 'var(--color-surface)',
-              }}
-            />
+            <div style={{ position: 'relative' }}>
+              <textarea
+                id="caregiver-note-input"
+                value={noteText}
+                onChange={(e) => setNoteText(e.target.value)}
+                placeholder="Describe what you observed (e.g., 'She felt dizzy when getting out of bed this morning', 'She needed support walking outside', 'She only finished half her lunch')..."
+                rows={4}
+                disabled={loading || sessionId !== null}
+                style={{
+                  width: '100%',
+                  padding: '12px 42px 12px 12px',
+                  borderRadius: '8px',
+                  border: isRecording ? '2px solid var(--color-danger)' : '1px solid var(--color-border-strong)',
+                  fontSize: '14px',
+                  color: 'var(--color-text-main)',
+                  boxSizing: 'border-box',
+                  resize: 'vertical',
+                  outline: 'none',
+                  fontFamily: 'inherit',
+                  lineHeight: '1.5',
+                  backgroundColor: sessionId !== null ? 'var(--color-bg)' : 'var(--color-surface)',
+                  transition: 'border 0.2s ease',
+                }}
+              />
+
+              {/* Voice Mic Button */}
+              {sessionId === null && (
+                <button
+                  type="button"
+                  onClick={toggleRecording}
+                  title={isRecording ? 'Stop Recording' : 'Voice-to-Text Speech Dictation'}
+                  style={{
+                    position: 'absolute',
+                    right: '10px',
+                    top: '10px',
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    backgroundColor: isRecording ? 'var(--color-danger)' : 'var(--color-surface-alt)',
+                    color: isRecording ? '#ffffff' : 'var(--color-text-muted)',
+                    border: '1px solid var(--color-border)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    boxShadow: isRecording ? '0 0 12px rgba(220, 38, 38, 0.5)' : 'none',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  {isRecording ? <MicOff size={15} /> : <Mic size={15} />}
+                </button>
+              )}
+            </div>
+
+            {/* Recording indicator */}
+            {isRecording && (
+              <div
+                style={{
+                  marginTop: '8px',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  backgroundColor: 'var(--color-danger-soft)',
+                  color: 'var(--color-danger)',
+                  fontSize: '11.5px',
+                  fontWeight: 600,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-danger)' }} />
+                Listening… Speak naturally into your microphone.
+              </div>
+            )}
 
             {/* Quick Helper Chips (only when not yet submitted) */}
             {sessionId === null && (

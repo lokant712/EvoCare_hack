@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   Plus,
   Smartphone,
+  Laptop,
   Maximize2,
   Minimize2
 } from 'lucide-react';
@@ -32,6 +33,7 @@ interface CaretakerMobileAppProps {
   onSelectPatient?: (code: string) => void;
   onObservationSaved: () => void;
   onLogout?: () => void;
+  onSwitchToDesktop?: () => void;
 }
 
 interface ClarificationQuestionState {
@@ -58,6 +60,7 @@ export const CaretakerMobileApp: React.FC<CaretakerMobileAppProps> = ({
   onSelectPatient,
   onObservationSaved,
   onLogout,
+  onSwitchToDesktop,
 }) => {
   const [activeTab, setActiveTab] = useState<'log' | 'history' | 'pairing'>('log');
   const [noteText, setNoteText] = useState('');
@@ -362,6 +365,30 @@ export const CaretakerMobileApp: React.FC<CaretakerMobileAppProps> = ({
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+            {onSwitchToDesktop && (
+              <button
+                onClick={onSwitchToDesktop}
+                title="Switch to PC Desktop Portal"
+                style={{
+                  padding: '4px 8px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  backgroundColor: 'var(--color-surface-alt)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text-main)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                <Laptop size={13} style={{ color: 'var(--color-accent)' }} />
+                <span>PC View</span>
+              </button>
+            )}
+
             {/* Desktop Frame Mode Switcher */}
             <button
               onClick={() => setIsWideView(!isWideView)}

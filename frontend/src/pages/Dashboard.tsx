@@ -6,6 +6,7 @@ import { PatientRecordsTab } from '../components/patient/PatientRecordsTab';
 import { ClinicalAssistantTab } from '../components/assistant/ClinicalAssistantTab';
 import { DoctorClinicalEntryTab } from '../components/clinical/DoctorClinicalEntryTab';
 import { PatientCompanionTab } from '../components/patient/PatientCompanionTab';
+import { CaregiverNotesTab } from '../components/caregiver/CaregiverNotesTab';
 import { CaretakerMobileApp } from './CaretakerMobileApp';
 import { AdminUserManagement } from '../components/admin/AdminUserManagement';
 import { DoctorPatientAccessGate } from '../components/doctor/DoctorPatientAccessGate';
@@ -47,6 +48,23 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   });
   const [sessionRemainingSeconds, setSessionRemainingSeconds] = useState<number | null>(null);
   const [show2FAModal, setShow2FAModal] = useState<boolean>(false);
+
+  // Responsive device detection for Caretaker: auto-switches between mobile & desktop PC
+  const [isMobileScreen, setIsMobileScreen] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
+  const [caregiverViewMode, setCaregiverViewMode] = useState<'auto' | 'mobile' | 'desktop'>('auto');
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileScreen(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Chat sessions state
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
@@ -272,19 +290,47 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     );
   }
 
-  // Caregiver Login Mode
+  // Caregiver Login Mode: Actively switches between Mobile Smartphone App and Desktop PC Portal based on screen width / device
   if (user.role === 'CAREGIVER') {
+    const showMobileView =
+      caregiverViewMode === 'mobile' || (caregiverViewMode === 'auto' && isMobileScreen);
+
+    if (showMobileView) {
+      return (
+        <div style={{ minHeight: '100dvh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
+          <CaretakerMobileApp
+            data={data}
+            user={user}
+            authorizedPatients={authorizedPatients}
+            selectedPatientCode={selectedPatientCode}
+            onSelectPatient={setSelectedPatientCode}
+            onObservationSaved={refetch}
+            onLogout={onLogout}
+            onSwitchToDesktop={() => setCaregiverViewMode('desktop')}
+          />
+        </div>
+      );
+    }
+
+    // Full PC Desktop Caregiver Portal View
     return (
-      <div style={{ minHeight: '100dvh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
-        <CaretakerMobileApp
-          data={data}
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
+        <Header
+          patient={data.patient}
           user={user}
           authorizedPatients={authorizedPatients}
           selectedPatientCode={selectedPatientCode}
           onSelectPatient={setSelectedPatientCode}
-          onObservationSaved={refetch}
           onLogout={onLogout}
         />
+        <main style={{ flex: 1 }}>
+          <CaregiverNotesTab
+            data={data}
+            user={user}
+            onObservationSaved={refetch}
+            onSwitchToMobile={() => setCaregiverViewMode('mobile')}
+          />
+        </main>
       </div>
     );
   }

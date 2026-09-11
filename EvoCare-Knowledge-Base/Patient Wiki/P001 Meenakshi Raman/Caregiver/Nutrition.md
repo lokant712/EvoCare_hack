@@ -55,6 +55,9 @@ Meal intake, appetite variation, and hydration logs recorded by caregivers.
 | **2026-09-11** | CG001 | *"She didn't eat much."* | Meal: Dinner (Only a few bites (<25%)) | [[Raw Evidence/Caregiver/EV-CG-458|EV-CG-458]] |
 | **2026-09-11** | CG001 | *"She ate half her lunch."* | Meal: Lunch (About half (50%)) | [[Raw Evidence/Caregiver/EV-CG-469|EV-CG-469]] |
 | **2026-09-11** | CG001 | *"She ate all her dinner."* | Meal: Dinner (UNKNOWN) | [[Raw Evidence/Caregiver/EV-CG-470|EV-CG-470]] |
+| **2026-09-11** | CG001 | *"She didn't eat much."* | Meal: Dinner (Only a few bites (<25%)) | [[Raw Evidence/Caregiver/EV-CG-483|EV-CG-483]] |
+| **2026-09-11** | CG001 | *"She ate half her lunch."* | Meal: Lunch (About half (50%)) | [[Raw Evidence/Caregiver/EV-CG-494|EV-CG-494]] |
+| **2026-09-11** | CG001 | *"She ate all her dinner."* | Meal: Dinner (UNKNOWN) | [[Raw Evidence/Caregiver/EV-CG-495|EV-CG-495]] |
 
 ---
 
