@@ -1,22 +1,58 @@
 {
-  "collapse-filter": true,
+  "collapse-filter": false,
   "search": "",
   "showTags": false,
   "showAttachments": false,
-  "hideUnresolved": false,
-  "showOrphans": true,
-  "collapse-color-groups": true,
-  "colorGroups": [],
-  "collapse-display": true,
-  "showArrow": false,
+  "hideUnresolved": true,
+  "showOrphans": false,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:Caregiver",
+      "color": {
+        "a": 1,
+        "rgb": 1095797
+      }
+    },
+    {
+      "query": "path:Clinical",
+      "color": {
+        "a": 1,
+        "rgb": 3900150
+      }
+    },
+    {
+      "query": "path:Derived",
+      "color": {
+        "a": 1,
+        "rgb": 9133302
+      }
+    },
+    {
+      "query": "path:Raw Evidence",
+      "color": {
+        "a": 1,
+        "rgb": 16096779
+      }
+    },
+    {
+      "query": "file:Patient Overview",
+      "color": {
+        "a": 1,
+        "rgb": 16007006
+      }
+    }
+  ],
+  "collapse-display": false,
+  "showArrow": true,
   "textFadeMultiplier": 0,
-  "nodeSizeMultiplier": 1,
-  "lineSizeMultiplier": 1,
-  "collapse-forces": true,
-  "centerStrength": 0.518713248970312,
-  "repelStrength": 10,
+  "nodeSizeMultiplier": 1.35,
+  "lineSizeMultiplier": 1.45,
+  "collapse-forces": false,
+  "centerStrength": 0.55,
+  "repelStrength": 14,
   "linkStrength": 1,
-  "linkDistance": 250,
-  "scale": 0.5792782456774478,
-  "close": true
+  "linkDistance": 180,
+  "scale": 0.5,
+  "close": false
 }
