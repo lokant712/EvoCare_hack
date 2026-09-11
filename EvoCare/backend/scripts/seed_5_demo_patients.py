@@ -138,8 +138,14 @@ def seed_patients():
         }
     ]
 
-    kb_base = Path(backend_dir).parent / "EvoCare-Knowledge-Base" / "Patient Wiki"
-    kb_base.mkdir(parents=True, exist_ok=True)
+    kb_roots = [
+        Path(backend_dir).parent / "knowledge-base" / "Patient Wiki",
+        Path(backend_dir).parent.parent / "EvoCare-Knowledge-Base" / "Patient Wiki",
+        Path(backend_dir).parent / "EvoCare-Knowledge-Base" / "Patient Wiki",
+    ]
+
+    for kb_base in kb_roots:
+        kb_base.mkdir(parents=True, exist_ok=True)
 
     for pdata in patients_data:
         code = pdata["patient_code"]
@@ -213,36 +219,65 @@ def seed_patients():
                     start_date=datetime.now(timezone.utc) - timedelta(days=90)
                 ))
 
-        # Add memory overview page if not present
-        mp_exist = db.query(MemoryPage).filter(MemoryPage.patient_id == pat.id, MemoryPage.title == "Patient Overview").first()
-        if not mp_exist:
-            db.add(MemoryPage(
-                patient_id=pat.id,
-                path=f"Patient Wiki/{pat.patient_code} {pat.name}/Patient Overview.md",
-                title="Patient Overview",
-                content=f"# Patient Overview: {pat.name} ({pat.patient_code})\n\n- **Age/Sex:** {pat.age}y / {pat.sex}\n- **Location:** {pat.location}\n- **Primary Email:** {pat.email}\n- **Clinical Status:** {pat.status}\n",
-                page_type=PageType.PATIENT,
-                version=1
-            ))
+        # Ensure Disk Wiki directory structure exists for all KB roots
+        pat_dir_name = f"{pat.patient_code} {pat.name}"
+        for kb_base in kb_roots:
+            pat_wiki_dir = kb_base / pat_dir_name
+            pat_wiki_dir.mkdir(parents=True, exist_ok=True)
+            (pat_wiki_dir / "Caregiver").mkdir(exist_ok=True)
+            (pat_wiki_dir / "Clinical").mkdir(exist_ok=True)
+            (pat_wiki_dir / "Derived").mkdir(exist_ok=True)
 
-        # Ensure Disk Wiki directory structure exists
-        pat_dir_name = f"{pat.patient_code} {pat.name}" if pat.patient_code == "P001" else pat.patient_code
-        pat_wiki_dir = kb_base / pat_dir_name
-        pat_wiki_dir.mkdir(parents=True, exist_ok=True)
-        (pat_wiki_dir / "Caregiver").mkdir(exist_ok=True)
-        (pat_wiki_dir / "Clinical").mkdir(exist_ok=True)
-        (pat_wiki_dir / "Derived").mkdir(exist_ok=True)
+            # 1. Patient Overview.md
+            overview_file = pat_wiki_dir / "Patient Overview.md"
+            if not overview_file.exists():
+                overview_file.write_text(
+                    f"# Patient Overview: {pat.name} ({pat.patient_code})\n\n"
+                    f"- **Age / Sex:** {pat.age}y / {pat.sex}\n"
+                    f"- **Location:** {pat.location}\n"
+                    f"- **Primary Email:** {pat.email}\n"
+                    f"- **Clinical Status:** {pat.status}\n"
+                    f"- **Primary Physician:** Dr. Anand Rao\n"
+                    f"- **Primary Caregiver:** Priya ({pat.patient_code})\n\n"
+                    f"## Baseline Longitudinal Summary\n"
+                    + "\n".join([f"- **{b[0]}:** {b[1]}" for b in pdata["baselines"]]) + "\n",
+                    encoding="utf-8"
+                )
 
-        overview_file = pat_wiki_dir / "Patient Overview.md"
-        if not overview_file.exists():
-            overview_file.write_text(
-                f"# Patient Overview: {pat.name} ({pat.patient_code})\n\n"
-                f"- **Age / Sex:** {pat.age}y / {pat.sex}\n"
-                f"- **Location:** {pat.location}\n"
-                f"- **Contact:** {pat.email}\n"
-                f"- **Baseline Health Profile:** {pdata['baselines'][0][1]}\n",
-                encoding="utf-8"
-            )
+            # 2. Clinical/Diagnoses.md
+            diag_file = pat_wiki_dir / "Clinical" / "Diagnoses.md"
+            if not diag_file.exists():
+                diag_file.write_text(
+                    f"# Active Diagnoses & Problem List: {pat.name}\n\n"
+                    f"## Confirmed Clinical Conditions\n"
+                    + "\n".join([f"- **{m[3]}:** Managed on {m[0]} {m[1]} ({m[2]})." for m in pdata["medications"]]) + "\n",
+                    encoding="utf-8"
+                )
+
+            # 3. Clinical/Medications.md
+            med_file = pat_wiki_dir / "Clinical" / "Medications.md"
+            if not med_file.exists():
+                med_file.write_text(
+                    f"# Active Medications: {pat.name}\n\n"
+                    f"| Medication | Dosage | Schedule | Indication |\n"
+                    f"| :--- | :--- | :--- | :--- |\n"
+                    + "\n".join([f"| **{m[0]}** | {m[1]} | {m[2]} | {m[3]} |" for m in pdata["medications"]]) + "\n",
+                    encoding="utf-8"
+                )
+
+            # 4. Caregiver domain baseline markdown files
+            for b_cat, b_val in pdata["baselines"]:
+                cat_file = pat_wiki_dir / "Caregiver" / f"{b_cat}.md"
+                if not cat_file.exists():
+                    cat_file.write_text(
+                        f"# Caregiver Observation Domain: {b_cat}\n"
+                        f"**Patient:** {pat.name} ({pat.patient_code})\n\n"
+                        f"## Baseline Assessment\n"
+                        f"- **Established Baseline:** {b_val}\n\n"
+                        f"## Chronological Observation Log\n"
+                        f"- `[EV-CG-{pat.patient_code}-001]` Baseline established during initial comprehensive geriatric assessment.\n",
+                        encoding="utf-8"
+                    )
 
     db.commit()
     db.close()
