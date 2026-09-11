@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  evocare:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - JWT_SECRET_KEY=evocare-production-secret-jwt-key-2026!
+    volumes:
+      - ./EvoCare/backend/evocare.db:/app/EvoCare/backend/evocare.db
+      - ./EvoCare-Knowledge-Base:/app/EvoCare-Knowledge-Base
