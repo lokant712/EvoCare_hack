@@ -89,3 +89,30 @@ app.include_router(dashboard.router, prefix=settings.API_V1_STR)
 app.include_router(clinical_reasoning.router, prefix=settings.API_V1_STR)
 app.include_router(patient_companion.router, prefix=settings.API_V1_STR)
 
+# Serve built frontend static files if present (All-in-One Deployment)
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from pathlib import Path
+
+frontend_dist = Path(__file__).resolve().parent.parent.parent.parent / "frontend" / "dist"
+if not frontend_dist.exists():
+    frontend_dist = Path("/app/frontend_dist")
+if not frontend_dist.exists():
+    frontend_dist = Path(__file__).resolve().parent.parent.parent / "frontend_dist"
+
+if frontend_dist.exists():
+    assets_dir = frontend_dist / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def serve_spa_frontend(full_path: str):
+        # Don't intercept API routes or docs
+        if full_path.startswith("api") or full_path in ("docs", "redoc", "openapi.json", "health"):
+            return None
+        target = frontend_dist / full_path
+        if target.is_file():
+            return FileResponse(str(target))
+        return FileResponse(str(frontend_dist / "index.html"))
+
+
