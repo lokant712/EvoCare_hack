@@ -25,7 +25,6 @@ export const CareNetworkScene: React.FC = () => {
     const height = mount.clientHeight;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#ff00ff');
     const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
     camera.position.z = 9;
 
