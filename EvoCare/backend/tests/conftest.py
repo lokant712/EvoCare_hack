@@ -21,13 +21,20 @@ def db_session():
     db = SessionLocal()
     # Ensure KB is imported
     ImportService.import_all(db)
+    from app.models.security import User
+    if not db.query(User).filter(User.username == "doctor.demo").first():
+        try:
+            from scripts.seed_security_demo import seed_security_and_p002
+            seed_security_and_p002()
+        except Exception:
+            pass
     try:
         yield db
     finally:
         db.close()
 
 @pytest.fixture(scope="session")
-def client():
+def client(db_session):
     c = TestClient(app)
     from app.core.security import create_access_token
     from app.models.security import User

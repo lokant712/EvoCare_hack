@@ -19,6 +19,8 @@ All four diagnoses form the long-standing diagnostic baseline established prior 
 ---
 
 ## Clinical Information (Doctor)
+- **2026-09-11 Encounter**: Dr. Ramesh Varma, MD (Attending Physician) recorded 1 diagnosis(es): **Orthostatic Hypotension** (I95.1). Ref: [[Doctor Records/Consultation_P001_20260911_021201.md|Consultation_P001_20260911_021201.md]]
+- **2026-09-11 Encounter**: Dr. Ramesh Varma, MD (Attending Physician) recorded 1 diagnosis(es): **Orthostatic Hypotension** (I95.1). Ref: [[Doctor Records/Consultation_P001_20260911_020920.md|Consultation_P001_20260911_020920.md]]
 - **2026-09-11 Encounter**: Dr. Ramesh Varma, MD (Attending Physician) recorded 1 diagnosis(es): **Orthostatic Hypotension** (I95.1). Ref: [[Doctor Records/Consultation_P001_20260911_011905.md|Consultation_P001_20260911_011905.md]]
 - **2026-09-11 Encounter**: Dr. Ramesh Varma, MD (Attending Physician) recorded 1 diagnosis(es): **Orthostatic Hypotension** (I95.1). Ref: [[Doctor Records/Consultation_P001_20260911_003159.md|Consultation_P001_20260911_003159.md]]
 - **2026-09-11 Encounter**: Dr. Ramesh Varma, MD (Attending Physician) recorded 1 diagnosis(es): **Orthostatic Hypotension** (I95.1). Ref: [[Doctor Records/Consultation_P001_20260911_001455.md|Consultation_P001_20260911_001455.md]]

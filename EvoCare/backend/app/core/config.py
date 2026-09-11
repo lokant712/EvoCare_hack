@@ -23,7 +23,11 @@ class Settings:
     DEBUG: bool = os.getenv("DEBUG", "True").lower() in ("true", "1")
     KNOWLEDGE_BASE_DIR: str = os.getenv(
         "KNOWLEDGE_BASE_DIR",
-        str(Path(__file__).resolve().parent.parent.parent.parent / "knowledge-base")
+        str(
+            (Path(__file__).resolve().parents[4] / "EvoCare-Knowledge-Base")
+            if (Path(__file__).resolve().parents[4] / "EvoCare-Knowledge-Base").exists()
+            else (Path(__file__).resolve().parents[3] / "knowledge-base")
+        )
     )
 
     # Multi-Tier AI Provider Settings (Gemini Flash + Groq + Deterministic Fallback)

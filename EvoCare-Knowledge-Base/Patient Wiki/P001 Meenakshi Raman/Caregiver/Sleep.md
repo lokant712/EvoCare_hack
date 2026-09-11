@@ -36,6 +36,8 @@ Nocturnal sleep duration and sleep quality observations recorded by family.
 | **2026-09-11** | CG001 | *"She woke up in the night."* | Caregiver observation (sleep) | [[Raw Evidence/Caregiver/EV-CG-462|EV-CG-462]] |
 | **2026-09-11** | CG001 | *"She woke up in the night."* | Caregiver observation (sleep) | [[Raw Evidence/Caregiver/EV-CG-487|EV-CG-487]] |
 | **2026-09-11** | CG001 | *"She woke up in the night."* | Caregiver observation (sleep) | [[Raw Evidence/Caregiver/EV-CG-512|EV-CG-512]] |
+| **2026-09-11** | CG001 | *"She woke up in the night."* | Caregiver observation (sleep) | [[Raw Evidence/Caregiver/EV-CG-537|EV-CG-537]] |
+| **2026-09-11** | CG001 | *"She woke up in the night."* | Caregiver observation (sleep) | [[Raw Evidence/Caregiver/EV-CG-060|EV-CG-060]] |
 
 ---
 

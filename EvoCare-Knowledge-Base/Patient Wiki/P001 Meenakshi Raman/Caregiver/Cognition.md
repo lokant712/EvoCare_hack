@@ -62,6 +62,12 @@ Longitudinal behavioral and cognitive notes recorded by family members.
 | **2026-09-11** | CG001 | *"She forgot what day it was and seemed confused."* | Caregiver observation (cognition) | [[Raw Evidence/Caregiver/EV-CG-504|EV-CG-504]] |
 | **2026-09-11** | CG001 | *"She seems confused."* | Duration: Brief moment (few minutes) | [[Raw Evidence/Caregiver/EV-CG-509|EV-CG-509]] |
 | **2026-09-11** | CG001 | *"She seems confused today."* | Caregiver observation (cognition) | [[Raw Evidence/Caregiver/EV-CG-522|EV-CG-522]] |
+| **2026-09-11** | CG001 | *"She forgot what day it was and seemed confused."* | Caregiver observation (cognition) | [[Raw Evidence/Caregiver/EV-CG-529|EV-CG-529]] |
+| **2026-09-11** | CG001 | *"She seems confused."* | Duration: Brief moment (few minutes) | [[Raw Evidence/Caregiver/EV-CG-534|EV-CG-534]] |
+| **2026-09-11** | CG001 | *"She seems confused today."* | Caregiver observation (cognition) | [[Raw Evidence/Caregiver/EV-CG-547|EV-CG-547]] |
+| **2026-09-11** | CG001 | *"She forgot what day it was and seemed confused."* | Caregiver observation (cognition) | [[Raw Evidence/Caregiver/EV-CG-052|EV-CG-052]] |
+| **2026-09-11** | CG001 | *"She seems confused."* | Duration: Brief moment (few minutes) | [[Raw Evidence/Caregiver/EV-CG-057|EV-CG-057]] |
+| **2026-09-11** | CG001 | *"She seems confused today."* | Caregiver observation (cognition) | [[Raw Evidence/Caregiver/EV-CG-070|EV-CG-070]] |
 
 ---
 
