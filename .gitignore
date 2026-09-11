@@ -6,7 +6,9 @@ env/
 ENV/
 
 # Build outputs
+dist/
 /dist/
+frontend/dist/
 build/
 *.egg-info/
 
@@ -48,6 +50,7 @@ Thumbs.db
 */.obsidian/cache/
 
 # Duplicate runtime directories
+knowledge-base/
 EvoCare/knowledge-base/
 EvoCare/EvoCare-Knowledge-Base/
 EvoCare/phase*-validation/

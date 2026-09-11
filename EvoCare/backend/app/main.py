@@ -64,10 +64,11 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
 app.add_middleware(SecurityHeadersMiddleware)
 
-# Universal CORS middleware (supports local, Vercel, Render, Cloudflare, mobile)
+# Explicit CORS middleware
+allowed_origins = [o.strip() for o in settings.CORS_ORIGINS if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"^https?://.*",
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

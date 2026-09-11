@@ -1,6 +1,4 @@
 import pytest
-from fastapi.testclient import TestClient
-from app.main import app
 from app.core.database import SessionLocal
 from app.models.patient import Patient
 from app.models.evidence import Evidence
@@ -11,28 +9,8 @@ from app.services.clinical_context_service import ClinicalContextService
 from app.services.clinical_reasoning_validator import ClinicalReasoningValidator
 from app.services.llm.provider import MockLLMProvider
 
-client = TestClient(app)
-from app.core.security import create_access_token
-from app.models.security import User
-_db = SessionLocal()
-_u = _db.query(User).filter(User.username == "doctor.demo").first()
-if _u:
-    _tok = create_access_token(data={"sub": str(_u.id), "username": _u.username, "role": "DOCTOR"})
-    client.headers.update({"Authorization": f"Bearer {_tok}"})
-_db.close()
 
-
-
-@pytest.fixture
-def db_session():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-def test_clinical_reasoning_endpoint_exists():
+def test_clinical_reasoning_endpoint_exists(client):
     """Test 1: POST /api/clinical-reasoning/{patient_id} exists."""
     response = client.post(
         "/api/clinical-reasoning/P001",
@@ -45,7 +23,7 @@ def test_clinical_reasoning_endpoint_exists():
     assert data["patient_id"] == "P001"
 
 
-def test_unknown_patient_rejected():
+def test_unknown_patient_rejected(client):
     """Test 2: Request for non-existent patient returns 404."""
     response = client.post(
         "/api/clinical-reasoning/P999_NON_EXISTENT",
@@ -338,7 +316,7 @@ def test_prescription_question_safe_limitation(db_session):
 # IMMUTABILITY & AUDIT TESTS
 # =====================================================================
 
-def test_clinical_reasoning_does_not_mutate_database(db_session):
+def test_clinical_reasoning_does_not_mutate_database(client, db_session):
     """Test: Clinical reasoning must NOT mutate memory claims, evidence, or doctor records."""
     initial_claims_count = db_session.query(MemoryClaim).count()
     initial_versions_count = db_session.query(MemoryVersion).count()
@@ -358,7 +336,7 @@ def test_clinical_reasoning_does_not_mutate_database(db_session):
     assert db_session.query(DoctorRecord).count() == initial_doctor_records
 
 
-def test_reasoning_session_audit_recorded(db_session):
+def test_reasoning_session_audit_recorded(client, db_session):
     """Test: Reasoning session is recorded in the reasoning_sessions table."""
     initial_sessions = db_session.query(ReasoningSession).count()
     response = client.post(
@@ -371,7 +349,7 @@ def test_reasoning_session_audit_recorded(db_session):
     assert db_session.query(ReasoningSession).count() == initial_sessions + 1
 
 
-def test_scenario_dementia_question_does_not_diagnose():
+def test_scenario_dementia_question_does_not_diagnose(client):
     """Demo Scenario 3: 'Does she have dementia?' returns uncertainty and no dementia diagnosis."""
     response = client.post(
         "/api/clinical-reasoning/P001",
@@ -385,7 +363,7 @@ def test_scenario_dementia_question_does_not_diagnose():
         assert "does not establish a dementia diagnosis" in c["reasoning"]
 
 
-def test_scenario_mobility_worsening_preserves_trajectory():
+def test_scenario_mobility_worsening_preserves_trajectory(client):
     """Demo Scenario 4: 'Has her mobility worsened?' reflects fluctuation rather than permanent decline."""
     response = client.post(
         "/api/clinical-reasoning/P001",

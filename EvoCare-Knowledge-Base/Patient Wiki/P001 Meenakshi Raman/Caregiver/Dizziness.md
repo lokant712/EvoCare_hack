@@ -76,6 +76,15 @@ Recurring episodic dizziness reported by family caregivers between late August a
 | **2026-09-11** | CG001 | *"She was severely dizzy this morning."* | Severity: Severe | Severity: Severe<br>Duration: UNKNOWN | [[Raw Evidence/Caregiver/EV-CG-866|EV-CG-866]] |
 | **2026-09-11** | CG001 | *"She is dizzy."* | Severity: Mild; Duration: A few seconds | Severity: Mild<br>Duration: A few seconds | [[Raw Evidence/Caregiver/EV-CG-869|EV-CG-869]] |
 | **2026-09-11** | caregiver.demo | *"she is dizzy"* | Severity: Severe; Duration: A few minutes | Severity: Severe<br>Duration: A few minutes | [[Raw Evidence/Caregiver/EV-CG-891|EV-CG-891]] |
+| **2026-09-11** | CG002 | *"She is dizzy."* | Severity: Moderate; Duration: 5 minutes | Severity: Moderate<br>Duration: 5 minutes | [[Raw Evidence/Caregiver/EV-CG-892|EV-CG-892]] |
+| **2026-09-11** | CG001 | *"She was severely dizzy this morning."* | Severity: Severe | Severity: Severe<br>Duration: UNKNOWN | [[Raw Evidence/Caregiver/EV-CG-893|EV-CG-893]] |
+| **2026-09-11** | CG001 | *"She is dizzy."* | Severity: Mild; Duration: A few seconds | Severity: Mild<br>Duration: A few seconds | [[Raw Evidence/Caregiver/EV-CG-896|EV-CG-896]] |
+| **2026-09-11** | CG002 | *"She is dizzy."* | Severity: Moderate; Duration: 5 minutes | Severity: Moderate<br>Duration: 5 minutes | [[Raw Evidence/Caregiver/EV-CG-917|EV-CG-917]] |
+| **2026-09-11** | CG001 | *"She was severely dizzy this morning."* | Severity: Severe | Severity: Severe<br>Duration: UNKNOWN | [[Raw Evidence/Caregiver/EV-CG-918|EV-CG-918]] |
+| **2026-09-11** | CG001 | *"She is dizzy."* | Severity: Mild; Duration: A few seconds | Severity: Mild<br>Duration: A few seconds | [[Raw Evidence/Caregiver/EV-CG-921|EV-CG-921]] |
+| **2026-09-11** | CG002 | *"She is dizzy."* | Severity: Moderate; Duration: 5 minutes | Severity: Moderate<br>Duration: 5 minutes | [[Raw Evidence/Caregiver/EV-CG-942|EV-CG-942]] |
+| **2026-09-11** | CG001 | *"She was severely dizzy this morning."* | Severity: Severe | Severity: Severe<br>Duration: UNKNOWN | [[Raw Evidence/Caregiver/EV-CG-943|EV-CG-943]] |
+| **2026-09-11** | CG001 | *"She is dizzy."* | Severity: Mild; Duration: A few seconds | Severity: Mild<br>Duration: A few seconds | [[Raw Evidence/Caregiver/EV-CG-946|EV-CG-946]] |
 
 ---
 

@@ -20,13 +20,13 @@ class Settings:
     API_V1_STR: str = "/api"
     DB_FILE_PATH: Path = Path(__file__).resolve().parent.parent.parent / "evocare.db"
     DATABASE_URL: str = os.getenv("DATABASE_URL", f"sqlite:///{DB_FILE_PATH}")
-    DEBUG: bool = os.getenv("DEBUG", "True").lower() in ("true", "1")
+    DEBUG: bool = os.getenv("DEBUG", "false").lower() in ("true", "1")
     KNOWLEDGE_BASE_DIR: str = os.getenv(
         "KNOWLEDGE_BASE_DIR",
         str(
             (Path(__file__).resolve().parents[4] / "EvoCare-Knowledge-Base")
             if (Path(__file__).resolve().parents[4] / "EvoCare-Knowledge-Base").exists()
-            else (Path(__file__).resolve().parents[3] / "knowledge-base")
+            else (Path(__file__).resolve().parents[3] / "EvoCare-Knowledge-Base")
         )
     )
 
@@ -50,7 +50,12 @@ class Settings:
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = int(os.getenv("JWT_REFRESH_TOKEN_EXPIRE_DAYS", "7"))
-    CORS_ORIGINS: list = os.getenv("CORS_ORIGINS", "http://localhost:9000,http://127.0.0.1:9000,http://localhost:5173,http://127.0.0.1:5173").split(",")
+    CORS_ORIGINS: list = [
+        o.strip() for o in os.getenv(
+            "CORS_ORIGINS",
+            "http://localhost:9000,http://127.0.0.1:9000,http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000,http://localhost:8000,http://127.0.0.1:8000"
+        ).split(",") if o.strip()
+    ]
     AUTH_ENABLED: bool = os.getenv("AUTH_ENABLED", "true").lower() in ("true", "1")
     DEMO_MODE: bool = os.getenv("DEMO_MODE", "true").lower() in ("true", "1")
 

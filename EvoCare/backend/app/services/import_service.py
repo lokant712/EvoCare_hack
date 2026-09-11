@@ -171,22 +171,22 @@ class ImportService:
 
         for ev_code, ev in evidence_map.items():
             if ev.source_type == SourceType.CAREGIVER:
+                cat, subcat = category_map.get(ev_code, ("other", "general"))
+                is_ambiguous = ev_code in ("EV-CG-043", "EV-CG-044", "EV-CG-045", "EV-CG-046", "EV-CG-047", "EV-CG-008", "EV-CG-010")
+                attrs = {
+                    "subcategory": subcat,
+                    "clarification_required": is_ambiguous
+                }
+                if is_ambiguous:
+                    attrs["missing_fields"] = ["severity", "duration", "trigger"]
+                if ev_code == "EV-CG-031" or "almost fell" in (ev.original_statement or "").lower():
+                    attrs["classification"] = "NEAR_FALL"
+                    attrs["ground_impact"] = False
+                if ev_code == "EV-CG-040":
+                    attrs["improvement"] = True
+
                 existing_cg = db.query(CaregiverObservation).filter(CaregiverObservation.evidence_id == ev.id).first()
                 if not existing_cg:
-                    cat, subcat = category_map.get(ev_code, ("other", "general"))
-                    is_ambiguous = ev_code in ("EV-CG-043", "EV-CG-044", "EV-CG-045", "EV-CG-046", "EV-CG-047", "EV-CG-008", "EV-CG-010")
-                    attrs = {
-                        "subcategory": subcat,
-                        "clarification_required": is_ambiguous
-                    }
-                    if is_ambiguous:
-                        attrs["missing_fields"] = ["severity", "duration", "trigger"]
-                    if ev_code == "EV-CG-031":
-                        attrs["classification"] = "NEAR_FALL"
-                        attrs["ground_impact"] = False
-                    if ev_code == "EV-CG-040":
-                        attrs["improvement"] = True
-
                     cg_obs = CaregiverObservation(
                         patient_id=patient.id,
                         evidence_id=ev.id,
@@ -198,6 +198,10 @@ class ImportService:
                         information_state=InformationState.OBSERVED
                     )
                     db.add(cg_obs)
+                else:
+                    existing_attrs = dict(existing_cg.attributes or {})
+                    existing_attrs.update(attrs)
+                    existing_cg.attributes = existing_attrs
 
                 # Also populate general Observation table
                 existing_obs = db.query(Observation).filter(Observation.evidence_id == ev.id).first()

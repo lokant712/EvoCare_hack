@@ -22,7 +22,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy backend code and Knowledge Base
 COPY EvoCare/backend/ /app/EvoCare/backend/
 COPY EvoCare-Knowledge-Base/ /app/EvoCare-Knowledge-Base/
-COPY knowledge-base/ /app/knowledge-base/ 2>/dev/null || true
 
 # Copy built frontend into backend static directory
 COPY --from=frontend-builder /app/frontend/dist /app/frontend_dist

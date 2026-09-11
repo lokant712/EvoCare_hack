@@ -26,7 +26,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run in-process test suite
+      - name: Run full pytest suite (177 tests)
+        working-directory: EvoCare/backend
+        run: |
+          pytest
+
+      - name: Run in-process integration test suite
         working-directory: EvoCare/backend
         run: |
           python test_inprocess_all.py
