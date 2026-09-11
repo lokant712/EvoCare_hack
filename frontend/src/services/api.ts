@@ -1,7 +1,7 @@
 import { DashboardResponse, MemoryHistoryItem, ClinicalReasoningResponse } from '../types';
 import { authService } from './auth';
 
-const API_BASE = '/api';
+export const API_BASE = ((import.meta as any).env?.VITE_API_URL || '').replace(/\/$/, '') + '/api';
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) {

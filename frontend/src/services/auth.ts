@@ -3,6 +3,8 @@
  * Manages JWT token lifecycle: login, logout, token storage, user decoding.
  */
 
+import { API_BASE } from './api';
+
 const TOKEN_KEY = 'evocare_access_token';
 const USER_KEY = 'evocare_user';
 
@@ -32,7 +34,7 @@ export interface LoginResult {
 class AuthService {
   /** Attempt login; returns user info on success, throws on failure. */
   async login(username: string, password: string): Promise<AuthUser> {
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch(`${API_BASE}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
@@ -55,7 +57,7 @@ class AuthService {
     const token = this.getToken();
     if (token) {
       try {
-        await fetch('/api/auth/logout', {
+        await fetch(`${API_BASE}/auth/logout`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -71,11 +73,12 @@ class AuthService {
     return localStorage.getItem(TOKEN_KEY);
   }
 
-  /** Get stored user info or null. */
+  /** Get current stored user object or null. */
   getUser(): AuthUser | null {
+    const raw = localStorage.getItem(USER_KEY);
+    if (!raw) return null;
     try {
-      const raw = localStorage.getItem(USER_KEY);
-      return raw ? (JSON.parse(raw) as AuthUser) : null;
+      return JSON.parse(raw) as AuthUser;
     } catch {
       return null;
     }
@@ -90,7 +93,7 @@ class AuthService {
   async getAuthorizedPatients(): Promise<AuthorizedPatient[]> {
     const token = this.getToken();
     if (!token) return [];
-    const res = await fetch('/api/auth/authorized-patients', {
+    const res = await fetch(`${API_BASE}/auth/authorized-patients`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!res.ok) return [];

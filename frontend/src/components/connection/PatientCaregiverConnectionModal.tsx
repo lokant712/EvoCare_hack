@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UserPlus, CheckCircle2, Clock, AlertCircle, Trash2, HeartHandshake, ShieldCheck } from 'lucide-react';
 import { authService, AuthUser } from '../../services/auth';
+import { API_BASE } from '../../services/api';
 
 interface PatientCaregiverConnectionModalProps {
   patientCode: string;
@@ -51,10 +52,10 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
     try {
       const token = authService.getToken();
       const [cgRes, connRes] = await Promise.all([
-        fetch('/api/caregiver-connections/caregivers', {
+        fetch(`${API_BASE}/caregiver-connections/caregivers`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch(`/api/caregiver-connections/my-connections?patient_code=${patientCode}`, {
+        fetch(`${API_BASE}/caregiver-connections/my-connections?patient_code=${patientCode}`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -91,7 +92,7 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
 
     try {
       const token = authService.getToken();
-      const res = await fetch('/api/caregiver-connections/request', {
+      const res = await fetch(`${API_BASE}/caregiver-connections/request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +126,7 @@ export const PatientCaregiverConnectionModal: React.FC<PatientCaregiverConnectio
 
     try {
       const token = authService.getToken();
-      const res = await fetch(`/api/caregiver-connections/${connectionId}/disconnect`, {
+      const res = await fetch(`${API_BASE}/caregiver-connections/${connectionId}/disconnect`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });

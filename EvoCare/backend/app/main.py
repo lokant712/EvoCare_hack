@@ -2,19 +2,54 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
+from contextlib import asynccontextmanager
 from app.core.config import settings
-from app.core.database import engine, Base
+from app.core.database import engine, Base, SessionLocal
 import app.models  # Load all models for metadata
 
 # Initialize database schema
 Base.metadata.create_all(bind=engine)
+
+def auto_seed_database_if_empty():
+    """Automatically seeds default demo accounts, 5 patients, and knowledge base if database is empty."""
+    db = SessionLocal()
+    try:
+        from app.models.security import User
+        user_count = db.query(User).count()
+        if user_count == 0:
+            print("[EvoCare Startup] New database detected. Seeding Knowledge Base & Demo Accounts...")
+            from app.services.import_service import ImportService
+            ImportService.import_all(db)
+
+            try:
+                from scripts.seed_security_demo import seed_security_and_p002
+                seed_security_and_p002()
+            except Exception as e:
+                print(f"[EvoCare Startup] Security seeding notice: {e}")
+
+            try:
+                from scripts.seed_5_demo_patients import seed_patients
+                seed_patients()
+            except Exception as e:
+                print(f"[EvoCare Startup] 5 Patients seeding notice: {e}")
+            print("[EvoCare Startup] Seeding complete! Demo users (doctor.demo, caregiver.demo, patient.demo, admin.demo) are active.")
+    except Exception as e:
+        print(f"[EvoCare Startup] Seeding check notice: {e}")
+    finally:
+        db.close()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    auto_seed_database_if_empty()
+    yield
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
     description="Longitudinal Memory System & Clinical Intelligence API for Elderly Healthcare",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    lifespan=lifespan
 )
 
 # Security Headers Middleware
@@ -29,19 +64,10 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
 app.add_middleware(SecurityHeadersMiddleware)
 
-# CORS middleware
-origins = [
-    "http://localhost:9000",
-    "http://127.0.0.1:9000",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
-
+# Universal CORS middleware (supports local, Vercel, Render, Cloudflare, mobile)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origin_regex=r"^https?://.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

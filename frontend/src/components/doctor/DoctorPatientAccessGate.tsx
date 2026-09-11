@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, UserCheck, Lock, CheckCircle2, AlertCircle, Mail } from 'lucide-react';
 import { authService } from '../../services/auth';
+import { API_BASE } from '../../services/api';
 
 interface DoctorPatientAccessGateProps {
   initialPatientCode?: string;
@@ -49,7 +50,7 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
 
     try {
       const token = authService.getToken();
-      const res = await fetch(`/api/patients/lookup/${clean}`, {
+      const res = await fetch(`${API_BASE}/patients/lookup/${clean}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
@@ -80,7 +81,7 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
 
     try {
       const token = authService.getToken();
-      const res = await fetch('/api/patients/request-access-code', {
+      const res = await fetch(`${API_BASE}/patients/request-access-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,23 +91,23 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.detail || 'Failed to dispatch code.');
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.detail || 'Failed to send verification code.');
       }
 
       const data = await res.json();
+      const code = data.demo_code || data.otp || '7742';
       setOtpRequested(true);
-      const code = data.demo_code || '7742';
       setGeneratedOtp(code);
-      setEnteredOtp(code); // Pre-fill for quick physician demo flow
+      setEnteredOtp(code);
     } catch (err: any) {
-      setVerifyError(err.message || 'Error requesting consent code.');
+      setVerifyError(err.message || 'Failed to send verification code.');
     } finally {
       setLookupLoading(false);
     }
   };
 
-  // Verify Patient Consent OTP
+  // Verify OTP and Unlock Chart
   const handleVerifyOtp = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     const cleanCode = patientCode.trim().toUpperCase();
@@ -121,7 +122,7 @@ export const DoctorPatientAccessGate: React.FC<DoctorPatientAccessGateProps> = (
 
     try {
       const token = authService.getToken();
-      const res = await fetch('/api/patients/verify-access-code', {
+      const res = await fetch(`${API_BASE}/patients/verify-access-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

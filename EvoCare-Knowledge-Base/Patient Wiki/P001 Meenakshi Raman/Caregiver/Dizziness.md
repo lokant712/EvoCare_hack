@@ -66,6 +66,9 @@ Recurring episodic dizziness reported by family caregivers between late August a
 | **2026-09-11** | CG002 | *"She is dizzy."* | Severity: Moderate; Duration: 5 minutes | Severity: Moderate<br>Duration: 5 minutes | [[Raw Evidence/Caregiver/EV-CG-050|EV-CG-050]] |
 | **2026-09-11** | CG001 | *"She was severely dizzy this morning."* | Severity: Severe | Severity: Severe<br>Duration: UNKNOWN | [[Raw Evidence/Caregiver/EV-CG-051|EV-CG-051]] |
 | **2026-09-11** | CG001 | *"She is dizzy."* | Severity: Mild; Duration: A few seconds | Severity: Mild<br>Duration: A few seconds | [[Raw Evidence/Caregiver/EV-CG-054|EV-CG-054]] |
+| **2026-09-11** | CG002 | *"She is dizzy."* | Severity: Moderate; Duration: 5 minutes | Severity: Moderate<br>Duration: 5 minutes | [[Raw Evidence/Caregiver/EV-CG-075|EV-CG-075]] |
+| **2026-09-11** | CG001 | *"She was severely dizzy this morning."* | Severity: Severe | Severity: Severe<br>Duration: UNKNOWN | [[Raw Evidence/Caregiver/EV-CG-076|EV-CG-076]] |
+| **2026-09-11** | CG001 | *"She is dizzy."* | Severity: Mild; Duration: A few seconds | Severity: Mild<br>Duration: A few seconds | [[Raw Evidence/Caregiver/EV-CG-079|EV-CG-079]] |
 
 ---
 

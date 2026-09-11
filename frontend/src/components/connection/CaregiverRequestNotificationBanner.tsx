@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HeartHandshake, CheckCircle2, Trash2, Users, AlertCircle } from 'lucide-react';
 import { authService } from '../../services/auth';
+import { API_BASE } from '../../services/api';
 
 interface CaregiverRequestNotificationBannerProps {
   onConnectionsChanged?: () => void;
@@ -30,7 +31,7 @@ export const CaregiverRequestNotificationBanner: React.FC<CaregiverRequestNotifi
   const fetchConnections = async () => {
     try {
       const token = authService.getToken();
-      const res = await fetch('/api/caregiver-connections/my-connections', {
+      const res = await fetch(`${API_BASE}/caregiver-connections/my-connections`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -52,7 +53,7 @@ export const CaregiverRequestNotificationBanner: React.FC<CaregiverRequestNotifi
 
     try {
       const token = authService.getToken();
-      const res = await fetch(`/api/caregiver-connections/${connectionId}/respond`, {
+      const res = await fetch(`${API_BASE}/caregiver-connections/${connectionId}/respond`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +83,7 @@ export const CaregiverRequestNotificationBanner: React.FC<CaregiverRequestNotifi
 
     try {
       const token = authService.getToken();
-      const res = await fetch(`/api/caregiver-connections/${connectionId}/disconnect`, {
+      const res = await fetch(`${API_BASE}/caregiver-connections/${connectionId}/disconnect`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
