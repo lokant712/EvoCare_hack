@@ -6,7 +6,7 @@ import { PatientRecordsTab } from '../components/patient/PatientRecordsTab';
 import { ClinicalAssistantTab } from '../components/assistant/ClinicalAssistantTab';
 import { DoctorClinicalEntryTab } from '../components/clinical/DoctorClinicalEntryTab';
 import { PatientCompanionTab } from '../components/patient/PatientCompanionTab';
-import { CaregiverNotesTab } from '../components/caregiver/CaregiverNotesTab';
+import { CaretakerMobileApp } from './CaretakerMobileApp';
 import { AdminUserManagement } from '../components/admin/AdminUserManagement';
 import { DoctorPatientAccessGate } from '../components/doctor/DoctorPatientAccessGate';
 import { WhyModal } from '../components/evidence/WhyModal';
@@ -275,18 +275,16 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   // Caregiver Login Mode
   if (user.role === 'CAREGIVER') {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
-        <Header
-          patient={data.patient}
+      <div style={{ minHeight: '100dvh', backgroundColor: 'var(--color-bg)', color: 'var(--color-text-main)' }}>
+        <CaretakerMobileApp
+          data={data}
           user={user}
           authorizedPatients={authorizedPatients}
           selectedPatientCode={selectedPatientCode}
           onSelectPatient={setSelectedPatientCode}
+          onObservationSaved={refetch}
           onLogout={onLogout}
         />
-        <main style={{ flex: 1 }}>
-          <CaregiverNotesTab data={data} user={user} onObservationSaved={refetch} />
-        </main>
       </div>
     );
   }
